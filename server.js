@@ -128,7 +128,7 @@ app.post('/createProfile',passport.authenticate('jwt', { session: false }), (req
     return res.status(200).send("Success Login")
 })
 
-app.listen(3000, function() {
-    console.log('Server is listening on 3000')
+app.listen(5000, function() {
+    console.log('Server is listening on 5000')
 })
 
