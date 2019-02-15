@@ -7,8 +7,37 @@ const jwt = require('jsonwebtoken')
 const passport = require('passport');
 var fs = require('fs')
 var axios = require('axios')
+var multer = require('multer')
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+       cb(null, './uploads/')
+    },
+    filename: function(req, file, cd) {
+        file.originalname = req.body.name + '.jpg'
+        cd(null, file.originalname)
+    }
+})
+
+
+var path = require('path')
 const keys = require('./config/keys')
 
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+  
+}
+
+const upload = multer({
+     storage: storage,
+     limits: {
+         fileSize: 1024 * 1024 * 5
+     },
+     fileFilter: fileFilter
+})
 
 app.use(passport.initialize());
 require('./config/passport')(passport);
@@ -28,7 +57,30 @@ db.connect((error) => {
     console.log("Database is connected")
 });
 
+
+
+// Check File Type
+function checkFileType(file, cb){
+    // Allowed ext
+    const filetypes = /jpeg|jpg|png|gif/;
+    // Check ext
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    // Check mime
+    const mimetype = filetypes.test(file.mimetype);
+  
+    if(mimetype && extname){
+      return cb(null,true);
+    } else {
+      cb('Error: Images Only!');
+    }
+  }
+  
+
+  
+ 
+
 app.use(express.static("./"));
+app.use(express.static("uploads"));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit:50000}));
 app.use(bodyParser.json({limit: '50mb', extended: true}));
 
@@ -124,9 +176,32 @@ app.get('/createUserTable', (req, res) => {
     })
 })
 
-app.post('/createProfile',passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/createProfile', (req, res) => {
+    var sql = `CREATE TABLE profile(image_path VARCHAR(255), name VARCHAR(255), email VARCHAR(255), 
+               phone_number VARCHAR(255), about_me VARCHAR(255), city VARCHAR(255), country VARCHAR(255), 
+               company VARCHAR(255), school VARCHAR(255), hometown VARCHAR(255), languages VARCHAR(255), 
+               gender VARCHAR(255), PRIMARY KEY(email))`
+    db.query(sql, (err, result) => {
+         if (err) throw err;
+         console.log(result);
+         res.send("Created Table Successfully")
+
+    })
+})
+
+app.post('/createProfile', upload.single('filename'), passport.authenticate('jwt', { session: false }), (req, res) => {
+    
     return res.status(200).send("Success Login")
 })
+
+app.post('/upload', upload.single('filename'), (req, res) => {
+    console.log(req.body.name)
+    console.log(req.file.path)
+    
+    res.send("fsdfds")
+});
+
+  
 
 app.listen(5000, function() {
     console.log('Server is listening on 5000')
