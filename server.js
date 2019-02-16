@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
        cb(null, './uploads/')
     },
     filename: function(req, file, cd) {
-        file.originalname = req.body.name + '.jpg'
+        file.originalname = req.body.email + '.jpg'
         cd(null, file.originalname)
     }
 })
@@ -42,20 +42,21 @@ const upload = multer({
 app.use(passport.initialize());
 require('./config/passport')(passport);
 
-var db = mysql.createConnection({
+var pool = mysql.createPool({
+    connectionLimit: 500,
     host     : 'localhost',
     user     : 'root',
     password : 'root',
     database : 'Canvas273'
   });
 
-db.connect((error) => {
-    if (error) {
-        throw error;
-    }  
+// pool.connect((error) => {
+//     if (error) {
+//         throw error;
+//     }  
 
-    console.log("Database is connected")
-});
+//     console.log("Database is connected")
+// });
 
 
 
@@ -91,66 +92,79 @@ app.get('/', function(req, res) {
 app.post('/login', function(req, res) {
     var email = req.body.email;
     var password = req.body.password
-    db.query('SELECT * FROM basicUsers where email =?', email, function(err, result) {
-       if (err) {
-        
-         return res.status(404).json(err)
-       }
-       if (result.length == 0) {
-         return res.status(404).json('User not found')
-       }
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+        connection.query('SELECT * FROM basicUsers where email =?', email, function(err, result) {
+        if (err) {
+            
+            return res.status(404).json(err)
+        }
+        if (result.length == 0) {
+            return res.status(404).json('User not found')
+        }
 
-       bcrypt.compare(password, result[0].password)
-              .then(isMatch => {
-                  if(isMatch) {
-                    
-                      const payload = { email: result[0].email, name: result[0].name} //Create JWT payload
-                      jwt.sign(
-                          payload, 
-                          keys.secretOrKey, 
-                          { expiresIn: 3600 }, 
-                          (err, token) => {
-                            res.json({
-                                success: true,
-                                token: 'Bearer ' + token
-                            })
-                      });
-                  } else {
-                     
-                      return res.status(400).json('Password incorrect')
-                  }
+        bcrypt.compare(password, result[0].password)
+                .then(isMatch => {
+                    if(isMatch) {
+                        
+                        const payload = { email: result[0].email, name: result[0].name} //Create JWT payload
+                        jwt.sign(
+                            payload, 
+                            keys.secretOrKey, 
+                            { expiresIn: 3600 }, 
+                            (err, token) => {
+                                res.json({
+                                    success: true,
+                                    token: 'Bearer ' + token
+                                })
+                        });
+                    } else {
+                        
+                        return res.status(400).json('Password incorrect')
+                    }
+            })
+        
         })
-      
     })
 })
 
 app.post('/createBasicUser', function(req,res) {
+
      var name = req.body.name;
      var email = req.body.email;
      var password = req.body.password;
      var user = {name: name, email: email, password: password}
+     pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
 
-     bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(user.password, salt, (err, hash) => {
-            if (err) throw err;
-            user.password = hash;
-            var sql = 'INSERT INTO basicUsers SET ?  ON DUPLICATE KEY UPDATE name = VALUES(name), email = VALUES(email), password = VALUES(password)'
-        let query = db.query(sql, user, (err, result) => {
-          if(err) {
-               if(err.errno==1062){  
-                  res.send('dubplicated key')
-            }
-            res.send('error')
-           
-        } else {
-            console.log('added one user');
-            console.log(result)
-            res.json(user)
-            
-        }      
-    });            
-  })
-})
+            bcrypt.genSalt(10, (err, salt) => {
+                bcrypt.hash(user.password, salt, (err, hash) => {
+                    if (err) throw err;
+                    user.password = hash;
+                    var sql = 'INSERT INTO basicUsers SET ?  ON DUPLICATE KEY UPDATE name = VALUES(name), email = VALUES(email), password = VALUES(password)'
+                let query = connection.query(sql, user, (err, result) => {
+                if(err) {
+                    if(err.errno==1062){  
+                        res.send('dubplicated key')
+                    }
+                    res.send('error')
+                
+                } else {
+                    console.log('added one user');
+                    console.log(result)
+                    res.json(user)
+                    
+                }      
+            });            
+        })
+        })
+    })
 })
 
 
@@ -177,21 +191,66 @@ app.get('/createUserTable', (req, res) => {
 })
 
 app.get('/createProfile', (req, res) => {
-    var sql = `CREATE TABLE profile(image_path VARCHAR(255), name VARCHAR(255), email VARCHAR(255), 
-               phone_number VARCHAR(255), about_me VARCHAR(255), city VARCHAR(255), country VARCHAR(255), 
-               company VARCHAR(255), school VARCHAR(255), hometown VARCHAR(255), languages VARCHAR(255), 
-               gender VARCHAR(255), PRIMARY KEY(email))`
-    db.query(sql, (err, result) => {
-         if (err) throw err;
-         console.log(result);
-         res.send("Created Table Successfully")
+        var sql = `CREATE TABLE profile(image_path VARCHAR(255), name VARCHAR(255), email VARCHAR(255), 
+                phone_number VARCHAR(255), about_me VARCHAR(255), city VARCHAR(255), country VARCHAR(255), 
+                company VARCHAR(255), school VARCHAR(255), hometown VARCHAR(255), languages VARCHAR(255), 
+                gender VARCHAR(255), PRIMARY KEY(email))`
+        db.query(sql, (err, result) => {
+            if (err) throw err;
+            console.log(result);
+            res.send("Created Table Successfully")
 
-    })
+        })
 })
 
 app.post('/createProfile', upload.single('filename'), passport.authenticate('jwt', { session: false }), (req, res) => {
+    var sql = 'INSERT INTO profile SET ?'
+    var image_path = req.file.path
+    var name = req.body.name
+    var email = req.body.email
+    var phone_number = req.body.phone_number
+    var about_me = req.body.about_me
+    var city = req.body.city
+    var country = req.body.country
+    var company = req.body.company
+    var school = req.body.school
+    var hometown = req.body.hometown
+    var languages = req.body.languages
+    var gender = req.body.gender
+    var data = {
+        image_path,
+        name,
+        email,
+        phone_number,
+        about_me,
+        city,
+        country,
+        company,
+        school,
+        hometown,
+        languages,
+        gender
+    }
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, data, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+
+          })
+
+          
+
+    })
     
-    return res.status(200).send("Success Login")
+      //return res.status(200).send("Success Login")
 })
 
 app.post('/upload', upload.single('filename'), (req, res) => {
