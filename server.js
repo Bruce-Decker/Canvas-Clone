@@ -50,6 +50,13 @@ var pool = mysql.createPool({
     database : 'Canvas273'
   });
 
+var db = mysql.createConnection({
+    host     : 'localhost',
+    user     : 'root',
+    password : 'root',
+    database : 'Canvas273'
+});
+
 // pool.connect((error) => {
 //     if (error) {
 //         throw error;
@@ -251,6 +258,60 @@ app.post('/createProfile', upload.single('filename'), passport.authenticate('jwt
     })
     
       //return res.status(200).send("Success Login")
+})
+
+app.post('/createCourse', passport.authenticate('jwt', { session: false }), function(req, res) {
+    var sql = 'INSERT INTO profile SET ?'
+    var CourseId = req.body.CourseId;
+    var CourseName = req.body.CourseName;
+    var CourseDept = req.body.CourseDept;
+    var CourseDescription = req.body.CourseDescription;
+    var CourseRoom = req.body.CourseRoom;
+    var CourseCapacity = req.body.CourseCapacity;
+    var WaitlistCapacity = req.body.WaitlistCapacity;
+    var CourseTerm = req.body.CourseTerm;
+    var courseData = {
+        CourseId,
+        CourseName,
+        CourseDept,
+        CourseRoom,
+        CourseCapacity,
+        WaitlistCapacity,
+        CourseTerm
+    }
+
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, courseData, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+
+          })
+        
+    })
+
+})
+
+
+app.get('/createCourseTable', (req, res) => {
+    var sql = `CREATE TABLE course(CourseId VARCHAR(255), 
+        CourseName VARCHAR(255), CourseDept VARCHAR(255), 
+        CourseDescription VARCHAR(255),
+        CourseRoom VARCHAR(255), CourseCapacity VARCHAR(255), 
+        WaitlistCapacity VARCHAR(255), CourseTerm VARCHAR(255), PRIMARY KEY(CourseId))`
+    db.query(sql, (err, result) => {
+         if (err) throw err;
+         console.log(result);
+         res.send("Created Table Successfully")
+
+    })
 })
 
 app.post('/upload', upload.single('filename'), (req, res) => {
