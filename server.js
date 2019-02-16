@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken')
 const passport = require('passport');
 var fs = require('fs')
 var axios = require('axios')
+const validateLogin = require('./validation/validateLogin')
+const validateRegister = require('./validation/validateRegister')
 var multer = require('multer')
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -97,6 +99,12 @@ app.get('/', function(req, res) {
 })
 
 app.post('/login', function(req, res) {
+    const { errors, isValid } = validateLogin(req.body)
+    if (!isValid) {
+        return res.status(400).json(errors);
+    }
+
+
     var email = req.body.email;
     var password = req.body.password
     pool.getConnection(function(err,connection){
@@ -139,6 +147,11 @@ app.post('/login', function(req, res) {
 })
 
 app.post('/createBasicUser', function(req,res) {
+    const { errors, isValid } = validateRegister(req.body);
+    if (!isValid) {
+        return res.status(400).json(errors);
+    }
+    
 
      var name = req.body.name;
      var email = req.body.email;
