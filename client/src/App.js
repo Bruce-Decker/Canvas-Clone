@@ -1,24 +1,31 @@
 import React, { Component } from 'react';
 import Login from './components/Login'
 import Landing from './components/Landing'
+import Register from './components/Register'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
 
 import './App.css';
+
+const store = createStore(() => [], {}, applyMiddleware())
 
 class App extends Component {
   render() {
       return (
-       
-        <BrowserRouter>
-          <div className="App">
-           
-            <Route exact path="/" component={Landing} />
-            <div className="container">
-                <Route exact path="/login" component={Login} />
-               
+         <Provider store = { store }>
+            <BrowserRouter>
+              <div className="App">
+              
+                <Route exact path="/" component={Landing} />
+                <div className="container">
+                    <Route exact path="/login" component={Login} />
+                    <Route exact path="/register" component={Register} />
+                  
+                  </div>
               </div>
-          </div>
-        </BrowserRouter>
+            </BrowserRouter>
+         </Provider>
       
       );
   }
