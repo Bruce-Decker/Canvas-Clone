@@ -4,11 +4,12 @@ import Landing from './components/Landing'
 import Register from './components/Register'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import store from './store'
+
 
 import './App.css';
 
-const store = createStore(() => [], {}, applyMiddleware())
+
 
 class App extends Component {
   render() {
