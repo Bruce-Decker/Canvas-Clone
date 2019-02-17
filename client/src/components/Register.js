@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import RegisterBanner from './RegisterBanner'
 import classnames from 'classnames'
+import axios from 'axios'
 import { connect } from 'react-redux'
+
+import '../App.css';
 
 class Register extends Component {
     constructor() {
@@ -19,11 +22,26 @@ class Register extends Component {
       this.setState({[e.target.name]: e.target.value})
   }
 
+  onSubmit = (e) => {
+     e.preventDefault()
+     const newUser = {
+         name: this.state.name, 
+         email: this.state.email,
+         password: this.state.password,
+         password2: this.state.password2
+     }
+     axios.post('/createBasicUser', newUser)
+        .then(result => console.log(result.data))
+        .catch(err => this.setState({errors: err.response.data}))
+  }
+
   render() {
+      const { errors } = this.state;
+     
       return (
           <div className = "Register">
              <RegisterBanner />
-
+            
              <div id="signin-container">
                   <div data-se="auth-container" id="okta-sign-in" className="auth-container main-container no-beacon">      
                       <div className="okta-sign-in-header auth-header">                
@@ -32,7 +50,8 @@ class Register extends Component {
                               </div>      
                               <div className="auth-content">
                                   <div className="auth-content-inner">
-                                     <div className="primary-auth"><form method="POST" action="https://sjsu.okta.com/login/login.htm" data-se="o-form" id="form18" className="primary-auth-form o-form o-form-edit-mode">        
+                                     <div className="primary-auth">
+                                       <form onSubmit = {this.onSubmit} data-se="o-form" id="form18" className="primary-auth-form o-form o-form-edit-mode">        
                                          <div data-se="o-form-content" className="o-form-content o-form-theme clearfix">                        
                                             <h2 data-se="o-form-head" className="okta-form-title o-form-head">Register</h2>                          
                                                <div className="o-form-error-container" data-se="o-form-error-container" />      
@@ -51,7 +70,12 @@ class Register extends Component {
                                                                   autoComplete="off" 
                                                                   value = {this.state.name}
                                                                   onChange = {this.onChange}
+                                                                 
                                                                   /> 
+                                                             <div className = "inputError">
+                                                                {errors.name }
+                                                             </div>
+                                                                
                                                             
                                                             
 
@@ -71,7 +95,11 @@ class Register extends Component {
                                                                      autoComplete="off" 
                                                                      value = {this.state.email}
                                                                      onChange = {this.onChange}
-                                                                     />       
+                                                                     />      
+
+                                                             <div className = "inputError">
+                                                                {errors.email }
+                                                             </div> 
                                                                   
                                                               </span>
                                                         </div>
@@ -82,7 +110,7 @@ class Register extends Component {
                                                               <span className="input-tooltip icon form-help-16" data-hasqtip={2} />                    
                                                               <span className="icon input-icon remote-lock-16" />            
 
-                                                              <input type="text" 
+                                                              <input type="password" 
                                                                      placeholder="Password" 
                                                                      name="password" 
                                                                      id="okta-signin-password" 
@@ -90,7 +118,10 @@ class Register extends Component {
                                                                      autoComplete="off" 
                                                                      value = {this.state.password}
                                                                      onChange = {this.onChange}
-                                                                     />       
+                                                                     />  
+                                                             <div className = "inputError">
+                                                                  {errors.password }
+                                                             </div>      
                                                                   
                                                               </span>
                                                         </div>
@@ -100,7 +131,7 @@ class Register extends Component {
                                                               <span className="input-tooltip icon form-help-16" data-hasqtip={3} />                    
                                                               <span className="icon input-icon remote-lock-16" />            
 
-                                                              <input type="text" 
+                                                              <input type="password" 
                                                                      placeholder="Type Password Again" 
                                                                      name="password2" 
                                                                      id="okta-signin-password2" 
@@ -108,14 +139,19 @@ class Register extends Component {
                                                                      autoComplete="off" 
                                                                      value = {this.state.password2}
                                                                      onChange = {this.onChange}
-                                                                     />       
+                                                                     />   
+
+                                                             <div className = "inputError">
+                                                                  {errors.password2 }
+                                                             </div>      
                                                                   
                                                               </span>
                                                         </div>
                                                     </div>
                                                     <div data-se="o-form-fieldset" className="o-form-fieldset o-form-label-top margin-btm-0"><div data-se="o-form-input-container" className="o-form-input"><span data-se="o-form-input-remember" className="o-form-input-name-remember">    
                                                               <div className="custom-checkbox"></div>    </span></div></div></div>  </div>  <div className="o-form-button-bar"><input className="button button-primary" type="submit" defaultValue="Sign In" id="okta-signin-submit" data-type="save" /></div>
-                                                              </form><div className="auth-footer">     
+                                    </form>
+                                        <div className="auth-footer">     
                                                               
                                                                <ul className="help-links js-help-links" style={{display: 'none'}}>       
                                                                 <li>       
