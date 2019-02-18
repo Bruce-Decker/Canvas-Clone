@@ -290,12 +290,13 @@ app.post('/createCourse', passport.authenticate('jwt', { session: false }), func
         CourseId,
         CourseName,
         CourseDept,
+        CourseDescription,
         CourseRoom,
         CourseCapacity,
         WaitlistCapacity,
         CourseTerm
     }
-
+    
     pool.getConnection(function(err,connection){
         if (err) {
             res.json({"code" : 100, "status" : "Error in connection database"});
@@ -314,6 +315,87 @@ app.post('/createCourse', passport.authenticate('jwt', { session: false }), func
     })
 
 })
+
+app.get('/searchCoursebyID', passport.authenticate('jwt', { session: false }), function(req, res) {
+    
+    console.log(req.body.id)
+    var id = req.body.id
+    var sql = `SELECT * FROM course WHERE CourseId = ${id} LIMIT 1`
+
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+          })       
+    })
+})
+
+app.get('/searchCoursebyName', passport.authenticate('jwt', { session: false }), function(req, res) {
+    
+    console.log(req.body.courseName)
+   
+    var courseName = req.body.courseName
+    console.log(courseName)
+    var sql = `SELECT * FROM course WHERE CourseName = ?`
+
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, courseName, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+          })       
+    })
+})
+
+app.get('/searchCoursebyValue', passport.authenticate('jwt', { session: false }), function(req, res) {
+    
+    console.log(req.body.courseId)
+   
+    var courseId = req.body.courseId
+    
+    var sql = `SELECT * FROM course WHERE CourseId > ?`
+
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, courseId, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+          })       
+    })
+})
+
+app.get('/createCourseListTable', (req, res) => {
+    var sql = `CREATE TABLE CourseList(email VARCHAR(255), CourseId VARCHAR(255), PRIMARY KEY(email))`
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log(result);
+        res.send("Created Table Successfully")
+
+    })
+})
+
 
 
 app.get('/createCourseTable', (req, res) => {
