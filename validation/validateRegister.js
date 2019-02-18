@@ -27,10 +27,21 @@ module.exports = function validateRegister(data) {
     
     
       if (Validator.isEmpty(data.password) || Validator.isEmpty(data.password2)) {
-        errors.password = 'One of the password field is required';
+        if (Validator.isEmpty(data.password)) {
+          errors.password = 'Please enter password';
+        } 
+        if (Validator.isEmpty(data.password2)) {
+          errors.password2 = 'Please enter password';
+        }
+       
       } else {
-        if (!Validator.isLength(data.password, { min: 6, max: 30 })) {
-          errors.password = 'Password must be at least 6 characters';
+        if (!Validator.isLength(data.password, { min: 6, max: 30 }) || !Validator.isLength(data.password2, { min: 6, max: 30 })) {
+           if (!Validator.isLength(data.password, { min: 6, max: 30 })) {
+              errors.password = 'Password must be at least 6 characters';
+           }
+           if (!Validator.isLength(data.password, { min: 6, max: 30 })) {
+              errors.password2 = 'Password must be at least 6 characters';
+           }
         } else {
           if (data.password != data.password2) {
             errors.password2 = 'Passwords must match';

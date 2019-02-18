@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import RegisterBanner from './RegisterBanner'
+import { withRouter } from 'react-router-dom';
 import classnames from 'classnames'
 import axios from 'axios'
+import propTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { registerUser } from '../actions/authActions'
 
 import '../App.css';
 
@@ -18,6 +21,12 @@ class Register extends Component {
         }
     }
 
+ componentWillReceiveProps(nextProps) {
+     if (nextProps.errors) {
+         this.setState({errors: nextProps.errors})
+     }
+ }
+
   onChange = (e) => {
       this.setState({[e.target.name]: e.target.value})
   }
@@ -30,17 +39,24 @@ class Register extends Component {
          password: this.state.password,
          password2: this.state.password2
      }
-     axios.post('/createBasicUser', newUser)
-        .then(result => console.log(result.data))
-        .catch(err => this.setState({errors: err.response.data}))
+     console.log(newUser)
+
+    this.props.registerUser(newUser, this.props.history)
+    this.state.errors = null
+    //  axios.post('/createBasicUser', newUser)
+    //     .then(result => console.log(result.data))
+    //     .catch(err => this.setState({errors: err.response.data}))
   }
 
   render() {
       const { errors } = this.state;
+
+      const { user } = this.props.auth;
      
       return (
           <div className = "Register">
              <RegisterBanner />
+             
             
              <div id="signin-container">
                   <div data-se="auth-container" id="okta-sign-in" className="auth-container main-container no-beacon">      
@@ -171,5 +187,16 @@ class Register extends Component {
       }
     
     }
+
+Register.propTypes = {
+    registerUser: propTypes.func.isRequired,
+    auth: propTypes.object.isRequired,
+    errors: propTypes.object.isRequired
+}
+
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+    errors: state.errors
+})
     
-    export default Register; 
+export default connect(mapStateToProps, { registerUser })(withRouter(Register)); 

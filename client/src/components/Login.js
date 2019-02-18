@@ -1,8 +1,55 @@
 import React, { Component } from 'react'
 import LoginBanner from './LoginBanner'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { loginUser } from '../actions/authActions'
+
 
 class Login extends Component {
+    constructor() {
+        super();
+        this.state = {
+            email: '',
+            password: '',
+            errors: {}
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.auth.isAuthenticated) {
+           
+             this.props.history.push('/')
+        }
+        if (nextProps.errors) {
+          
+            this.setState({errors: nextProps.errors})
+        }
+    }
+
+    onChange = (e) => {
+        this.setState({[e.target.name]: e.target.value})
+    }
+
+    onSubmit = (e) => {
+        e.preventDefault()
+        const user = {
+           
+            email: this.state.email,
+            password: this.state.password,
+           
+        }
+        console.log(user)
+   
+       this.props.loginUser(user)
+       //this.state.errors = null
+       //  axios.post('/createBasicUser', newUser)
+       //     .then(result => console.log(result.data))
+       //     .catch(err => this.setState({errors: err.response.data}))
+     }
+
   render() {
+     const { errors } = this.state
+
       return (
           <div className = "Login">
                <LoginBanner />
@@ -14,7 +61,10 @@ class Login extends Component {
                               </div>      
                               <div className="auth-content">
                                   <div className="auth-content-inner">
-                                     <div className="primary-auth"><form method="POST" action="https://sjsu.okta.com/login/login.htm" data-se="o-form" id="form18" className="primary-auth-form o-form o-form-edit-mode">        
+
+
+                                     <div className="primary-auth">
+                                       <form onSubmit = {this.onSubmit} data-se="o-form" id="form18" className="primary-auth-form o-form o-form-edit-mode">        
                                          <div data-se="o-form-content" className="o-form-content o-form-theme clearfix">                        
                                             <h2 data-se="o-form-head" className="okta-form-title o-form-head">Sign In</h2>                          
                                                <div className="o-form-error-container" data-se="o-form-error-container" />      
@@ -23,13 +73,48 @@ class Login extends Component {
                                                           <div data-se="o-form-input-container" className="o-form-input">
                                                               <span data-se="o-form-input-username" className="o-form-input-name-username o-form-control okta-form-input-field input-fix">              
                                                               <span className="input-tooltip icon form-help-16" data-hasqtip={0} />                    
-                                                              <span className="icon input-icon person-16-gray" />            
-                                                              <input type="text" placeholder="SJSU ID Number" name="username" id="okta-signin-username"  aria-label="SJSU ID Number" autoComplete="off" />          
+                                                              <span className="icon input-icon person-16-gray" />  
+
+                                                              <input type="text" 
+                                                                     placeholder="SJSU Email" 
+                                                                     name="email" 
+                                                                     id="okta-signin-username"  
+                                                                     aria-label="SJSU Email" 
+                                                                     autoComplete="off"
+                                                                     value = {this.state.email}
+                                                                     onChange = {this.onChange}
+                                                                     
+                                                                     />  
+
+                                                                     <div className = "inputError">
+                                                                        {errors.email }
+                                                                     </div>    
+
+
+
                                                               </span></div></div><div data-se="o-form-fieldset" className="o-form-fieldset o-form-label-top">
                                                               <div data-se="o-form-input-container" className="o-form-input"><span data-se="o-form-input-password" className="o-form-input-name-password o-form-control okta-form-input-field input-fix">              
                                                               <span className="input-tooltip icon form-help-16" data-hasqtip={1} />                    
                                                               <span className="icon input-icon remote-lock-16" />            
-                                                              <input type="password" placeholder="Password" name="password" id="okta-signin-password" aria-label="Password" autoComplete="off" />          
+
+
+                                                              <input type="password" 
+                                                                     placeholder="Password" 
+                                                                     name="password" 
+                                                                     id="okta-signin-password" 
+                                                                     aria-label="Password" 
+                                                                     autoComplete="off" 
+                                                                     value = {this.state.password}
+                                                                     onChange = {this.onChange}
+                                                                     /> 
+
+
+                                                                   <div className = "inputError">
+                                                                        {errors.password }
+                                                                   </div> 
+
+
+
                                                               </span></div></div><div data-se="o-form-fieldset" className="o-form-fieldset o-form-label-top margin-btm-0"><div data-se="o-form-input-container" className="o-form-input"><span data-se="o-form-input-remember" className="o-form-input-name-remember">    
                                                               <div className="custom-checkbox"><input type="checkbox" name="remember" id="input41" /><label htmlFor="input41" data-se-for-name="remember">Remember me</label></div>    </span></div></div></div>  </div>  <div className="o-form-button-bar"><input className="button button-primary" type="submit" defaultValue="Sign In" id="okta-signin-submit" data-type="save" /></div>
                                                               </form><div className="auth-footer">     
@@ -55,4 +140,15 @@ class Login extends Component {
 
 }
 
-export default Login;
+Login.propTypes = {
+    loginUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
+}
+
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+    errors: state.errors
+})
+
+export default connect(mapStateToProps, { loginUser })(Login);

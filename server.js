@@ -2,6 +2,7 @@ var express = require('express')
 var app = express();
 var bodyParser = require('body-parser')
 var mysql = require('mysql')
+const morgan = require('morgan')
 var bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const passport = require('passport');
@@ -41,6 +42,7 @@ const upload = multer({
      fileFilter: fileFilter
 })
 
+app.use(morgan('dev'))
 app.use(passport.initialize());
 require('./config/passport')(passport);
 
@@ -104,7 +106,7 @@ app.post('/login', function(req, res) {
         return res.status(400).json(errors);
     }
 
-
+   
     var email = req.body.email;
     var password = req.body.password
     pool.getConnection(function(err,connection){
@@ -118,7 +120,8 @@ app.post('/login', function(req, res) {
             return res.status(404).json(err)
         }
         if (result.length == 0) {
-            return res.status(404).json('User not found')
+            errors.email = 'User not found'
+            return res.status(404).json(errors)
         }
 
         bcrypt.compare(password, result[0].password)
@@ -274,7 +277,7 @@ app.post('/createProfile', upload.single('filename'), passport.authenticate('jwt
 })
 
 app.post('/createCourse', passport.authenticate('jwt', { session: false }), function(req, res) {
-    var sql = 'INSERT INTO profile SET ?'
+    var sql = 'INSERT INTO course SET ?'
     var CourseId = req.body.CourseId;
     var CourseName = req.body.CourseName;
     var CourseDept = req.body.CourseDept;
@@ -327,13 +330,9 @@ app.get('/createCourseTable', (req, res) => {
     })
 })
 
-app.post('/upload', upload.single('filename'), (req, res) => {
-    console.log(req.body.name)
-    console.log(req.file.path)
-    
-    res.send("fsdfds")
-});
+app.post('/postComment/:userID', passport.authenticate('jwt', { session: false }), function(req, res) {
 
+})
   
 
 app.listen(5000, function() {
