@@ -412,6 +412,36 @@ app.get('/createCourseTable', (req, res) => {
     })
 })
 
+
+app.post('/registerCourse', passport.authenticate('jwt', { session: false }), function(req, res) {
+    var sql = 'INSERT INTO CourseList SET ?'
+    var email = req.body.email;
+    var CourseId = req.body.CourseId;
+   
+    var courseData = {
+        email,
+        CourseId
+    }
+    
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, courseData, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+
+          })
+        
+    })
+
+})
+
 app.post('/postComment/:userID', passport.authenticate('jwt', { session: false }), function(req, res) {
 
 })
