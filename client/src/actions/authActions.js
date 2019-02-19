@@ -39,6 +39,7 @@ export const loginUser = (userData) => dispatch => {
 export const logout = () => dispatch => {
     localStorage.removeItem('token')
     tokenHeader(false)
+   
     dispatch(activeUser({}))
 }
 
