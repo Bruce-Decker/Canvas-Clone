@@ -228,7 +228,9 @@ app.get('/createProfile', (req, res) => {
 
 app.post('/createProfile', upload.single('filename'), passport.authenticate('jwt', { session: false }), (req, res) => {
     var sql = 'INSERT INTO profile SET ?'
+    
     var image_path = req.file.path
+    
     var name = req.body.name
     var email = req.body.email
     var phone_number = req.body.phone_number

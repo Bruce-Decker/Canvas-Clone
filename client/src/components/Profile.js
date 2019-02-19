@@ -1,7 +1,8 @@
 import Sidebar_Custom from './Sidebar_Custom'
 import Banner from './Banner'
 import '../App.css';
-
+import axios from 'axios'
+import { connect } from 'react-redux'
 import React, { Component } from 'react'
 
 
@@ -11,7 +12,7 @@ class Profile extends Component {
         this.state = {
             name: '',
             email: '',
-            filename: '',
+            file: null,
             phone_number: '',
             city: '',
             country: '',
@@ -25,30 +26,43 @@ class Profile extends Component {
         }
     }
 
+    handleFile = event => {
+        console.log('uploaded')
+        let file = event.target.files[0]
+        
+        this.setState({file: file})
+    }
+
     onChange = (e) => {
         this.setState({[e.target.name]: e.target.value})
     }
 
     onSubmit = (e) => {
         e.preventDefault()
-        const user = {
-            name: this.state.name,
-            email: this.state.email,
-            filename: this.state.filename,
-            phone_number: this.state.phone_number,
-            city: this.state.city,
-            country: this.state.country,
-            company: this.state.company,
-            school: this.state.school,
-            hometown: this.state.hometown,
-            languages: this.state.languages,
-            gender: this.state.gender,
-            about_me: this.state.about_me,
+        let file = this.state.file
+        let formdata = new FormData()
+        formdata.append('name', this.state.name)
+        formdata.append('email', this.state.email)
+        formdata.append('filename', file)
+        formdata.append('phone_number', this.state.phone_number)
+        formdata.append('city', this.state.city)
+        formdata.append('country', this.state.country)
+        formdata.append('company', this.state.company)
+        formdata.append('school', this.state.school)
+        formdata.append('hometown', this.state.hometown)
+        formdata.append('languages', this.state.languages)
+        formdata.append('gender', this.state.gender)
+        formdata.append('about_me', this.state.about_me)
 
-           
-        }
-        console.log(user)
+        axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
+        axios.post('/createProfile', formdata)
+        .then(res => console.log(res.data))
+        .catch(err => console.log(err))
+       
     }
+
+   
+    
    
     render() {
       
@@ -69,7 +83,7 @@ class Profile extends Component {
                 </div>
                 <div className="field">
                 <label> Upload an image </label>
-                <input type="file" name="filename" id="fileToUpload"  onChange = {this.onChange}/>
+                <input type="file" name="filename" id="fileToUpload"  onChange = {this.handleFile}/>
                 </div>
                 <div className="field">
                   <label> Phone Number </label>
@@ -133,5 +147,10 @@ class Profile extends Component {
 
 
 }
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+    errors: state.errors
+})
 
-export default Profile
+
+export default connect(mapStateToProps)(Profile)

@@ -6,6 +6,7 @@ import Profile from './components/Profile'
 import jwt_decode from 'jwt-decode'
 import tokenHeader from './utility/tokenHeader'
 import { activeUser } from './actions/authActions'
+import { logout } from './actions/authActions'
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { Provider } from 'react-redux';
@@ -18,6 +19,11 @@ if (localStorage.token) {
   tokenHeader(localStorage.token)
   const decoded = jwt_decode(localStorage.token)
   store.dispatch(activeUser(decoded));
+  const time_now = Date.now() / 1000;
+  if (decoded.exp < time_now) {
+     store.dispatch(logout())
+     window.location.href = '/'
+  }
 }
 
 
