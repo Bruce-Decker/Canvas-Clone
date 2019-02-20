@@ -3,6 +3,7 @@ import Login from './components/Login'
 import Landing from './components/Landing'
 import Register from './components/Register'
 import Profile from './components/Profile'
+import createCourse from './components/createCourse'
 import jwt_decode from 'jwt-decode'
 import tokenHeader from './utility/tokenHeader'
 import { activeUser } from './actions/authActions'
@@ -40,6 +41,7 @@ class App extends Component {
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/register" component={Register} />
                     <Route exact path="/profile" component={Profile} />
+                    <Route exact path="/createCourse" component={createCourse} />
                   
                 
               </div>
