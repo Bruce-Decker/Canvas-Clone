@@ -1,4 +1,10 @@
 
+.welcome {
+  display:inline-block;
+  
+ 
+}
+
 .inputError {
 
   color: red;
@@ -12,6 +18,31 @@
 .SJSU_image {
   width: 100px;
   height: 100px;
+}
+
+.bannerContainer {
+ 
+ text-align: center;
+
+}
+
+.loginContainer {
+ 
+  position: relative;    
+  margin-top: 20px;
+  margin-bottom: 50px;
+  width: 500px;
+  margin-left: 440px;
+
+}
+
+.registerContainer {
+ 
+  position: relative;    
+  margin-top: 50px;
+  width: 500px;
+  margin-left: 440px;
+
 }
 
 .profileContainer {
