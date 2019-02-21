@@ -11,6 +11,7 @@ class Banner extends Component {
       
         <p>  Access SJSU Canvas at Anytime using your SJSU email</p>
         </div>
+        <hr></hr>
     </div>
       )
   }

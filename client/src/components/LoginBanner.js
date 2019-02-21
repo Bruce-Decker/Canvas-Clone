@@ -11,6 +11,7 @@ class LoginBanner extends Component {
       
         <p> Login with your San Jose State University Email to access SJSU Canvas</p>
         </div>
+        <hr></hr>
     </div>
       )
   }

@@ -51,14 +51,16 @@ var pool = mysql.createPool({
     host     : 'localhost',
     user     : 'root',
     password : 'root',
-    database : 'Canvas273'
+    database : 'Canvas273',
+    multipleStatements: true
   });
 
 var db = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
     password : 'root',
-    database : 'Canvas273'
+    database : 'Canvas273',
+    multipleStatements: true
 });
 
 // pool.connect((error) => {
@@ -98,6 +100,10 @@ app.use(bodyParser.json({limit: '50mb', extended: true}));
 
 app.get('/', function(req, res) {
     res.send('test')
+})
+
+app.get('/test', function(req, res) {
+    res.send('sdfsdfsdf')
 })
 
 app.post('/login', function(req, res) {
@@ -224,6 +230,28 @@ app.get('/createProfile', (req, res) => {
             res.send("Created Table Successfully")
 
         })
+})
+
+app.get('/retrieveUserProfileFromCourse/:Id', (req, res) => {
+  
+    var Id = req.params.Id;
+    var sql = "SELECT * FROM CourseList JOIN profile where CourseId =?"
+   
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }  
+          connection.query(sql, Id, (err, result) => {
+            if (err) {
+                throw err
+            } else {
+                res.send(result)
+            }
+
+        })
+     
+ })
 })
 
 app.post('/createProfile', upload.single('filename'), passport.authenticate('jwt', { session: false }), (req, res) => {

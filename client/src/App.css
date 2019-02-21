@@ -24,18 +24,28 @@
 .SJSU_image {
   width: 100px;
   height: 100px;
+  z-index: 10;
 }
 
 .bannerContainer {
  margin-top: 20px;
  text-align: center;
+ z-index: 0;
 
+}
+
+
+.tableContainer {
+  margin-top: 50px;
+  width: 700px;
+  text-align: center;
+  margin-left: 340px;
 }
 
 .loginContainer {
  
   position: relative;    
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 50px;
   width: 500px;
   margin-left: 440px;
@@ -62,12 +72,14 @@
 
 .profileContainer {
  
-  position: relative;    
+    
   margin-top: 50px;
   width: 500px;
   margin-left: 450px;
 
 }
+
+
 
 .sidebar {
   margin: 0;
@@ -78,6 +90,8 @@
   height: 100%;
   overflow: auto;
   margin-right: 2200px;
+  z-index: 1;
+  position: absolute;
 }
 
 /* Sidebar links */
@@ -86,18 +100,21 @@
   color: black;
   padding: 16px;
   text-decoration: none;
+  z-index: 10;
 }
 
 /* Active/current link */
 .sidebar a.active {
   background-color: white;;
   color: blue;
+  z-index: 10;
 }
 
 /* Links on mouse-over */
 .sidebar a:hover:not(.active) {
   background-color: #555;
   color: white;
+  z-index: 10;
 }
 
 /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
@@ -105,23 +122,6 @@ div.content {
   margin-left: 200px;
   padding: 1px 16px;
   height: 1000px;
+  z-index: 10;
 }
 
-/* On screens that are less than 700px wide, make the sidebar into a topbar */
-@media screen and (max-width: 700px) {
-  .sidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
-  }
-  .sidebar a {float: left;}
-  div.content {margin-left: 0;}
-}
-
-/* On screens that are less than 400px, display the bar vertically, instead of horizontally */
-@media screen and (max-width: 400px) {
-  .sidebar a {
-    text-align: center;
-    float: none;
-  }
-}
