@@ -29,7 +29,9 @@ class createCourse extends Component {
     }
 
     onSubmit = (e) => {
-       
+        
+      
+        var email = this.props.auth.user.email;
         var CourseId = this.state.CourseId
         var CourseName = this.state.CourseName
         var CourseDept = this.state.CourseDept
@@ -39,6 +41,7 @@ class createCourse extends Component {
         var WaitlistCapacity = this.state.WaitlistCapacity
         var CourseTerm = this.state.CourseTerm
         var data = {
+            email: email,
             CourseId: CourseId,
             CourseName: CourseName,
             CourseDept: CourseDept,
@@ -113,5 +116,12 @@ class createCourse extends Component {
     }
 }
 
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+    
+    errors: state.errors
+})
 
-export default createCourse;
+
+
+export default connect(mapStateToProps)(createCourse);

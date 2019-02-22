@@ -12,6 +12,7 @@ class StudentSearch extends Component {
         super();
         this.state = {
             CourseId: '',
+            tableVisibility: false,
             students: []
         }
 
@@ -35,6 +36,7 @@ class StudentSearch extends Component {
 
       this.setState({
         students: response.data,
+        tableVisibility: true
        
     })
     
@@ -70,22 +72,20 @@ class StudentSearch extends Component {
              <div className = "tableContainer">
                 <table className="ui celled table">
 
-<thead>
-  <tr><th>Image</th>
-    <th>Name</th>
-    <th>Email</th>
-  </tr></thead>
-<tbody>
+                 { this.state.tableVisibility ? <Table /> : null }
+             <tbody>
 
-      {this.state.students.map(student => 
-       <div>
-           
-          <h5> {student.image_path} {student.name} {student.email}</h5>
-         
-         
-          </div>
+                 {this.state.students.map(student => 
+                    <tr>
+                       <td><img src = {"../../" + student.image_path} height = "190" width = "190" /></td>
+                       <td>{student.name}</td>
+                       <td>{student.email}</td>
 
-     )}
+                    </tr>
+                 
+              
+
+              )}
 
 
         </tbody>
@@ -98,5 +98,20 @@ class StudentSearch extends Component {
 
     }
 }
+
+var Table = () => ({
+    render: function() {
+        return (
+            <thead>
+            <tr>
+                <th>Profile Image</th>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+            </thead>
+
+        )
+    }
+})
 
 export default StudentSearch

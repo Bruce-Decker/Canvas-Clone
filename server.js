@@ -308,6 +308,7 @@ app.post('/createProfile', upload.single('filename'), passport.authenticate('jwt
 
 app.post('/createCourse', passport.authenticate('jwt', { session: false }), function(req, res) {
     var sql = 'INSERT INTO course SET ?'
+    var email = req.body.email;
     var CourseId = req.body.CourseId;
     var CourseName = req.body.CourseName;
     var CourseDept = req.body.CourseDept;
@@ -317,6 +318,7 @@ app.post('/createCourse', passport.authenticate('jwt', { session: false }), func
     var WaitlistCapacity = req.body.WaitlistCapacity;
     var CourseTerm = req.body.CourseTerm;
     var courseData = {
+        email,
         CourseId,
         CourseName,
         CourseDept,
@@ -429,11 +431,11 @@ app.get('/createCourseListTable', (req, res) => {
 
 
 app.get('/createCourseTable', (req, res) => {
-    var sql = `CREATE TABLE course(CourseId VARCHAR(255), 
+    var sql = `CREATE TABLE course(email VARCHAR(255), CourseId VARCHAR(255), 
         CourseName VARCHAR(255), CourseDept VARCHAR(255), 
         CourseDescription VARCHAR(255),
         CourseRoom VARCHAR(255), CourseCapacity VARCHAR(255), 
-        WaitlistCapacity VARCHAR(255), CourseTerm VARCHAR(255), PRIMARY KEY(CourseId))`
+        WaitlistCapacity VARCHAR(255), CourseTerm VARCHAR(255), PRIMARY KEY(email))`
     db.query(sql, (err, result) => {
          if (err) throw err;
          console.log(result);
