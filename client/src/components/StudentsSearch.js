@@ -77,9 +77,9 @@ class StudentSearch extends Component {
 
                  {this.state.students.map(student => 
                     <tr>
-                       <td><img src = {"../../" + student.image_path} height = "190" width = "190" /></td>
-                       <td>{student.name}</td>
-                       <td>{student.email}</td>
+                       <td key = {student.eamil}><img src = {"../../" + student.image_path} height = "190" width = "190" key = {student.eamil}/></td>
+                       <td key = {student.eamil}>{student.name}</td>
+                       <td key = {student.eamil}>{student.email}</td>
 
                     </tr>
                  

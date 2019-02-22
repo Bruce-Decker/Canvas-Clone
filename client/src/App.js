@@ -5,6 +5,7 @@ import Register from './components/Register'
 import Profile from './components/Profile'
 import createCourse from './components/createCourse'
 import StudentSearch from './components/StudentsSearch'
+import showRegisteredCourse from './components/showRegisteredCourse'
 import jwt_decode from 'jwt-decode'
 import tokenHeader from './utility/tokenHeader'
 import { activeUser } from './actions/authActions'
@@ -49,6 +50,7 @@ class App extends Component {
                        <SecureRoutes exact path="/createCourse" component={createCourse} />
                     </Switch>
                     <Route exact path="/studentSearch" component={StudentSearch} />
+                    <Route exact path="/showRegisteredCourse" component={showRegisteredCourse} />
                   
                 
               </div>

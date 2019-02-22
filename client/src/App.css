@@ -61,6 +61,19 @@
 
 }
 
+.registerCourseContainer {
+ 
+  position: relative;    
+  margin-top: 50px;
+  width: 700px;
+  margin-left: 450px;
+
+}
+
+.drop_button {
+  float: right;
+}
+
 .pageContainer {
  
   position: relative;    

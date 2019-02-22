@@ -419,7 +419,7 @@ app.get('/searchCoursebyValue', passport.authenticate('jwt', { session: false })
 })
 
 app.get('/createCourseListTable', (req, res) => {
-    var sql = `CREATE TABLE CourseList(email VARCHAR(255), CourseId VARCHAR(255), PRIMARY KEY(email))`
+    var sql = `CREATE TABLE CourseList(uuid VARCHAR(255), email VARCHAR(255), CourseId VARCHAR(255), PRIMARY KEY(uuid))`
     db.query(sql, (err, result) => {
         if (err) throw err;
         console.log(result);
@@ -435,7 +435,7 @@ app.get('/createCourseTable', (req, res) => {
         CourseName VARCHAR(255), CourseDept VARCHAR(255), 
         CourseDescription VARCHAR(255),
         CourseRoom VARCHAR(255), CourseCapacity VARCHAR(255), 
-        WaitlistCapacity VARCHAR(255), CourseTerm VARCHAR(255), PRIMARY KEY(email))`
+        WaitlistCapacity VARCHAR(255), CourseTerm VARCHAR(255), PRIMARY KEY(CourseId))`
     db.query(sql, (err, result) => {
          if (err) throw err;
          console.log(result);
@@ -447,10 +447,13 @@ app.get('/createCourseTable', (req, res) => {
 
 app.post('/registerCourse', passport.authenticate('jwt', { session: false }), function(req, res) {
     var sql = 'INSERT INTO CourseList SET ?'
+    
     var email = req.body.email;
     var CourseId = req.body.CourseId;
+    var uuid = email.toString() + CourseId.toString()
    
     var courseData = {
+        uuid,
         email,
         CourseId
     }
@@ -474,9 +477,45 @@ app.post('/registerCourse', passport.authenticate('jwt', { session: false }), fu
 
 })
 
-app.post('/postComment/:userID', passport.authenticate('jwt', { session: false }), function(req, res) {
+app.get('/registerCourse/:email', function(req, res) {
+    var email = req.params.email
+   
+    console.log(email)
+    var sql = `SELECT courseId FROM CourseList WHERE email = ?`
+    
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, email, (err, results) => {
+              if (err) {
+                  throw err
+              } else {
+                  var count = results.length;
+                  if (count) {
+                    var course_array = results.map(i => i.courseId); 
+                  }
+                  var sql2 = `SELECT * FROM course WHERE courseId in  ('${course_array.join("','")}')`
+                  connection.query(sql2, (err, results2) => {
+                    if (err) {
+                        throw err
+                    } else {
+                       res.send(results2)
+                    }
+                     
+                  })
+              
+              }
+          })       
+    })
 
 })
+
+// app.post('/postComment/:userID', passport.authenticate('jwt', { session: false }), function(req, res) {
+
+// })
   
 
 app.listen(5000, function() {
