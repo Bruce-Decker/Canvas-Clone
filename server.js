@@ -444,6 +444,35 @@ app.get('/createCourseTable', (req, res) => {
     })
 })
 
+app.post('/dropCourse', function(req, res) {
+    var data = req.body;
+    var delete_data = {
+        email: data.email,
+        CourseId: data.CourseId
+    }
+    
+    var sql = "DELETE FROM CourseList WHERE email  = ? AND CourseId = ?"
+    console.log(sql)
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, [delete_data.email, delete_data.CourseId], (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+
+          })
+        
+    })
+
+
+})
+
 
 app.post('/registerCourse', passport.authenticate('jwt', { session: false }), function(req, res) {
     var sql = 'INSERT INTO CourseList SET ?'

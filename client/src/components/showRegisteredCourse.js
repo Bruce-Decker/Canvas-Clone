@@ -18,8 +18,21 @@ class showRegisteredCourse extends Component {
        
     }
 
-    onClick = (a) => {
-        console.log(a)
+    onClick = (courseId) => {
+        // console.log(courseId)
+        // console.log(this.props.auth.user.email)
+        var data = {
+            email: this.props.auth.user.email,
+            CourseId: courseId
+        }
+        console.log(data)
+
+        axios.post('/dropCourse', data)
+        .then(res => this.componentDidMount())
+        .catch(err => console.log(err))
+
+        
+
     }
 
 
