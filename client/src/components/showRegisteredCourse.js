@@ -4,6 +4,9 @@ import '../App.css';
 import axios from 'axios'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
+
 
 
 class showRegisteredCourse extends Component {
@@ -68,7 +71,7 @@ class showRegisteredCourse extends Component {
               <div className = "registerCourseContainer">
                {  this.state.courses.map(course =>  
                     
-                    <h1 key = {course.CourseId}> {course.CourseId}  {course.CourseName}  { this.state.listVisibility ? <ListButton value = {course.CourseId} onClick = {this.onClick}/> : null } </h1>
+                    <h1 key = {course.CourseId}> <Link to = {`/CourseProfile/${course.CourseId}`} params = {course.CourseId}> {course.CourseId}   {course.CourseName}</Link>   { this.state.listVisibility ? <ListButton value = {course.CourseId} onClick = {this.onClick}/> : null } </h1>
                
                 )}
                 </div>

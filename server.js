@@ -235,7 +235,7 @@ app.get('/createProfile', (req, res) => {
 app.get('/retrieveUserProfileFromCourse/:Id', (req, res) => {
   
     var Id = req.params.Id;
-    var sql = "SELECT * FROM CourseList JOIN profile where CourseId =?"
+    var sql = "SELECT * FROM CourseList where CourseId =?"
    
     pool.getConnection(function(err,connection){
         if (err) {
@@ -246,15 +246,30 @@ app.get('/retrieveUserProfileFromCourse/:Id', (req, res) => {
             if (err) {
                 throw err
             } else {
-                res.send(result)
+              
+                var count = result.length
+                if (count) {
+                    var profile_array = result.map(i => i.email); 
+                    var sql2 = `SELECT * FROM profile WHERE email in  ('${profile_array.join("','")}')`
+                    connection.query(sql2, (err, results2) => {
+                        if (err) {
+                            throw err
+                        } else {
+                        res.send(results2)
+                        }
+                        
+                    }) 
+                 } else {
+                     res.send([{CourseId: null, CourseName: null}])
+                 }
             }
 
         })
      
  })
 })
-
-app.post('/createProfile', upload.single('filename'), passport.authenticate('jwt', { session: false }), (req, res) => {
+// passport.authenticate('jwt', { session: false }),
+app.post('/createProfile', upload.single('filename'),  (req, res) => {
     var sql = 'INSERT INTO profile SET ?'
     
     var image_path = req.file.path
@@ -474,7 +489,7 @@ app.post('/dropCourse', function(req, res) {
 })
 
 
-app.post('/registerCourse', passport.authenticate('jwt', { session: false }), function(req, res) {
+app.post('/registerCourse',  function(req, res) {
     var sql = 'INSERT INTO CourseList SET ?'
     
     var email = req.body.email;

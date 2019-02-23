@@ -7,6 +7,7 @@ import createCourse from './components/createCourse'
 import StudentSearch from './components/StudentsSearch'
 import CourseProfile from './components/CourseProfile'
 import showRegisteredCourse from './components/showRegisteredCourse'
+import ViewStudents from './components/ViewStudents'
 import jwt_decode from 'jwt-decode'
 import tokenHeader from './utility/tokenHeader'
 import { activeUser } from './actions/authActions'
@@ -54,7 +55,9 @@ class App extends Component {
                     <Route exact path="/studentSearch" component={StudentSearch} />
                     <Route exact path="/showRegisteredCourse" component={showRegisteredCourse} />
                    
-                  
+                    <Route exact path="/courseProfile/:CourseId" component={CourseProfile} />
+                    <Route exact path="/viewStudents/:CourseId" component={ViewStudents} />
+                   
                 
               </div>
             </BrowserRouter>
