@@ -12,7 +12,8 @@ class showRegisteredCourse extends Component {
         this.state = {
           
           
-            courses: []
+            courses: [],
+            listVisibility: false
         }
 
        
@@ -25,7 +26,7 @@ class showRegisteredCourse extends Component {
             email: this.props.auth.user.email,
             CourseId: courseId
         }
-        console.log(data)
+     
 
         axios.post('/dropCourse', data)
         .then(res => this.componentDidMount())
@@ -36,17 +37,26 @@ class showRegisteredCourse extends Component {
     }
 
 
+
    async componentDidMount() {
        
         const response = await axios.get('/registerCourse/' + this.props.auth.user.email)
-        console.log(response.data)
+        
         this.setState({
             courses: response.data,
           
            
         })
+        if (this.state.courses[0].CourseId !== null) {
+           
+         this.setState({
+           
+            listVisibility: true
+           
+        })
+        }
 
-        console.log(this.state.courses)
+       
     }
 
     render() {
@@ -56,9 +66,10 @@ class showRegisteredCourse extends Component {
               <Banner />
               <Sidebar_Custom />
               <div className = "registerCourseContainer">
-                {this.state.courses.map(course => 
-                   
-                    <h1> {course.CourseId}  {course.CourseName}  <button class="ui red button drop_button" onClick={() => this.onClick(course.CourseId)}> Drop </button></h1>
+               {  this.state.courses.map(course =>  
+                    
+                    <h1 key = {course.CourseId}> {course.CourseId}  {course.CourseName}  { this.state.listVisibility ? <ListButton value = {course.CourseId} onClick = {this.onClick}/> : null } </h1>
+               
                 )}
                 </div>
           </div>
@@ -66,6 +77,18 @@ class showRegisteredCourse extends Component {
     }
 
 }
+
+
+var ListButton = (props) => ({
+    
+    render: function() {
+        return (
+            <button className="ui red button drop_button" onClick={() => this.props.onClick(this.props.value)}> Drop </button>
+
+        )
+    }
+})
+
 
 const mapStateToProps = (state) => ({
     auth: state.auth,

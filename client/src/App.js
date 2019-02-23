@@ -5,12 +5,14 @@ import Register from './components/Register'
 import Profile from './components/Profile'
 import createCourse from './components/createCourse'
 import StudentSearch from './components/StudentsSearch'
+import CourseProfile from './components/CourseProfile'
 import showRegisteredCourse from './components/showRegisteredCourse'
 import jwt_decode from 'jwt-decode'
 import tokenHeader from './utility/tokenHeader'
 import { activeUser } from './actions/authActions'
 import { logout } from './actions/authActions'
 import { resetProfile } from './actions/userProfileAction'
+
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { Provider } from 'react-redux';
@@ -51,6 +53,7 @@ class App extends Component {
                     </Switch>
                     <Route exact path="/studentSearch" component={StudentSearch} />
                     <Route exact path="/showRegisteredCourse" component={showRegisteredCourse} />
+                   
                   
                 
               </div>

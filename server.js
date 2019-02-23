@@ -507,7 +507,14 @@ app.post('/registerCourse', passport.authenticate('jwt', { session: false }), fu
 })
 
 app.get('/registerCourse/:email', function(req, res) {
-    var email = req.params.email
+    var email 
+    
+     if (req.params.email) {
+         email = req.params.email
+     } else {
+         email = "doesn't exist"
+     }
+    
    
     console.log(email)
     var sql = `SELECT courseId FROM CourseList WHERE email = ?`
@@ -525,16 +532,18 @@ app.get('/registerCourse/:email', function(req, res) {
                   var count = results.length;
                   if (count) {
                     var course_array = results.map(i => i.courseId); 
-                  }
-                  var sql2 = `SELECT * FROM course WHERE courseId in  ('${course_array.join("','")}')`
-                  connection.query(sql2, (err, results2) => {
-                    if (err) {
-                        throw err
-                    } else {
-                       res.send(results2)
-                    }
-                     
-                  })
+                    var sql2 = `SELECT * FROM course WHERE courseId in  ('${course_array.join("','")}')`
+                    connection.query(sql2, (err, results2) => {
+                        if (err) {
+                            throw err
+                        } else {
+                        res.send(results2)
+                        }
+                        
+                    }) 
+                 } else {
+                     res.send([{CourseId: null, CourseName: null}])
+                 }
               
               }
           })       
