@@ -65,7 +65,7 @@ class Register extends Component {
 
           <div className = "registerContainer">
            
-             <div class = "ui stacked segment">
+           
 
                                 <form className="ui form" onSubmit = {this.onSubmit}>
                                     <div className="field">
@@ -152,7 +152,7 @@ class Register extends Component {
 
                                 
           </div>
-          </div>  
+        
           )
       }
     

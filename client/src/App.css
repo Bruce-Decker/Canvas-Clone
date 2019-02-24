@@ -57,7 +57,7 @@
   position: relative;    
   margin-top: 50px;
   width: 500px;
-  margin-left: 440px;
+  margin-left: 520px;
 
 }
 
@@ -67,6 +67,14 @@
   margin-top: 50px;
   width: 700px;
   margin-left: 450px;
+
+}
+
+.announcementContainer {
+  position: relative;    
+  margin-top: 50px;
+  width: 700px;
+  margin-left: 420px;
 
 }
 
@@ -97,14 +105,15 @@
 .sidebar {
   margin: 0;
   padding: 0;
+  padding-bottom: 10 px;
   width: 100px;
   background-color: rgb(35, 85, 157);
   position: fixed;
   height: 100%;
   overflow: auto;
   margin-right: 2200px;
-  z-index: 1;
-  position: absolute;
+
+
 }
 
 /* Sidebar links */

@@ -33,10 +33,10 @@ if (localStorage.token) {
   console.log(decoded)
   if (localStorage.getItem('isFaculty') == 'yes') {
     store.dispatch(activeFaculty(decoded));
-    console.log("sdsdfsdfsdfsdfsdf")
+    
 
   } else {
-    console.log(localStorage.getItem('isFaculty'))
+    
     store.dispatch(activeUser(decoded));
   }
  

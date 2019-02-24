@@ -59,7 +59,7 @@ class FacultyLogin extends Component {
              
 
         <div className = "loginContainer">
-          <div class = "ui stacked segment">
+           <div className = "well">
                 <form onSubmit = {this.onSubmit} className="ui large form">
                                     <div className="field">
                                     <label> Email </label>
@@ -111,9 +111,10 @@ class FacultyLogin extends Component {
                                     
                                     </div>
                   </form>
+                  </div>
               </div>
               </div>
-          </div>
+         
       )
   }
 

@@ -642,6 +642,13 @@ app.get('/registerCourse/:email', function(req, res) {
 })
 
 app.post('/announcement', function(req, res) {
+    var title
+    if (req.body.title) {
+        title = req.body.title
+    } else {
+        title = "No Subject"
+    }
+   
     var email = req.body.email
     var CourseId = req.body.CourseId
     console.log(CourseId)
@@ -656,6 +663,7 @@ app.post('/announcement', function(req, res) {
     console.log(uuid)
     var data = {
         uuid,
+        title,
         email,
         CourseId,
         comment,
@@ -682,9 +690,30 @@ app.post('/announcement', function(req, res) {
 
 })
 
+app.get('/announcement/:id', function(req, res) {
+    console.log(req.params.id)
+    id = req.params.id
+    var sql = `SELECT * FROM Announcement WHERE CourseId="${id}"`
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+          })       
+    })
+    
+})
+
 
 app.get('/createAnnouncementTable', (req, res) => {
-    var sql = `CREATE TABLE Announcement(uuid VARCHAR (255), email VARCHAR(255), CourseId VARCHAR(255), 
+    var sql = `CREATE TABLE Announcement(uuid VARCHAR (255), title VARCHAR(255), email VARCHAR(255), CourseId VARCHAR(255), 
         comment VARCHAR(255), time VARCHAR(255), PRIMARY KEY(uuid))`
     db.query(sql, (err, result) => {
          if (err) throw err;
