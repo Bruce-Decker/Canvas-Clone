@@ -1,5 +1,6 @@
 export const GET_ERRORS = 'GET_ERRORS'
 export const ACTIVE_USER = 'ACTIVE_USER'
+export const ACTIVE_FACULTY = 'ACTIVE_FACULTY'
 export const RETRIEVE_PROFILE = 'RETRIEVE_PROFILE'
 export const LOAD_PROFILE = 'LOAD_PROFILE'
 export const PROFILE_NO_DATA = 'PROFILE_NO_DATA'

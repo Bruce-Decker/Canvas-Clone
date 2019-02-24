@@ -31,6 +31,7 @@ class CourseProfile extends Component {
               <Sidebar_Custom />
               <div className = "registerCourseContainer">
                 <h1> <Link to ={`/ViewStudents/${this.props.match.params.CourseId}`}> View Students </Link> </h1> 
+                <h1> <Link to ={`/ViewAnnouncements/${this.props.match.params.CourseId}`}> View Announcements </Link> </h1> 
              </div>
             </div>
         )

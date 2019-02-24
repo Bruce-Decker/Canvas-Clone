@@ -106,6 +106,55 @@ app.get('/test', function(req, res) {
     res.send('sdfsdfsdf')
 })
 
+app.post('/facultyLogin', function(req, res) {
+    const { errors, isValid } = validateLogin(req.body)
+    if (!isValid) {
+        return res.status(400).json(errors);
+    }
+
+   
+    var email = req.body.email;
+    var password = req.body.password
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+        connection.query('SELECT * FROM basicUsers where email =?', email, function(err, result) {
+        if (err) {
+            
+            return res.status(404).json(err)
+        }
+        if (result.length == 0) {
+            errors.email = 'User not found'
+            return res.status(404).json(errors)
+        }
+
+        bcrypt.compare(password, result[0].password)
+                .then(isMatch => {
+                    if(isMatch) {
+                        
+                        const payload = { email: result[0].email, name: result[0].name} //Create JWT payload
+                        jwt.sign(
+                            payload, 
+                            keys.secretOrKey, 
+                            { expiresIn: 3600 }, 
+                            (err, token) => {
+                                res.json({
+                                    success: true,
+                                    token: 'Bearer ' + token
+                                })
+                        });
+                    } else {
+                        
+                        return res.status(400).json('Password incorrect')
+                    }
+            })
+        
+        })
+    })
+})
+
 app.post('/login', function(req, res) {
     const { errors, isValid } = validateLogin(req.body)
     if (!isValid) {
@@ -323,8 +372,10 @@ app.post('/createProfile', upload.single('filename'),  (req, res) => {
 
 app.post('/createCourse', passport.authenticate('jwt', { session: false }), function(req, res) {
     var sql = 'INSERT INTO course SET ?'
+
     var email = req.body.email;
     var CourseId = req.body.CourseId;
+    var uuid = email + CourseId
     var CourseName = req.body.CourseName;
     var CourseDept = req.body.CourseDept;
     var CourseDescription = req.body.CourseDescription;
@@ -333,6 +384,7 @@ app.post('/createCourse', passport.authenticate('jwt', { session: false }), func
     var WaitlistCapacity = req.body.WaitlistCapacity;
     var CourseTerm = req.body.CourseTerm;
     var courseData = {
+        uuid,
         email,
         CourseId,
         CourseName,
@@ -362,6 +414,29 @@ app.post('/createCourse', passport.authenticate('jwt', { session: false }), func
     })
 
 })
+
+app.get('/createCourse/:email', function(req, res) {
+    var email = req.params.email
+    console.log(email)
+    var sql = `SELECT * FROM course WHERE email = "${email}"`
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+          })       
+    })
+  
+
+})
+
 
 app.get('/searchCoursebyID', passport.authenticate('jwt', { session: false }), function(req, res) {
     
@@ -446,11 +521,11 @@ app.get('/createCourseListTable', (req, res) => {
 
 
 app.get('/createCourseTable', (req, res) => {
-    var sql = `CREATE TABLE course(email VARCHAR(255), CourseId VARCHAR(255), 
+    var sql = `CREATE TABLE course(uuid VARCHAR (255), email VARCHAR(255), CourseId VARCHAR(255), 
         CourseName VARCHAR(255), CourseDept VARCHAR(255), 
         CourseDescription VARCHAR(255),
         CourseRoom VARCHAR(255), CourseCapacity VARCHAR(255), 
-        WaitlistCapacity VARCHAR(255), CourseTerm VARCHAR(255), PRIMARY KEY(CourseId))`
+        WaitlistCapacity VARCHAR(255), CourseTerm VARCHAR(255), PRIMARY KEY(uuid))`
     db.query(sql, (err, result) => {
          if (err) throw err;
          console.log(result);
@@ -564,6 +639,59 @@ app.get('/registerCourse/:email', function(req, res) {
           })       
     })
 
+})
+
+app.post('/announcement', function(req, res) {
+    var email = req.body.email
+    var CourseId = req.body.CourseId
+    console.log(CourseId)
+    var comment = req.body.comment
+    var present_time = new Date()
+    var time = present_time.getMonth() + "/" + present_time.getDate() + "/"
+    time = time + present_time.getFullYear() + " " + present_time.getHours()
+    time = time + ":" + present_time.getMinutes() + ":" + present_time.getSeconds()
+    time = time + ":" + present_time.getMilliseconds()
+    var uuid = email + " " + time
+    console.log(time)
+    console.log(uuid)
+    var data = {
+        uuid,
+        email,
+        CourseId,
+        comment,
+        time
+    }
+    var sql = 'INSERT INTO Announcement SET ?'
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, data, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+
+          })
+        
+    })
+
+
+})
+
+
+app.get('/createAnnouncementTable', (req, res) => {
+    var sql = `CREATE TABLE Announcement(uuid VARCHAR (255), email VARCHAR(255), CourseId VARCHAR(255), 
+        comment VARCHAR(255), time VARCHAR(255), PRIMARY KEY(uuid))`
+    db.query(sql, (err, result) => {
+         if (err) throw err;
+         console.log(result);
+         res.send("Created Table Successfully")
+
+    })
 })
 
 // app.post('/postComment/:userID', passport.authenticate('jwt', { session: false }), function(req, res) {

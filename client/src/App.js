@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import Login from './components/Login'
+import FacultyLogin from './components/FacultyLogin'
 import Landing from './components/Landing'
 import Register from './components/Register'
 import Profile from './components/Profile'
 import createCourse from './components/createCourse'
 import StudentSearch from './components/StudentsSearch'
 import CourseProfile from './components/CourseProfile'
+import ViewAnnouncements from './components/ViewAnnouncements'
 import showRegisteredCourse from './components/showRegisteredCourse'
+import showCreatedCourse from './components/showCreatedCourse'
 import ViewStudents from './components/ViewStudents'
 import jwt_decode from 'jwt-decode'
 import tokenHeader from './utility/tokenHeader'
-import { activeUser } from './actions/authActions'
+import { activeUser, activeFaculty } from './actions/authActions'
 import { logout } from './actions/authActions'
 import { resetProfile } from './actions/userProfileAction'
 
@@ -26,7 +29,17 @@ import './App.css';
 if (localStorage.token) {
   tokenHeader(localStorage.token)
   const decoded = jwt_decode(localStorage.token)
-  store.dispatch(activeUser(decoded));
+  
+  console.log(decoded)
+  if (localStorage.getItem('isFaculty') == 'yes') {
+    store.dispatch(activeFaculty(decoded));
+    console.log("sdsdfsdfsdfsdfsdf")
+
+  } else {
+    console.log(localStorage.getItem('isFaculty'))
+    store.dispatch(activeUser(decoded));
+  }
+ 
   const time_now = Date.now() / 1000;
   if (decoded.exp < time_now) {
      store.dispatch(resetProfile())
@@ -47,6 +60,7 @@ class App extends Component {
                 <Route exact path="/" component={Landing} />
                
                     <Route exact path="/login" component={Login} />
+                    <Route exact path="/facultyLogin" component={FacultyLogin} />
                     <Route exact path="/register" component={Register} />
                     <Route exact path="/profile" component={Profile} />
                     <Switch>
@@ -54,9 +68,11 @@ class App extends Component {
                     </Switch>
                     <Route exact path="/studentSearch" component={StudentSearch} />
                     <Route exact path="/showRegisteredCourse" component={showRegisteredCourse} />
+                    <Route exact path="/showCreatedCourse" component={showCreatedCourse} />
                    
                     <Route exact path="/courseProfile/:CourseId" component={CourseProfile} />
                     <Route exact path="/viewStudents/:CourseId" component={ViewStudents} />
+                    <Route exact path="/ViewAnnouncements/:CourseId" component={ViewAnnouncements} />
                    
                 
               </div>
