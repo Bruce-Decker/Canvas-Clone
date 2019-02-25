@@ -742,28 +742,33 @@ app.get('/showRegisterCourseInfo', function(req,res) {
                     var course_capacity_array = results.map(result => result.CourseCapacity)
                     var waitlist_capacity_array = results.map(result => result.WaitlistCapacity)
                     var courseId_array = results.map(result => result.CourseId)
-                   //console.log(results)
+                   console.log(results)
                     var sql2 = `SELECT CourseId, COUNT(*) as count FROM CourseList GROUP BY CourseId ORDER BY count`
                      connection.query(sql2, (err, results2) => {
                         if (err) {
                             throw err
                         } else {
+                        console.log()
+                        console.log(results2)
                         results3 = []
-                        results2.forEach(function(element2) {
+                        results.forEach(function(element) {
                             //console.log()
                             //console.log(element2.CourseId)
-                            results.forEach(function(element) {
-                                if (element2.CourseId == element.CourseId) {
-                                     var data = {
-                                         CourseId: element2.CourseId,
-                                         count: element2.count,
-                                         CourseCapacity: element.CourseCapacity,
-                                         WaitlistCapacity: element.WaitlistCapacity
+                            var data = {
+                                CourseId: element.CourseId,
+                                count: 0,
+                                CourseCapacity: element.CourseCapacity,
+                                WaitlistCapacity: element.WaitlistCapacity
 
-                                     }
-                                     results3.push(data)
+                            }
+                            
+                            results2.forEach(function(element2) {
+                                if (element2.CourseId == element.CourseId) {
+                                     
+                                    data.count = element2.count
                                 }
                             })
+                            results3.push(data)
                         })
                         res.send(results3)
                         }

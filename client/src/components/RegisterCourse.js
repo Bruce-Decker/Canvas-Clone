@@ -10,7 +10,12 @@ import { Link } from 'react-router-dom'
 class RegisterCourse extends Component {
     constructor() {
         super();
-
+        this.state = {
+          
+          
+            courses: [],
+            listVisibility: false
+        }
     }
 
 
@@ -24,6 +29,16 @@ class RegisterCourse extends Component {
         )
 
     }
+
+
+    async componentDidMount() {
+       
+        const response = await axios.get('/showRegisterCourseInfo')
+        
+        console.log(response.data)
+       
+    }
+
 
 
 }
