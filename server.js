@@ -509,7 +509,7 @@ app.get('/searchCoursebyValue', passport.authenticate('jwt', { session: false })
 })
 
 app.get('/createCourseListTable', (req, res) => {
-    var sql = `CREATE TABLE CourseList(uuid VARCHAR(255), email VARCHAR(255), CourseId VARCHAR(255), PRIMARY KEY(uuid))`
+    var sql = `CREATE TABLE CourseList(uuid VARCHAR(255), email VARCHAR(255), CourseId VARCHAR(255), status VARCHAR(255), PRIMARY KEY(uuid))`
     db.query(sql, (err, result) => {
         if (err) throw err;
         console.log(result);
@@ -569,11 +569,13 @@ app.post('/registerCourse',  function(req, res) {
     
     var email = req.body.email;
     var CourseId = req.body.CourseId;
+    var status = req.body.status;
     var uuid = email.toString() + CourseId.toString()
    
     var courseData = {
         uuid,
         email,
+        status,
         CourseId
     }
     
@@ -755,10 +757,12 @@ app.get('/showRegisterCourseInfo', function(req,res) {
                             //console.log()
                             //console.log(element2.CourseId)
                             var data = {
+                                CourseName: element.CourseName,
                                 CourseId: element.CourseId,
                                 count: 0,
                                 CourseCapacity: element.CourseCapacity,
-                                WaitlistCapacity: element.WaitlistCapacity
+                                WaitlistCapacity: element.WaitlistCapacity,
+                                status: "open"
 
                             }
                             
@@ -766,6 +770,12 @@ app.get('/showRegisterCourseInfo', function(req,res) {
                                 if (element2.CourseId == element.CourseId) {
                                      
                                     data.count = element2.count
+                                    if (data.count >= element.CourseCapacity && data.count < (element.CourseCapacity + element.WaitlistCapacity)) {
+                                        data.status = "waitlist"
+                                    } 
+                                    if (data.count > (element.CourseCapacity + element.WaitlistCapacity)) {
+                                        data.status = "closed"
+                                    }
                                 }
                             })
                             results3.push(data)
@@ -775,7 +785,7 @@ app.get('/showRegisterCourseInfo', function(req,res) {
                         
                     }) 
                  } else {
-                     res.send([{CourseId: null, CourseName: null}])
+                     res.send([{CourseId: null, CourseName: null, count: 0, CourseCapacity: null, WaitlistCapacity: null, status: "open"}])
                  }
 
                 }
@@ -783,28 +793,29 @@ app.get('/showRegisterCourseInfo', function(req,res) {
             })
 
             })
-        // if (err) {
-        //     res.json({"code" : 100, "status" : "Error in connection database"});
-        //     return;
-        //   }   
-
-        //   connection.query(sql, CourseId, (err, result) => {
-        //       if (err) {
-        //           throw err
-        //       } else {
-        //           var student_count = result[0].count
-        //           var sql2 = 
-        //           connection.query(sql2, (err, results2) => {
-        //             if (err) {
-        //                 throw err
-        //             } else {
-        //             res.send(results2)
-        //             }
-                    
-        //         }) 
-        //       }
-        //   })       
+      
     })
+
+app.get('/listRegisteredCourses/:email', function(req, res) {
+    console.log(req.params.email)
+    email = req.params.email
+    var sql = `SELECT * FROM CourseList WHERE email="${email}"`
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+          })       
+    })
+     
+})
 
 // app.post('/postComment/:userID', passport.authenticate('jwt', { session: false }), function(req, res) {
 

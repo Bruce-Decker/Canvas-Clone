@@ -38,7 +38,7 @@ class Profile extends Component {
     }
 
     onSubmit = (e) => {
-        e.preventDefault()
+        
         let file = this.state.file
         let formdata = new FormData()
         formdata.append('name', this.state.name)
