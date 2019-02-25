@@ -18,7 +18,7 @@ class FacultyLogin extends Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.auth.isAuthenticated) {
            
-             this.props.history.push('/profile')
+             this.props.history.push('/showCreatedCourse')
         }
         if (nextProps.errors) {
           

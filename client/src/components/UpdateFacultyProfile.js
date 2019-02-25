@@ -1,4 +1,4 @@
-import Sidebar_Custom from './Sidebar_Custom'
+import Sidebar_Faculty from './Sidebar_Faculty'
 import Banner from './Banner'
 import '../App.css';
 import axios from 'axios'
@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import React, { Component } from 'react'
 
 
-class Profile extends Component {
+class UpdateFacultyProfile extends Component {
     constructor() {
         super();
         this.state = {
@@ -69,7 +69,7 @@ class Profile extends Component {
           return (
               <div>
             <Banner />
-            <Sidebar_Custom />
+            <Sidebar_Faculty />
         <div className = "profileContainer">
        
             <form onSubmit = {this.onSubmit} className="ui form">
@@ -153,4 +153,4 @@ const mapStateToProps = (state) => ({
 })
 
 
-export default connect(mapStateToProps)(Profile)
+export default connect(mapStateToProps)(UpdateFacultyProfile)

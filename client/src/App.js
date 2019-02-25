@@ -4,6 +4,7 @@ import FacultyLogin from './components/FacultyLogin'
 import Landing from './components/Landing'
 import Register from './components/Register'
 import Profile from './components/Profile'
+import UpdateFacultyProfile from './components/UpdateFacultyProfile'
 import createCourse from './components/createCourse'
 import StudentSearch from './components/StudentsSearch'
 import CourseProfile from './components/CourseProfile'
@@ -71,6 +72,7 @@ class App extends Component {
                     <Route exact path="/showRegisteredCourse" component={showRegisteredCourse} />
                     <Route exact path="/showCreatedCourse" component={showCreatedCourse} />
                     <Route exact path="/registerCourse" component={RegisterCourse} />
+                    <Route exact path = "/updateFacultyProfile" component = {UpdateFacultyProfile} />
                    
                     <Route exact path="/courseProfile/:CourseId" component={CourseProfile} />
                     <Route exact path="/viewStudents/:CourseId" component={ViewStudents} />

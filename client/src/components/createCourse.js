@@ -1,4 +1,4 @@
-import Sidebar_Custom from './Sidebar_Custom'
+import Sidebar_Faculty from './Sidebar_Faculty'
 import Banner from './Banner'
 import '../App.css';
 import axios from 'axios'
@@ -62,7 +62,7 @@ class createCourse extends Component {
         return (
             <div>
                 <Banner />
-                <Sidebar_Custom />
+                <Sidebar_Faculty />
                 <div className = "pageContainer">
                     <h1> Create Course </h1>
                     <form onSubmit = {this.onSubmit} className="ui form">

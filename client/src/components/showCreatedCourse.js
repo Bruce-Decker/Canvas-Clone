@@ -1,4 +1,4 @@
-import Sidebar_Custom from './Sidebar_Custom'
+import Sidebar_Faculty from './Sidebar_Faculty'
 import Banner from './Banner'
 import '../App.css';
 import axios from 'axios'
@@ -46,8 +46,10 @@ class showCreatedCourse extends Component {
         return (
             <div className = "pageDesign">
               <Banner />
-              <Sidebar_Custom />
+              <Sidebar_Faculty />
+            
               <div className = "registerCourseContainer">
+              <h1> Instructor's Courses </h1>
                  {  this.state.courses.map(course =>  
 
                      <h1 key = {course.CourseId}> <Link to = {`/CourseProfile/${course.CourseId}`} params = {course.CourseId}> {course.CourseId}   {course.CourseName}</Link>  </h1>
