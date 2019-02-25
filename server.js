@@ -723,6 +723,84 @@ app.get('/createAnnouncementTable', (req, res) => {
     })
 })
 
+app.get('/showRegisterCourseInfo', function(req,res) {
+    var CourseId = req.params.id;
+    //var sql = `SELECT COUNT(*) as count FROM CourseList WHERE CourseId =?`
+    var sql = `SELECT * FROM course`
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }  
+
+          connection.query(sql, (err, results) => {
+            if (err) {
+                throw err
+            } else {
+                var count = results.length;
+                if (count) {
+                    var course_capacity_array = results.map(result => result.CourseCapacity)
+                    var waitlist_capacity_array = results.map(result => result.WaitlistCapacity)
+                    var courseId_array = results.map(result => result.CourseId)
+                   //console.log(results)
+                    var sql2 = `SELECT CourseId, COUNT(*) as count FROM CourseList GROUP BY CourseId ORDER BY count`
+                     connection.query(sql2, (err, results2) => {
+                        if (err) {
+                            throw err
+                        } else {
+                        results3 = []
+                        results2.forEach(function(element2) {
+                            //console.log()
+                            //console.log(element2.CourseId)
+                            results.forEach(function(element) {
+                                if (element2.CourseId == element.CourseId) {
+                                     var data = {
+                                         CourseId: element2.CourseId,
+                                         count: element2.count,
+                                         CourseCapacity: element.CourseCapacity,
+                                         WaitlistCapacity: element.WaitlistCapacity
+
+                                     }
+                                     results3.push(data)
+                                }
+                            })
+                        })
+                        res.send(results3)
+                        }
+                        
+                    }) 
+                 } else {
+                     res.send([{CourseId: null, CourseName: null}])
+                 }
+
+                }
+                 
+            })
+
+            })
+        // if (err) {
+        //     res.json({"code" : 100, "status" : "Error in connection database"});
+        //     return;
+        //   }   
+
+        //   connection.query(sql, CourseId, (err, result) => {
+        //       if (err) {
+        //           throw err
+        //       } else {
+        //           var student_count = result[0].count
+        //           var sql2 = 
+        //           connection.query(sql2, (err, results2) => {
+        //             if (err) {
+        //                 throw err
+        //             } else {
+        //             res.send(results2)
+        //             }
+                    
+        //         }) 
+        //       }
+        //   })       
+    })
+
 // app.post('/postComment/:userID', passport.authenticate('jwt', { session: false }), function(req, res) {
 
 // })

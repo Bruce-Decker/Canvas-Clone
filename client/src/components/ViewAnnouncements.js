@@ -6,16 +6,46 @@ import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import faker from 'faker'
 import { Link } from 'react-router-dom'
+import AnnouncementInput from './AnnouncementInput'
 
 class ViewAnnouncements extends Component {
     constructor() {
         super();
         this.state = {
-            announcements: []
+            announcements: [],
+            title: "",
+            comment: ""
+
          
         }
 
        
+    }
+
+    onChange = (e) => {
+        this.setState({[e.target.name]: e.target.value})
+    }
+
+
+    onClick = (e) => {
+      
+        var data = {
+            email: this.props.auth.user.email,
+            CourseId: this.props.match.params.CourseId,
+            title: this.state.title,
+            comment: this.state.comment
+
+        }
+        console.log(data)
+     
+      
+
+        axios.post('/announcement', data)
+        .then(res => this.componentDidMount())
+        .catch(err => console.log(err))
+
+        
+
     }
 
   
@@ -27,8 +57,7 @@ class ViewAnnouncements extends Component {
           
            
         })
-       console.log(response.data)
-       console.log(this.props.auth)
+      
        
     }
 
@@ -41,7 +70,7 @@ class ViewAnnouncements extends Component {
               <Sidebar_Custom />
             
               <div className = "announcementContainer">
-              { this.props.auth.isFaculty ? <TextInput /> : null }
+              { this.props.auth.isFaculty ? <AnnouncementInput onClick = {this.onClick} onChange = {this.onChange}/> : null }
              
                {  this.state.announcements.map(announcement =>  
 
@@ -90,28 +119,29 @@ class ViewAnnouncements extends Component {
 }
 
 
-var TextInput = (props) => ({
+// var TextInput = (props) => ({
     
-    render: function() {
-        return (
-            <div className="ui form">
-            <div className="field">
-            <label> Title </label>
-              <textarea rows="2"></textarea>
+//     render: function() {
+     
+//         return (
+//             <div className="ui form">
+//             <div className="field">
+//             <label> Title </label>
+//               <textarea rows="2" name = "title" ref = "title" onChange = {this.props.onChange}></textarea>
              
-            </div>
-            <div className="field">
-            <label>Message</label>
-              <textarea></textarea>
-            </div>
+//             </div>
+//             <div className="field">
+//             <label>Message</label>
+//               <textarea name = "comment" ref = "comment" onChange = {this.props.onChange}></textarea>
+//             </div>
            
-            <button className="ui primary button" >
-                  Send
-            </button>
-          </div>
-        )
-    }
-})
+//             <button className="ui primary button" onClick = {this.props.onClick}>
+//                   Send
+//             </button>
+//           </div>
+//         )
+//     }
+// })
 
 
 
