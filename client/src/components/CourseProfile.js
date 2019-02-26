@@ -1,10 +1,12 @@
 import Sidebar_Custom from './Sidebar_Custom'
+
 import Banner from './Banner'
 import '../App.css';
 import axios from 'axios'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import Sidebar_Faculty from './Sidebar_Faculty';
 
 class CourseProfile extends Component {
     constructor() {
@@ -21,6 +23,8 @@ class CourseProfile extends Component {
         console.log(this.props.location.pathname)
         console.log(this.props.match.url)
         console.log(this.props.match.params.CourseId)
+       
+
     }
 
     render() {
@@ -28,10 +32,12 @@ class CourseProfile extends Component {
         return (
             <div className = "pageDesign">
               <Banner />
-              <Sidebar_Custom />
+        { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
               <div className = "registerCourseContainer">
                 <h1> <Link to ={`/ViewStudents/${this.props.match.params.CourseId}`}> View Students </Link> </h1> 
                 <h1> <Link to ={`/ViewAnnouncements/${this.props.match.params.CourseId}`}> View Announcements </Link> </h1> 
+             
+                { this.props.auth.isFaculty ? <h1> <Link to ={`/createAssignment/${this.props.match.params.CourseId}`}> Create Assignment </Link> </h1>  : null }
              </div>
             </div>
         )

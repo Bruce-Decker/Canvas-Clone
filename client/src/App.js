@@ -12,6 +12,7 @@ import ViewAnnouncements from './components/ViewAnnouncements'
 import showRegisteredCourse from './components/showRegisteredCourse'
 import showCreatedCourse from './components/showCreatedCourse'
 import RegisterCourse from './components/RegisterCourse'
+import CreateAssignment from './components/CreateAssignment'
 import ViewStudents from './components/ViewStudents'
 import jwt_decode from 'jwt-decode'
 import tokenHeader from './utility/tokenHeader'
@@ -68,6 +69,9 @@ class App extends Component {
                     <Switch>
                        <SecureRoutes exact path="/createCourse" component={createCourse} />
                     </Switch>
+
+                    <Route exact path="/createAssignment/:CourseId" component={CreateAssignment} />
+                     
                     <Route exact path="/studentSearch" component={StudentSearch} />
                     <Route exact path="/showRegisteredCourse" component={showRegisteredCourse} />
                     <Route exact path="/showCreatedCourse" component={showCreatedCourse} />

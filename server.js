@@ -817,6 +817,57 @@ app.get('/listRegisteredCourses/:email', function(req, res) {
      
 })
 
+app.get('/createAssignmentsTable', (req, res) => {
+    var sql = `CREATE TABLE Assignments(uuid VARCHAR (255), assignment_name VARCHAR(255), email VARCHAR(255), CourseId VARCHAR(255), 
+        description VARCHAR(255), time VARCHAR(255), PRIMARY KEY(uuid))`
+    db.query(sql, (err, result) => {
+         if (err) throw err;
+         console.log(result);
+         res.send("Created Table Successfully")
+
+    })
+})
+
+app.post('/createAssignment', function(req, res) {
+    var assignment_name = req.body.assignment_name
+    var email  = req.body.email
+    var CourseId = req.body.CourseId
+    var uuid = email + "-" + CourseId + "-" + assignment_name
+    var description = req.body.description
+    var present_time = new Date()
+    var time = present_time.getMonth() + "/" + present_time.getDate() + "/"
+    time = time + present_time.getFullYear() + " " + present_time.getHours()
+    time = time + ":" + present_time.getMinutes() + ":" + present_time.getSeconds()
+    time = time + ":" + present_time.getMilliseconds()
+    var data = {
+        uuid,
+        assignment_name,
+        email,
+        CourseId,
+        description,
+        time
+    }
+    var sql = 'INSERT INTO Assignments SET ?'
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, data, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+
+          })
+        
+    })
+
+})
+
+
 // app.post('/postComment/:userID', passport.authenticate('jwt', { session: false }), function(req, res) {
 
 // })
