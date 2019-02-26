@@ -8,6 +8,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Sidebar_Faculty from './Sidebar_Faculty';
 
+
 class CourseProfile extends Component {
     constructor() {
         super();
@@ -38,6 +39,7 @@ class CourseProfile extends Component {
                 <h1> <Link to ={`/ViewAnnouncements/${this.props.match.params.CourseId}`}> View Announcements </Link> </h1> 
              
                 { this.props.auth.isFaculty ? <h1> <Link to ={`/createAssignment/${this.props.match.params.CourseId}`}> Create Assignment </Link> </h1>  : null }
+                <h1> <Link to ={`/ViewAssignments/${this.props.match.params.CourseId}`}> View Assignments </Link> </h1>
              </div>
             </div>
         )

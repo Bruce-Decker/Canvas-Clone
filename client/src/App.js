@@ -13,7 +13,9 @@ import showRegisteredCourse from './components/showRegisteredCourse'
 import showCreatedCourse from './components/showCreatedCourse'
 import RegisterCourse from './components/RegisterCourse'
 import CreateAssignment from './components/CreateAssignment'
+import ViewAssignments from './components/ViewAssignments'
 import ViewStudents from './components/ViewStudents'
+import UploadAssignment from './components/UploadAssignment'
 import jwt_decode from 'jwt-decode'
 import tokenHeader from './utility/tokenHeader'
 import { activeUser, activeFaculty } from './actions/authActions'
@@ -71,6 +73,7 @@ class App extends Component {
                     </Switch>
 
                     <Route exact path="/createAssignment/:CourseId" component={CreateAssignment} />
+                    <Route exact path="/ViewAssignments/:CourseId" component={ViewAssignments} />
                      
                     <Route exact path="/studentSearch" component={StudentSearch} />
                     <Route exact path="/showRegisteredCourse" component={showRegisteredCourse} />
@@ -81,6 +84,7 @@ class App extends Component {
                     <Route exact path="/courseProfile/:CourseId" component={CourseProfile} />
                     <Route exact path="/viewStudents/:CourseId" component={ViewStudents} />
                     <Route exact path="/ViewAnnouncements/:CourseId" component={ViewAnnouncements} />
+                    <Route exact path="/uploadAssignment/:CourseId/:assignmentName" component={UploadAssignment} />
                    
                 
               </div>

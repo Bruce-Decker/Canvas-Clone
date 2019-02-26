@@ -21,6 +21,16 @@ const storage = multer.diskStorage({
     }
 })
 
+const pdfStorage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './PDFs/')
+    },
+    filename: function(req, file, cd) {
+        file.originalname = req.body.email + "-" + req.params.id + "-" + req.body.assignment_name + '.pdf'
+        cd(null, file.originalname)
+    }
+})
+
 
 var path = require('path')
 const keys = require('./config/keys')
@@ -34,12 +44,17 @@ const fileFilter = (req, file, cb) => {
   
 }
 
+
 const upload = multer({
      storage: storage,
      limits: {
          fileSize: 1024 * 1024 * 5
      },
      fileFilter: fileFilter
+})
+
+const pdfUpload = multer({
+    storage : pdfStorage
 })
 
 app.use(morgan('dev'))
@@ -865,6 +880,86 @@ app.post('/createAssignment', function(req, res) {
         
     })
 
+})
+
+app.get('/listAssignments/:id', function(req, res) {
+      var id = req.params.id;
+      var sql = `SELECT * FROM Assignments WHERE CourseId="${id}" ORDER BY time DESC`
+      pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+          })       
+    })
+    
+ 
+})
+
+app.get('/createUploadsTable', (req, res) => {
+    var sql = `CREATE TABLE Uploads(uuid VARCHAR (255), assignment_name VARCHAR(255), email VARCHAR(255), CourseId VARCHAR(255), 
+         file_path VARCHAR(255), time VARCHAR(255), PRIMARY KEY(uuid))`
+    db.query(sql, (err, result) => {
+         if (err) throw err;
+         console.log(result);
+         res.send("Created Table Successfully")
+
+    })
+})
+
+
+// passport.authenticate('jwt', { session: false }),
+app.post('/upload/:id', pdfUpload.single('filename'),  (req, res) => {
+    var sql = 'INSERT INTO Uploads SET ?'
+    var assignment_name = req.body.assignment_name
+    var email = req.body.email
+    var CourseId = req.params.id
+    var uuid = email + "-" + CourseId + "-" + assignment_name
+
+    var file_path = req.file.path
+    
+    var present_time = new Date()
+    var time = present_time.getMonth() + "/" + present_time.getDate() + "/"
+    time = time + present_time.getFullYear() + " " + present_time.getHours()
+    time = time + ":" + present_time.getMinutes() + ":" + present_time.getSeconds()
+    time = time + ":" + present_time.getMilliseconds()
+
+
+    var data = {
+        uuid,
+        assignment_name,
+        email,
+        CourseId,
+        file_path,
+        time
+    }
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, data, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+
+          })
+
+          
+
+    })
+    
+      //return res.status(200).send("Success Login")
 })
 
 
