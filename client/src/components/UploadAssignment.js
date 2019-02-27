@@ -7,17 +7,27 @@ import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Sidebar_Faculty from './Sidebar_Faculty';
+import { Document, Page } from 'react-pdf';
+
 
 
 class UploadAssignment extends Component {
     constructor() {
         super();
         this.state = {
-            file: null
+            file: null,
+            path: '',
+            numPages: null,
+            pageNumber: 1,
 
         }
          
     }
+
+    onDocumentLoadSuccess = ({ numPages }) => {
+        this.setState({ numPages });
+      }
+    
 
     handleFile = event => {
       
@@ -40,7 +50,18 @@ class UploadAssignment extends Component {
 
     }
 
+    async componentDidMount() {
+        const response = await axios.get('/upload/' + this.props.match.params.CourseId + "/" + this.props.match.params.assignmentName + "/" + this.props.auth.user.email)
+        console.log(response.data)
+        this.setState({
+            file: response.data[0].file_path,
+           
+        })
+        console.log(this.state.file)
+    }
+
     render() {
+        const { pageNumber, numPages } = this.state;
         return (
             <div className = "pageDesign">
               <Banner />
@@ -59,8 +80,20 @@ class UploadAssignment extends Component {
               </button>
         </form>
       </div>
+      <div className = "space">
+
+      </div>
+      <Document
+          file= {"../../PDFs/bruce@gmail.com-272-assignment2.pdf"}
+          onLoadSuccess={this.onDocumentLoadSuccess}
+        >
+
+     <Page pageNumber={pageNumber} />
+        </Document>
+        <p>Page {pageNumber} of {numPages}</p>
 
                </div>
+               
 
             </div>
         )

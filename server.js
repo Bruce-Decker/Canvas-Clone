@@ -61,6 +61,8 @@ app.use(morgan('dev'))
 app.use(passport.initialize());
 require('./config/passport')(passport);
 
+
+
 var pool = mysql.createPool({
     connectionLimit: 500,
     host     : 'localhost',
@@ -960,6 +962,33 @@ app.post('/upload/:id', pdfUpload.single('filename'),  (req, res) => {
     })
     
       //return res.status(200).send("Success Login")
+})
+
+app.get('/upload/:CourseId/:assignment_name/:email', function(req, res) {
+    
+    var email = req.params.email
+    var CourseId = req.params.CourseId
+    var assignment_name = req.params.assignment_name
+    var uuid = email + "-" + CourseId + "-" + assignment_name
+    var sql = `SELECT * FROM Uploads WHERE uuid="${uuid}" LIMIT 1`
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+
+          })
+
+          
+
+    })
 })
 
 

@@ -22,6 +22,7 @@ import { activeUser, activeFaculty } from './actions/authActions'
 import { logout } from './actions/authActions'
 import { resetProfile } from './actions/userProfileAction'
 
+import Test from './components/Test'
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { Provider } from 'react-redux';
@@ -85,6 +86,7 @@ class App extends Component {
                     <Route exact path="/viewStudents/:CourseId" component={ViewStudents} />
                     <Route exact path="/ViewAnnouncements/:CourseId" component={ViewAnnouncements} />
                     <Route exact path="/uploadAssignment/:CourseId/:assignmentName" component={UploadAssignment} />
+                    <Route exact path="/test" component={Test} />
                    
                 
               </div>
