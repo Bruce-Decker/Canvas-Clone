@@ -13,7 +13,7 @@ import ShowPDF from './ShowPDF'
 
 var response;
 class UploadAssignment extends Component {
-   _isMounted = false;
+   
   
     constructor() {
         super();
@@ -50,7 +50,7 @@ class UploadAssignment extends Component {
           console.log(key, value);
         }
       axios.post(`/upload/${this.props.match.params.CourseId}`, formdata)
-        .then(res => this.setState({test: "10"}))
+        .then(res => this.props.history.push(`/viewAssignments/${this.props.match.params.CourseId}`))
         .catch(err => console.log("Error"))
        
     }
@@ -84,6 +84,10 @@ class UploadAssignment extends Component {
             </ul>
           </nav>
           );
+      }
+
+      componentDidUpdate() {
+
       }
 
 
