@@ -22,7 +22,7 @@ import { activeUser, activeFaculty } from './actions/authActions'
 import { logout } from './actions/authActions'
 import { resetProfile } from './actions/userProfileAction'
 
-import Test from './components/Test'
+import Test from './components/ShowPDF'
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { Provider } from 'react-redux';

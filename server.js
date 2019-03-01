@@ -26,7 +26,7 @@ const pdfStorage = multer.diskStorage({
         cb(null, './PDFs/')
     },
     filename: function(req, file, cd) {
-        file.originalname = req.body.email + "-" + req.params.id + "-" + req.body.assignment_name + '.pdf'
+        file.originalname = req.body.email  + req.params.id  + req.body.assignment_name + '.pdf'
         cd(null, file.originalname)
     }
 })
@@ -919,11 +919,12 @@ app.get('/createUploadsTable', (req, res) => {
 
 // passport.authenticate('jwt', { session: false }),
 app.post('/upload/:id', pdfUpload.single('filename'),  (req, res) => {
-    var sql = 'INSERT INTO Uploads SET ?'
+    var sql = 'REPLACE INTO Uploads SET ?'
+    var sql2 = 'ON DUPLICATE KEY UPDATE'
     var assignment_name = req.body.assignment_name
     var email = req.body.email
     var CourseId = req.params.id
-    var uuid = email + "-" + CourseId + "-" + assignment_name
+    var uuid = email +  CourseId +  assignment_name
 
     var file_path = req.file.path
     
@@ -942,6 +943,8 @@ app.post('/upload/:id', pdfUpload.single('filename'),  (req, res) => {
         file_path,
         time
     }
+
+    console.log("data " + data)
     pool.getConnection(function(err,connection){
         if (err) {
             res.json({"code" : 100, "status" : "Error in connection database"});
@@ -969,7 +972,7 @@ app.get('/upload/:CourseId/:assignment_name/:email', function(req, res) {
     var email = req.params.email
     var CourseId = req.params.CourseId
     var assignment_name = req.params.assignment_name
-    var uuid = email + "-" + CourseId + "-" + assignment_name
+    var uuid = email + CourseId +  assignment_name
     var sql = `SELECT * FROM Uploads WHERE uuid="${uuid}" LIMIT 1`
     pool.getConnection(function(err,connection){
         if (err) {

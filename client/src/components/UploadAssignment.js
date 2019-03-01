@@ -7,61 +7,124 @@ import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Sidebar_Faculty from './Sidebar_Faculty';
-import { Document, Page } from 'react-pdf';
+import PDF from 'react-pdf-js';
+import ShowPDF from './ShowPDF'
 
 
-
+var response;
 class UploadAssignment extends Component {
+   _isMounted = false;
+  
     constructor() {
         super();
         this.state = {
+            file_path: null,
+            isVisible: false,
             file: null,
-            path: '',
-            numPages: null,
-            pageNumber: 1,
+            test: "1"
+           
+        
 
         }
          
     }
 
-    onDocumentLoadSuccess = ({ numPages }) => {
-        this.setState({ numPages });
+    handleFile = event => {
+      console.log('uploaded')
+      let file = event.target.files[0]
+      
+      this.setState({file: file})
+  }
+
+
+    onSubmit = (e) => {
+      e.preventDefault()
+      console.log("sdfsdfsfd")
+        let file = this.state.file
+        let formdata = new FormData()
+        formdata.append('assignment_name', this.props.match.params.assignmentName)
+        formdata.append('email', this.props.auth.user.email)
+        formdata.append('filename', file)
+        console.log(formdata)
+        for (var [key, value] of formdata.entries()) { 
+          console.log(key, value);
+        }
+      axios.post(`/upload/${this.props.match.params.CourseId}`, formdata)
+        .then(res => this.setState({test: "10"}))
+        .catch(err => console.log("Error"))
+       
+    }
+    onDocumentComplete = (pages) => {
+        this.setState({ page: 1, pages });
+      }
+    
+      handlePrevious = () => {
+        this.setState({ page: this.state.page - 1 });
+      }
+    
+      handleNext = () => {
+        this.setState({ page: this.state.page + 1 });
       }
     
 
-    handleFile = event => {
-      
-        let file = event.target.files[0]
-        
-        this.setState({file: file})
-    }
+      renderPagination = (page, pages) => {
+        let previousButton = <li className="previous" onClick={this.handlePrevious}><a href="#"><i className="fa fa-arrow-left"></i> Previous</a></li>;
+        if (page === 1) {
+          previousButton = <li className="previous disabled"><a href="#"><i className="fa fa-arrow-left"></i> Previous</a></li>;
+        }
+        let nextButton = <li className="next" onClick={this.handleNext}><a href="#">Next <i className="fa fa-arrow-right"></i></a></li>;
+        if (page === pages) {
+          nextButton = <li className="next disabled"><a href="#">Next <i className="fa fa-arrow-right"></i></a></li>;
+        }
+        return (
+          <nav>
+            <ul className="pager">
+              {previousButton}
+              {nextButton}
+            </ul>
+          </nav>
+          );
+      }
 
-    onSubmit = (e) => {
-        var file = this.state.file
-        let formdata = new FormData()
-        formdata.append('assignment_name', this.props.match.params.assignmentName)
-     
-        formdata.append('email', this.props.auth.user.email)
-        formdata.append('filename', file)
-        axios.post('/upload/' + this.props.match.params.CourseId, formdata)
-         .then(res => console.log(res.data))
-         .catch(err => console.log(err))
-        
 
-    }
 
+    
     async componentDidMount() {
-        const response = await axios.get('/upload/' + this.props.match.params.CourseId + "/" + this.props.match.params.assignmentName + "/" + this.props.auth.user.email)
-        console.log(response.data)
-        this.setState({
-            file: response.data[0].file_path,
-           
-        })
-        console.log(this.state.file)
+       
+        try {
+         response = await axios.get('/upload/' + this.props.match.params.CourseId + "/" + this.props.match.params.assignmentName + "/" + this.props.auth.user.email)
+         console.log("File path " + response.data[0].file_path)
+        
+       
+            this.setState({
+                file_path: 'test',
+                isVisible: true,
+                test: "2"
+            })
+       
+        } catch {
+            this.setState({
+               isVisible: false,
+               
+                test: "3"
+            })
+        }
+        // console.log(this.props.match.params.CourseId)
+        // console.log(this.props.match.params.assignmentName)
+        // console.log(this.props.auth.user.email)
+        // console.log(response.data)
+      
+
+        
+       
     }
 
     render() {
-        const { pageNumber, numPages } = this.state;
+        let pagination = null;
+    if (this.state.pages) {
+      pagination = this.renderPagination(this.state.page, this.state.pages);
+    }
+      
         return (
             <div className = "pageDesign">
               <Banner />
@@ -75,23 +138,32 @@ class UploadAssignment extends Component {
                 <label className="label-for-default-js rounded-right mb-3" htmlFor="file-with-current">
             
                 </label>
-                <button class="ui primary button">
+                <button className="ui primary button">
                     Upload
               </button>
         </form>
       </div>
-      <div className = "space">
-
+      
+      <div>
+        {this.state.isVisible ? <ShowPDF url = {`../../PDFs/${this.props.auth.user.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} /> : null}
+        
+{/* 
+{this.state.isVisible ? <Test url = {`../../PDFs/testX.pdf`} /> : <h1> 2 </h1>}
+         */}
+        {/* <PDF
+          file="../../PDFs/testX.pdf"
+          onDocumentComplete={this.onDocumentComplete}
+          page={this.state.page}
+        />
+        {pagination} */}
       </div>
-      <Document
-          file= {"../../PDFs/bruce@gmail.com-272-assignment2.pdf"}
-          onLoadSuccess={this.onDocumentLoadSuccess}
-        >
+        {/* <h1> {this.state.file_path} </h1> */}
 
-     <Page pageNumber={pageNumber} />
-        </Document>
-        <p>Page {pageNumber} of {numPages}</p>
-
+   
+      <div className = "space">
+     
+      </div>
+     
                </div>
                
 
