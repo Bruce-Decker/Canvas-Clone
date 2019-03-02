@@ -11,24 +11,15 @@ app.get('/', function(req, res) {
 })
 
 app.post('/calculate', function(req, res) {
-    var num1 = parseFloat(req.body.num1);
-    var num2 = parseFloat(req.body.num2);
-    var symbol = req.body.symbol;
-    console.log(symbol)
-    
-    var result
-    if (symbol == "+") {
-       result = num1 + num2
-    } else if (symbol == "-") {
-        result = num1 - num2
-    } else if (symbol == "*") {
-        result = num1 * num2
-    } else if (symbol == "/") {
-        result = num1 / num2
-    } else {
-        result = "undefined"
+    var input = req.body.input;
+    var result;
+    try {
+        result = eval(input)
+        res.send(result.toString())
+    } catch {
+        res.send("error")
     }
-    res.send(result.toString())
+  
     
 })
 
