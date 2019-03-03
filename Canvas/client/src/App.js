@@ -15,6 +15,9 @@ import RegisterCourse from './components/RegisterCourse'
 import CreateAssignment from './components/CreateAssignment'
 import ViewAssignments from './components/ViewAssignments'
 import ViewStudents from './components/ViewStudents'
+import CreateQuiz from './components/CreateQuiz'
+import TakeQuiz from './components/TakeQuiz'
+import ViewQuizzes from './components/ViewQuizzes'
 import UploadAssignment from './components/UploadAssignment'
 import jwt_decode from 'jwt-decode'
 import tokenHeader from './utility/tokenHeader'
@@ -74,6 +77,9 @@ class App extends Component {
                     </Switch>
 
                     <Route exact path="/createAssignment/:CourseId" component={CreateAssignment} />
+                    <Route exact path="/createQuiz/:CourseId" component={CreateQuiz} />
+                    <Route exact path="/viewQuizzes/:CourseId" component={ViewQuizzes} />
+                    <Route exact path="/takeQuiz/:CourseId/:quizName" component={TakeQuiz} />
                     <Route exact path="/ViewAssignments/:CourseId" component={ViewAssignments} />
                      
                     <Route exact path="/studentSearch" component={StudentSearch} />

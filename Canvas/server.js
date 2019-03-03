@@ -994,6 +994,217 @@ app.get('/upload/:CourseId/:assignment_name/:email', function(req, res) {
     })
 })
 
+app.get('/createQuiz', (req, res) => {
+    var sql = `CREATE TABLE Quiz(uuid VARCHAR (255), quiz_name VARCHAR(255),question_id VARCHAR(255), 
+         email VARCHAR(255), CourseId VARCHAR(255), question VARCHAR(255), 
+        option_one_question VARCHAR(255), option_two_question VARCHAR(255), 
+         option_three_question VARCHAR(255), option_four_question VARCHAR(255),
+         right_answer VARCHAR(255), points INT(10), time VARCHAR(255), PRIMARY KEY(uuid))`
+    db.query(sql, (err, result) => {
+         if (err) throw err;
+         console.log(result);
+         res.send("Created Table Successfully")
+
+    })
+})
+
+app.post('/createQuiz/:id', pdfUpload.single('filename'),  (req, res) => {
+    var sql = 'REPLACE INTO Quiz SET ?'
+    
+    var quiz_name = req.body.quiz_name
+    quiz_name = quiz_name.replace(/\s/g, '');
+    var email = req.body.email
+    var CourseId = req.params.id
+    var question_id = req.body.question_id;
+    var uuid = email +  CourseId +  quiz_name + '-' + question_id
+    var question = req.body.question
+    var option_one_question = req.body.option_one_question
+    var option_two_question = req.body.option_two_question
+    var option_three_question = req.body.option_three_question
+    var option_four_question = req.body.option_four_question
+    var right_answer = req.body.right_answer
+    var points = parseInt(req.body.points)
+    
+    
+    var present_time = new Date()
+    var time = present_time.getMonth() + "/" + present_time.getDate() + "/"
+    time = time + present_time.getFullYear() + " " + present_time.getHours()
+    time = time + ":" + present_time.getMinutes() + ":" + present_time.getSeconds()
+    time = time + ":" + present_time.getMilliseconds()
+
+
+    var data = {
+       uuid,
+       quiz_name,
+       question_id,
+       email,
+       CourseId,
+       question,
+       option_one_question,
+       option_two_question,
+       option_three_question,
+       option_four_question,
+       right_answer,
+       points,
+       time
+    }
+
+    console.log("data " + data)
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, data, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+
+          })
+
+          
+
+    })
+    
+      //return res.status(200).send("Success Login")
+})
+
+
+app.get('/quizzes/:CourseId', function(req, res) {
+    
+   
+    var CourseId = req.params.CourseId
+  
+   // var sql = `SELECT DISTINCT quiz_name, points FROM Quiz WHERE CourseId="${CourseId}"`
+   var sql = `SELECT quiz_name, SUM(points) FROM Quiz GROUP BY quiz_name`
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  
+                  res.send(result)
+              }
+
+          })
+
+          
+
+    })
+})
+
+app.get('/takeQuiz/:CourseId/:quizName', function(req, res) {
+    
+   
+    var CourseId = req.params.CourseId
+    var quiz_name = req.params.quizName
+  
+   // var sql = `SELECT DISTINCT quiz_name, points FROM Quiz WHERE CourseId="${CourseId}"`
+   var sql = `SELECT * FROM Quiz WHERE CourseId="${CourseId}" AND quiz_name="${quiz_name}"`
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  
+                  res.send(result)
+              }
+
+          })
+
+          
+
+    })
+})
+
+app.post('/submitQuiz/:CourseId/:quizName', function(req, res) {
+    console.log(req.params.CourseId)
+    console.log(req.params.quizName)
+    console.log(req.body)
+    var CourseId = req.params.CourseId
+    var quiz_name = req.params.quizName
+    var submission_data = req.body
+    var user_answer_store = []
+    var correct_answer_store = []
+    var total_points = 0
+    for (var key in submission_data) {
+        if (submission_data.hasOwnProperty(key)) {
+            console.log(submission_data[key]);
+            user_answer_store.push(submission_data[key])
+        }
+    }
+    var sql = `SELECT right_answer, points FROM Quiz WHERE CourseId="${CourseId}" AND quiz_name="${quiz_name}"`
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  //console.log(result)
+                  result.forEach(function(element) {
+                      console.log(element)
+                      total_points = element.points + total_points
+                      correct_answer_store.push(element.right_answer)
+                  })
+
+                  user_answer_store.forEach(function(element) {
+                    console.log(element)
+                   
+                })
+
+
+
+                  var correct_count = compare_answers(user_answer_store, correct_answer_store)
+                  console.log(correct_count)
+                  var current_score = (correct_count / correct_answer_store.length) * total_points
+                  console.log("current score is " + current_score)
+                  //res.send(result)
+              }
+
+          })
+
+          
+
+    })
+
+    res.send("test")
+
+})
+
+function compare_answers(user_answer, correct_answer) {
+    var count = 0
+    for (var i = 0; i < user_answer.length; i++) {
+      
+      
+            if (user_answer[i] === correct_answer[i]) {
+                count = count + 1
+            }
+        
+    }
+
+    return count;
+
+}
+ 
+
+
 
 // app.post('/postComment/:userID', passport.authenticate('jwt', { session: false }), function(req, res) {
 
