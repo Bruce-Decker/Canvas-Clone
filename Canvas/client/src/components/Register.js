@@ -63,7 +63,7 @@ class Register extends Component {
           </div>
         
 
-          <div className = "registerContainer">
+          <div className = "loginContainer">
            
            
 
