@@ -11,8 +11,8 @@ import PDF from 'react-pdf-js';
 import ShowPDF from './ShowPDF'
 
 
-var response;
-class UploadAssignment extends Component {
+var response
+class ViewStudentUploadedHW extends Component {
    
   
     constructor() {
@@ -21,12 +21,17 @@ class UploadAssignment extends Component {
             file_path: null,
             isVisible: false,
             file: null,
-            test: "1"
+            test: "1",
+            points: ''
            
         
 
         }
          
+    }
+
+    onChange = (e) => {
+        this.setState({[e.target.name]: e.target.value})
     }
 
     handleFile = event => {
@@ -38,20 +43,27 @@ class UploadAssignment extends Component {
 
 
     onSubmit = (e) => {
-      e.preventDefault()
-      console.log("sdfsdfsfd")
-        let file = this.state.file
-        let formdata = new FormData()
-        formdata.append('assignment_name', this.props.match.params.assignmentName)
-        formdata.append('email', this.props.auth.user.email)
-        formdata.append('filename', file)
-        console.log(formdata)
-        for (var [key, value] of formdata.entries()) { 
-          console.log(key, value);
-        }
-      axios.post(`/upload/${this.props.match.params.CourseId}`, formdata)
-        .then(res => this.props.history.push(`/viewAssignments/${this.props.match.params.CourseId}`))
-        .catch(err => console.log("Error"))
+      
+    //   axios.post(`/upload/${this.props.match.params.CourseId}`, formdata)
+    //     .then(res => this.props.history.push(`/viewAssignments/${this.props.match.params.CourseId}`))
+    //     .catch(err => console.log("Error"))
+       console.log(this.state.points)
+       var CourseId = this.props.match.params.CourseId
+       var item_name = this.props.match.params.assignmentName
+       var earned_points = this.state.points
+       var email = this.props.match.params.email
+
+       var data = {
+           CourseId,
+           item_name, 
+           earned_points,
+           email
+       }
+
+
+       axios.post('/submitGrade', data)
+       .then(res => console.log(res.data))
+       .catch(err => console.log(err))
        
     }
     onDocumentComplete = (pages) => {
@@ -96,7 +108,7 @@ class UploadAssignment extends Component {
     async componentDidMount() {
        
         try {
-         response = await axios.get('/upload/' + this.props.match.params.CourseId + "/" + this.props.match.params.assignmentName + "/" + this.props.auth.user.email)
+         response = await axios.get('/upload/' + this.props.match.params.CourseId + "/" + this.props.match.params.assignmentName + "/" + this.props.match.params.email)
          console.log("File path " + response.data[0].file_path)
         
        
@@ -135,21 +147,21 @@ class UploadAssignment extends Component {
                { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
                <div className = "registerCourseContainer">
                <div className="input-default-wrapper mt-3">
-        <h1> Upload your assignment for {this.props.match.params.assignmentName}</h1>
+        <h1> {this.props.match.params.assignmentName}</h1>
 
         <form onSubmit = {this.onSubmit} className="ui form">
-              <input type="file" id="file-with-current" name = "filename" className="input-default-js" onChange = {this.handleFile}/>
-                <label className="label-for-default-js rounded-right mb-3" htmlFor="file-with-current">
-            
-                </label>
+        <div className="form-group">
+                            <label htmlFor="exampleFormControlInput1">Points</label>
+                            <input style={{width:"100px"}} type="assignment_name" className="form-control" name="points"  onChange = {this.onChange}/>
+                            </div>
                 <button className="ui primary button">
-                    Upload
+                    Give Points
               </button>
         </form>
       </div>
       
       <div>
-        {this.state.isVisible ? <ShowPDF url = {`../../../PDFs/${this.props.auth.user.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} /> : null}
+        {this.state.isVisible ? <ShowPDF url = {`../../../PDFs/${this.props.match.params.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} /> : null}
         
 {/* 
 {this.state.isVisible ? <Test url = {`../../PDFs/testX.pdf`} /> : <h1> 2 </h1>}
@@ -185,4 +197,4 @@ const mapStateToProps = (state) => ({
 })
 
 
-export default connect(mapStateToProps)(UploadAssignment)
+export default connect(mapStateToProps)(ViewStudentUploadedHW)

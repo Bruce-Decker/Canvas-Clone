@@ -40,7 +40,7 @@ class ViewAssignments extends Component {
               {  this.state.assignments.map(assignment =>  
                <div class="card">
                <div class="card-body">
-                   <Link to = {`/uploadAssignment/${this.props.match.params.CourseId}/${assignment.assignment_name}`}> <h3> {assignment.assignment_name}</h3></Link>
+                {this.props.auth.isFaculty ? <Link to = {`/ViewStudentUploadedHW/${this.props.match.params.CourseId}/${assignment.assignment_name}/${this.props.match.params.email}`}> <h3> {assignment.assignment_name}</h3></Link> :  <Link to = {`/uploadAssignment/${this.props.match.params.CourseId}/${assignment.assignment_name}/${this.props.auth.user.email}`}> <h3> {assignment.assignment_name}</h3></Link>}
                    <h1> {assignment.description}</h1>
                    </div>
                    </div>

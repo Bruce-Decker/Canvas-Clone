@@ -12,7 +12,7 @@ class TakeQuiz extends Component {
         super();
         this.state = {
             questions: [],
-           
+           // email: this.props.auth.user.email
            
 
          
@@ -28,9 +28,10 @@ class TakeQuiz extends Component {
         console.log(this.state)
         //window.location.reload();
         var data = this.state
+        data['email'] = this.props.auth.user.email
         delete data['questions']
         axios.post('/submitQuiz/' + this.props.match.params.CourseId + '/' + this.props.match.params.quizName, data)
-           .then(res => console.log(res.data))
+           .then(res => window.location.reload())
            .catch(err => console.log(err))
     }
 

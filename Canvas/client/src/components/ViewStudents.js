@@ -3,6 +3,7 @@ import Banner from './Banner'
 import '../App.css';
 import axios from 'axios'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import React, { Component } from 'react'
 
 
@@ -44,7 +45,7 @@ class ViewStudents extends Component {
                  {this.state.students.map(student => 
                     <tr>
                        <td key = {student.eamil}><img src = {"../../" + student.image_path} height = "190" width = "220" key = {student.eamil}/></td>
-                       <td key = {student.eamil}>{student.name}</td>
+                       <td key = {student.eamil}><Link to ={`/studentGradePage/${this.props.match.params.CourseId}/${student.email}`}> {student.name} </Link> </td>
                        <td key = {student.eamil}>{student.email}</td>
 
                     </tr>

@@ -836,7 +836,7 @@ app.get('/listRegisteredCourses/:email', function(req, res) {
 
 app.get('/createAssignmentsTable', (req, res) => {
     var sql = `CREATE TABLE Assignments(uuid VARCHAR (255), assignment_name VARCHAR(255), email VARCHAR(255), CourseId VARCHAR(255), 
-        description VARCHAR(255), time VARCHAR(255), PRIMARY KEY(uuid))`
+        description VARCHAR(255), full_points INT(100), time VARCHAR(255), PRIMARY KEY(uuid))`
     db.query(sql, (err, result) => {
          if (err) throw err;
          console.log(result);
@@ -851,6 +851,7 @@ app.post('/createAssignment', function(req, res) {
     var CourseId = req.body.CourseId
     var uuid = email + "-" + CourseId + "-" + assignment_name
     var description = req.body.description
+    var full_points = req.body.full_points
     var present_time = new Date()
     var time = present_time.getMonth() + "/" + present_time.getDate() + "/"
     time = time + present_time.getFullYear() + " " + present_time.getHours()
@@ -861,6 +862,7 @@ app.post('/createAssignment', function(req, res) {
         assignment_name,
         email,
         CourseId,
+        full_points,
         description,
         time
     }
@@ -1134,6 +1136,7 @@ app.post('/submitQuiz/:CourseId/:quizName', function(req, res) {
     console.log(req.params.CourseId)
     console.log(req.params.quizName)
     console.log(req.body)
+    var email = req.body.email;
     var CourseId = req.params.CourseId
     var quiz_name = req.params.quizName
     var submission_data = req.body
@@ -1176,6 +1179,26 @@ app.post('/submitQuiz/:CourseId/:quizName', function(req, res) {
                   var current_score = (correct_count / correct_answer_store.length) * total_points
                   console.log("current score is " + current_score)
                   //res.send(result)
+                  var sql2 = 'REPLACE INTO GradeBook SET ?'
+                  var uuid = email + "-" + CourseId + "-" + quiz_name 
+                  var grade_data = {
+                       uuid,
+                       email,
+                       item_name: quiz_name,
+                       CourseId,
+                       earned_points: current_score,
+                       full_points: total_points
+                  }
+                  connection.query(sql2, grade_data, (err, result2) => {
+                    if (err) {
+                        throw err
+                    } else {
+                        
+                        res.send(result2)
+                    }
+      
+                })
+                  
               }
 
           })
@@ -1184,8 +1207,43 @@ app.post('/submitQuiz/:CourseId/:quizName', function(req, res) {
 
     })
 
-    res.send("test")
+   
 
+})
+
+app.get('/getGrades/:CourseId/:email', function(req, res) {
+    var CourseId = req.params.CourseId
+    var email = req.params.email
+    
+   
+    var sql = `SELECT * FROM GradeBook WHERE CourseId="${CourseId}" AND email="${email}"`
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, (err, result) => {
+              if (err) {
+                  throw err
+              } else {   
+                  res.send(result)
+              }
+          })
+    })
+
+
+})
+
+app.get('/createGradeBook', (req, res) => {
+    var sql = `CREATE TABLE Gradebook(uuid VARCHAR (255), email VARCHAR(255), item_name VARCHAR(255), 
+         CourseId VARCHAR(255), earned_points VARCHAR(255), full_points VARCHAR(255), PRIMARY KEY(uuid))`
+    db.query(sql, (err, result) => {
+         if (err) throw err;
+         console.log(result);
+         res.send("Created Table Successfully")
+
+    })
 })
 
 function compare_answers(user_answer, correct_answer) {
@@ -1202,6 +1260,54 @@ function compare_answers(user_answer, correct_answer) {
     return count;
 
 }
+
+app.post('/submitGrade', (req, res) => {
+    //var sql = 'REPLACE INTO Uploads SET ?'
+    var CourseId = req.body.CourseId
+    var email = req.body.email
+    var item_name = req.body.item_name
+    var earned_points = req.body.earned_points
+    var uuid = email + "-" +  CourseId + "-" +  item_name
+    var full_points, data
+   
+    var sql = `SELECT * FROM Assignments WHERE CourseId="${CourseId}" AND assignment_name="${item_name}" LIMIT 1`
+    var sql2 = 'REPLACE INTO GradeBook SET ?'
+    
+
+   
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+          connection.query(sql, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  //res.send(result)
+                  full_points = result[0].full_points
+                  data = {
+                      uuid, 
+                      email,
+                      item_name, 
+                      CourseId, 
+                      earned_points,
+                      full_points
+                  }
+                  
+                  connection.query(sql2, data, (err, result2) => {
+                    if (err) {
+                        throw err
+                    } else {
+                       
+                        res.send(result2)
+                    }
+                })
+              }
+          })
+    })
+})
+
  
 
 

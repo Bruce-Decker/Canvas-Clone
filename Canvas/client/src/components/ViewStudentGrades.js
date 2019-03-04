@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
-class ViewGrades extends Component {
+class ViewStudentGrades extends Component {
     constructor() {
         super();
         this.state = {
@@ -17,8 +17,8 @@ class ViewGrades extends Component {
     }
 
     async componentDidMount() {
-       
-        const response = await axios.get('/getGrades/' + this.props.match.params.CourseId + "/" + this.props.auth.user.email)
+     
+        const response = await axios.get('/getGrades/' + this.props.match.params.CourseId + "/" + this.props.match.params.email)
         this.setState({
             grades: response.data,
             isTableVisible: true
@@ -32,10 +32,13 @@ class ViewGrades extends Component {
         return (
             <div className = "pageDesign">
             <Banner />
+         
            { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
+          
            <div className = "tableContainer">
              <table className="ui celled table">
              <Table />
+            
            {  this.state.grades.map(grade =>  
             //    <h1> {`${grade.item_name  }     ${grade.earned_points}`} </h1>
             <tr>
@@ -75,4 +78,4 @@ const mapStateToProps = (state) => ({
 })
 
 
-export default connect(mapStateToProps)(ViewGrades)
+export default connect(mapStateToProps)(ViewStudentGrades)

@@ -11,7 +11,8 @@ class CreateAssignment extends Component {
         super();
         this.state = {
             assignment_name: '',
-            description: ''
+            description: '',
+            full_points: 100
            
         }
 
@@ -26,10 +27,12 @@ class CreateAssignment extends Component {
         var description = this.state.description
         var CourseId = this.props.match.params.CourseId
         var email = this.props.auth.user.email
+        var full_points = this.state.full_points
         var data = {
             assignment_name,
             description,
             CourseId,
+            full_points,
             email
         }
         axios.post('/createAssignment', data)
@@ -50,9 +53,15 @@ class CreateAssignment extends Component {
                
                     <h1> Create Assignment </h1>
                     <form onSubmit= {this.onSubmit}>
+                    <div className="form-group">
+                       
                         <div className="form-group">
                         <label htmlFor="exampleFormControlInput1">Assignment Name</label>
                         <input type="assignment_name" className="form-control" name="assignment_name"  onChange = {this.onChange}/>
+                        </div>
+
+                        <label htmlFor="exampleFormControlInput1">Full Points</label>
+                        <input style={{width:"100px"}} type="assignment_name" className="form-control" name="full_points"  onChange = {this.onChange}/>
                         </div>
                     
                     
