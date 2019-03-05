@@ -23,6 +23,13 @@ import CreateQuiz from './components/CreateQuiz'
 import TakeQuiz from './components/TakeQuiz'
 import ViewQuizzes from './components/ViewQuizzes'
 import UploadAssignment from './components/UploadAssignment'
+import UploadCourseFile from './components/UploadCourseFile'
+import ViewEachCourseFile from './components/ViewEachCourseFile'
+import ViewStudentProfile from './components/ViewStudentProfile'
+import ViewMyProfile from './components/MyProfile'
+import SearchCourse from './components/SearchCourse'
+
+import ListCourseFiles from './components/ListCourseFiles'
 import jwt_decode from 'jwt-decode'
 import tokenHeader from './utility/tokenHeader'
 import { activeUser, activeFaculty } from './actions/authActions'
@@ -88,6 +95,8 @@ class App extends Component {
                     <Route exact path = "/ViewGrades/:CourseId/:email" component = {ViewGrades} />
                     <Route exact path = "/ViewStudentGrades/:CourseId/:email" component = {ViewStudentGrades} />
                     <Route exact path = "/studentGradePage/:CourseId/:email" component = {StudentGradePage} />
+                    <Route exact path = "/viewstudentProfile/:email" component = {ViewStudentProfile} />
+                    <Route exact path = "/viewMyProfile" component = {ViewMyProfile} />
 
 
                      
@@ -104,6 +113,13 @@ class App extends Component {
                     <Route exact path="/viewStudents/:CourseId" component={ViewStudents} />
                     <Route exact path="/ViewAnnouncements/:CourseId" component={ViewAnnouncements} />
                     <Route exact path="/uploadAssignment/:CourseId/:assignmentName/:email" component={UploadAssignment} />
+                    <Route exact path="/uploadCourseFile/:CourseId" component={UploadCourseFile} />
+                    <Route exact path="/listCourseFile/:CourseId" component={ListCourseFiles} />
+                    <Route exact path="/viewEachCourseFile/:CourseId/:item_name" component={ViewEachCourseFile} />
+
+                    <Route exact path="/searchCourse" component={SearchCourse} />
+                  
+
                     <Route exact path="/ViewStudentUploadedHW/:CourseId/:assignmentName/:email" component={ViewStudentUploadedHW} />
                     <Route exact path="/test" component={Test} />
                    

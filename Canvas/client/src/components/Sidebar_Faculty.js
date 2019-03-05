@@ -24,14 +24,15 @@ class SideBar_Custom extends Component {
        <img className = "SJSU_image" src={SJSU_logo}/>
       <Link className = "active" to = "/showCreatedCourse">
    
-         Home
+      <i className ="fas fa-home"></i> Home
       </Link>
-      <Link className="createCourse" to = "/createCourse"> Create Course </Link>
-      <Link className = "UpdateFacultyProfile" to = "/updateFacultyProfile">Update Profile</Link>
-      <a href="#about">About</a>
+      <Link className="createCourse" to = "/createCourse"><i className="fas fa-graduation-cap"></i> Create  Course </Link>
+      <Link to = "/searchCourse"> <i className="fas fa-book"></i> Search Course </Link>
+      <Link className = "UpdateFacultyProfile" to = "/updateFacultyProfile"><i className="fas fa-user"></i> Update Profile</Link>
+     
+      <Link to = "viewMyProfile"> <i className="fas fa-user-circle"></i> My Profile </Link>
       <Link className = "logout" to = "/" onClick = {this.LogoutButton}>
-   
-         Logout
+      <i className="fas fa-sign-out-alt"></i> Logout
       </Link>
     </div>
     )

@@ -22,17 +22,13 @@ class SideBar_Custom extends Component {
     return (
       <div className="sidebar">
        <img className = "SJSU_image" src={SJSU_logo}/>
-      <Link className = "active" to = "/showRegisteredCourse">
-   
-         Home
-      </Link>
-      <Link className="registerCourse" to = "/registerCourse"> Register Courses </Link>
-      <Link className = "profile" to = "/profile">Update Profile</Link>
-      <a href="#about">About</a>
-      <Link className = "logout" to = "/" onClick = {this.LogoutButton}>
-   
-         Logout
-      </Link>
+      <Link className = "active" to = "/showRegisteredCourse">  <i className ="fas fa-home"></i> Home </Link>
+      <Link className="registerCourse" to = "/registerCourse"> <i className="fas fa-graduation-cap"></i> Register Courses </Link>
+      <Link to = "/searchCourse"> <i className="fas fas fa-book"></i> Search Course </Link>
+      <Link className = "profile" to = "/profile"> <i className="fas fa-user"></i> Update Profile</Link>
+      <Link to = "/viewMyProfile"> <i className="fas fa-user-circle"></i> My Profile </Link>
+     
+      <Link className = "logout" to = "/" onClick = {this.LogoutButton}> <i className="fas fa-sign-out-alt"></i> Logout </Link>
     </div>
     )
   }
