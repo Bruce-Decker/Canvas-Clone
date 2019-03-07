@@ -1,4 +1,5 @@
 import Sidebar_Custom from './Sidebar_Custom'
+import Sidebar_Faculty from './Sidebar_Faculty'
 import Banner from './Banner'
 import '../App.css';
 import axios from 'axios'
@@ -67,7 +68,7 @@ class showRegisteredCourse extends Component {
         return (
             <div className = "pageDesign">
               <Banner />
-              <Sidebar_Custom />
+              { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
               <div className = "registerCourseContainer">
               <h1> Your registered courses </h1>
                {  this.state.courses.map(course =>  

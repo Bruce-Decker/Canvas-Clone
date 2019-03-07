@@ -154,7 +154,8 @@ class ViewEachCourseFile extends Component {
         </div>
         
         <div>
-          {this.state.isVisible ? <ShowPDF url = {`../../../PDFs/${this.props.match.params.CourseId}${this.props.match.params.item_name}.pdf`} /> : null}
+        <Link to ={`../../../${this.props.match.params.CourseId}${this.props.match.params.item_name}.pdf`} target="_blank">Download</Link>
+          {this.state.isVisible ? <ShowPDF url = {`../../../${this.props.match.params.CourseId}${this.props.match.params.item_name}.pdf`} /> : null}
           
   {/* 
   {this.state.isVisible ? <Test url = {`../../PDFs/testX.pdf`} /> : <h1> 2 </h1>}

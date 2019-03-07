@@ -22,9 +22,6 @@ class UploadAssignment extends Component {
             isVisible: false,
             file: null,
             test: "1"
-           
-        
-
         }
          
     }
@@ -50,7 +47,7 @@ class UploadAssignment extends Component {
           console.log(key, value);
         }
       axios.post(`/upload/${this.props.match.params.CourseId}`, formdata)
-        .then(res => this.props.history.push(`/viewAssignments/${this.props.match.params.CourseId}`))
+        .then(res => window.location.reload())
         .catch(err => console.log("Error"))
        
     }
@@ -86,11 +83,7 @@ class UploadAssignment extends Component {
           );
       }
 
-      componentDidUpdate() {
-
-      }
-
-
+     
 
     
     async componentDidMount() {
@@ -112,15 +105,7 @@ class UploadAssignment extends Component {
                
                 test: "3"
             })
-        }
-        // console.log(this.props.match.params.CourseId)
-        // console.log(this.props.match.params.assignmentName)
-        // console.log(this.props.auth.user.email)
-        // console.log(response.data)
-      
-
-        
-       
+        }       
     }
 
     render() {
@@ -149,7 +134,8 @@ class UploadAssignment extends Component {
       </div>
       
       <div>
-        {this.state.isVisible ? <ShowPDF url = {`../../../PDFs/${this.props.auth.user.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} /> : null}
+      {this.state.isVisible ? <Link to ={`../../../${this.props.match.params.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} target="_blank">Download</Link> : null }
+        {this.state.isVisible ? <ShowPDF url = {`../../../${this.props.auth.user.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} /> : null}
         
 {/* 
 {this.state.isVisible ? <Test url = {`../../PDFs/testX.pdf`} /> : <h1> 2 </h1>}

@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
 
 const pdfStorage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './PDFs/')
+        cb(null, './client/public/')
     },
     filename: function(req, file, cd) {
         file.originalname = req.body.email  + req.params.id  + req.body.assignment_name + '.pdf'
@@ -33,7 +33,7 @@ const pdfStorage = multer.diskStorage({
 
 const fileStorage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './PDFs/')
+        cb(null, './client/public')
     },
     filename: function(req, file, cd) {
         file.originalname = req.params.id  + req.body.item_name + '.pdf'
@@ -256,7 +256,7 @@ app.post('/createBasicUser', function(req,res) {
                 bcrypt.hash(user.password, salt, (err, hash) => {
                     if (err) throw err;
                     user.password = hash;
-                    var sql = 'INSERT INTO basicUsers SET ?  ON DUPLICATE KEY UPDATE name = VALUES(name), email = VALUES(email), password = VALUES(password)'
+                    var sql = 'REPLACE INTO basicUsers SET ?  ON DUPLICATE KEY UPDATE name = VALUES(name), email = VALUES(email), password = VALUES(password)'
                 let query = connection.query(sql, user, (err, result) => {
                 if(err) {
                     if(err.errno==1062){  
@@ -350,7 +350,7 @@ app.get('/retrieveUserProfileFromCourse/:Id', (req, res) => {
 })
 // passport.authenticate('jwt', { session: false }),
 app.post('/createProfile', upload.single('filename'),  (req, res) => {
-    var sql = 'INSERT INTO profile SET ?'
+    var sql = 'REPLACE INTO profile SET ?'
     
     var image_path = req.file.path
     
@@ -415,7 +415,7 @@ app.get('/viewProfile/:email', function(req, res) {
 
 
 app.post('/createCourse', passport.authenticate('jwt', { session: false }), function(req, res) {
-    var sql = 'INSERT INTO course SET ?'
+    var sql = 'REPLACE INTO course SET ?'
 
     var email = req.body.email;
     var CourseId = req.body.CourseId;
@@ -764,7 +764,7 @@ app.post('/dropCourse', function(req, res) {
 
 
 app.post('/registerCourse',  function(req, res) {
-    var sql = 'INSERT INTO CourseList SET ?'
+    var sql = 'REPLACE INTO CourseList SET ?'
     
     var email = req.body.email;
     var CourseId = req.body.CourseId;
@@ -870,7 +870,7 @@ app.post('/announcement', function(req, res) {
         comment,
         time
     }
-    var sql = 'INSERT INTO Announcement SET ?'
+    var sql = 'REPLACE INTO Announcement SET ?'
     pool.getConnection(function(err,connection){
         if (err) {
             res.json({"code" : 100, "status" : "Error in connection database"});
@@ -1048,7 +1048,7 @@ app.post('/createAssignment', function(req, res) {
         description,
         time
     }
-    var sql = 'INSERT INTO Assignments SET ?'
+    var sql = 'REPLACE INTO Assignments SET ?'
     pool.getConnection(function(err,connection){
         if (err) {
             res.json({"code" : 100, "status" : "Error in connection database"});

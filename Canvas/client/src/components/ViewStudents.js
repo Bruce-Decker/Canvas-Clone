@@ -1,4 +1,5 @@
 import Sidebar_Custom from './Sidebar_Custom'
+import Sidebar_Faculty from './Sidebar_Faculty'
 import Banner from './Banner'
 import '../App.css';
 import axios from 'axios'
@@ -50,7 +51,7 @@ class ViewStudents extends Component {
         return (
             <div className = "pageDesign">
               <Banner />
-              <Sidebar_Custom />
+              { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
               <div className = "tableContainer">
                 <table className="ui celled table">
 
@@ -59,10 +60,10 @@ class ViewStudents extends Component {
 
                  {this.state.students.map(student => 
                     <tr>
-                       <td key = {student.eamil}><img src = {"../../" + student.image_path} height = "190" width = "220" key = {student.eamil}/></td>
+                       <td key = {student.eamil}><img src = {"../../../" + student.image_path} height = "190" width = "220" key = {student.eamil}/></td>
                        <td key = {student.eamil}><Link to ={`/studentGradePage/${this.props.match.params.CourseId}/${student.email}`}> {student.name} </Link> </td>
                        <td  key = {student.eamil}>{student.email}</td>
-                       <ListButton CourseId = {this.props.match.params.CourseId} email = {student.email} onClick = {this.onClick}/>
+                       { this.props.auth.isFaculty ? <ListButton CourseId = {this.props.match.params.CourseId} email = {student.email} onClick = {this.onClick}/> : null }
                       
                       
                     </tr>

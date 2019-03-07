@@ -30,6 +30,7 @@ class UploadCourseFile extends Component {
          
     }
 
+  
 
     onChange = (e) => {
         this.setState({[e.target.name]: e.target.value})
@@ -44,7 +45,7 @@ class UploadCourseFile extends Component {
 
 
     onSubmit = (e) => {
-     
+     e.preventDefault()
       console.log("sdfsdfsfd")
         let file = this.state.file
         let formdata = new FormData()
@@ -126,7 +127,9 @@ class UploadCourseFile extends Component {
       </div>
       
       <div>
-        {this.state.isVisible ? <ShowPDF url = {`../../../PDFs/${this.props.auth.user.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} /> : null}
+        
+      {/* <Link to ={`../../../${this.props.match.params.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} target="_blank">Download</Link>
+        {this.state.isVisible ? <ShowPDF url = {`../../../${this.props.auth.user.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} /> : null} */}
         
 {/* 
 {this.state.isVisible ? <Test url = {`../../PDFs/testX.pdf`} /> : <h1> 2 </h1>}

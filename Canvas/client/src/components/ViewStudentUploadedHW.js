@@ -11,6 +11,7 @@ import PDF from 'react-pdf-js';
 import ShowPDF from './ShowPDF'
 
 
+
 var response
 class ViewStudentUploadedHW extends Component {
    
@@ -158,11 +159,14 @@ class ViewStudentUploadedHW extends Component {
                     Give Points
               </button>
         </form>
+        
       </div>
       
       <div>
-        {this.state.isVisible ? <ShowPDF url = {`../../../PDFs/${this.props.match.params.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} /> : null}
-        
+      <Link to ={`../../../${this.props.match.params.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} target="_blank">Download</Link>
+     
+        {/* {this.state.isVisible ? <ShowPDF url = {`../../../PDFs/${this.props.match.params.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} /> : null} */}
+        {this.state.isVisible ? <ShowPDF url = {`../../../${this.props.match.params.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} /> : null}
 {/* 
 {this.state.isVisible ? <Test url = {`../../PDFs/testX.pdf`} /> : <h1> 2 </h1>}
          */}
