@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
 
 const pdfStorage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './client/public/')
+        cb(null, '../frontend/public/')
     },
     filename: function(req, file, cd) {
         file.originalname = req.body.email  + req.params.id  + req.body.assignment_name + '.pdf'
@@ -33,7 +33,7 @@ const pdfStorage = multer.diskStorage({
 
 const fileStorage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './client/public')
+        cb(null, '../frontend/public')
     },
     filename: function(req, file, cd) {
         file.originalname = req.params.id  + req.body.item_name + '.pdf'
