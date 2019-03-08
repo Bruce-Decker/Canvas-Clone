@@ -256,7 +256,7 @@ app.post('/createBasicUser', function(req,res) {
                 bcrypt.hash(user.password, salt, (err, hash) => {
                     if (err) throw err;
                     user.password = hash;
-                    var sql = 'REPLACE INTO basicUsers SET ?  ON DUPLICATE KEY UPDATE name = VALUES(name), email = VALUES(email), password = VALUES(password)'
+                    var sql = 'INSERT INTO basicUsers SET ?  ON DUPLICATE KEY UPDATE name = VALUES(name), email = VALUES(email), password = VALUES(password)'
                 let query = connection.query(sql, user, (err, result) => {
                 if(err) {
                     if(err.errno==1062){  
@@ -1601,4 +1601,6 @@ app.get('/getFile/:CourseId/:item_name', function(req, res) {
 app.listen(5000, function() {
     console.log('Server is listening on 5000')
 })
+
+module.exports = app
 

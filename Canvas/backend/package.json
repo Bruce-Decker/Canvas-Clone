@@ -8,7 +8,8 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "frontend": "cd .. && npm start --prefix frontend",
-    "dev": "concurrently \"npm run server\" \"npm run frontend\""
+    "dev": "concurrently \"npm run server\" \"npm run frontend\"",
+    "test": "mocha"
   },
   "author": "Bruce Decker",
   "license": "ISC",
@@ -28,5 +29,12 @@
     "passport-jwt": "^4.0.0",
     "path": "^0.12.7",
     "react-router-dom": "^4.3.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "mocha": "^6.0.2",
+    "request": "^2.88.0",
+    "should": "^13.2.3"
   }
 }
