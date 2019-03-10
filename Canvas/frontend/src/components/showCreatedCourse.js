@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 
-
+var items = [200, 201, 202, 204, 206, 207, 211, 217, 227, 281, 290, 291, 292, 295, 301, 302, 304, 305]
 class showCreatedCourse extends Component {
     constructor() {
         super();
@@ -44,16 +44,37 @@ class showCreatedCourse extends Component {
     render() {
       
         return (
-            <div className = "pageDesign">
+            <div>
               <Banner />
               <Sidebar_Faculty />
             
-              <div className = "registerCourseContainer">
+              <div className = "registerCourseContainer2">
               <h1> Instructor's Courses </h1>
                  {  this.state.courses.map(course =>  
 
-                     <h1 key = {course.CourseId}> <Link to = {`/CourseProfile/${course.CourseId}`} params = {course.CourseId}> {course.CourseId}   {course.CourseName}</Link>  </h1>
-               
+                    //  <h1 key = {course.CourseId}> <Link to = {`/CourseProfile/${course.CourseId}`} params = {course.CourseId}> {course.CourseId}   {course.CourseName}</Link>  </h1>
+                    <div className="showRegisteredCourse">
+                    <div className="col s12 m7">
+                      <div className="card" style = {{width: "380px"}}>
+                        <div className="card-image">
+                          {/* <img src= {image_store[course.CourseId]} style = {{height: "150px"}} /> */}
+                          <Image  />
+                        
+                        </div>
+                        <div className="card-content">
+                        <h4 key = {course.CourseId}> <Link to = {`/CourseProfile/${course.CourseId}`} params = {course.CourseId}>{course.CourseTerm}-{course.CourseId}-{course.CourseName}</Link>   </h4>
+                        </div>
+                        <div className="card-action">
+                       <Link to ={`/ViewAnnouncements/${course.CourseId}`}> <i className="fas fa-bullhorn fa-lg"> </i> </Link>
+                       <Link to ={`/viewQuizzes/${course.CourseId}`}> <i className="fas fa-pen-square fa-lg"></i> </Link>
+                       <Link to ={`/ViewAssignments/${course.CourseId}/${this.props.auth.user.email}`}>  <i className="far fa-file-alt fa-lg"></i> </Link>
+                       <Link to ={`/ListCourseFile/${course.CourseId}`}> <i className="fas fa-sticky-note fa-lg"></i> </Link>
+                        
+                       
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                  )}
                   
               
@@ -63,6 +84,18 @@ class showCreatedCourse extends Component {
     }
 
 }
+
+
+var Image = (props) => ({
+    
+    render: function() {
+        return (
+            // <img src = {`http://lorempixel.com/400/200/nature?${Math.random()}}`} style = {{height: "150px"}}/>
+            
+            <img src = {`https://picsum.photos/400/${items[Math.floor(Math.random()*items.length)]}`} style = {{height: "150px"}}/>
+        )
+    }
+})
 
 
 

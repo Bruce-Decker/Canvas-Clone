@@ -16,11 +16,31 @@ export const registerUser = (userData, history) => dispatch => {
          )
 }
 
+export const createProfile = (userData) => dispatch => {
+    //axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
+    console.log("sdfsdf")
+    console.log("form data " + userData )
+     axios.post('/createProfile', userData)
+          .then(res => {
+              //console.log(res.data)
+              window.location.reload()
+          })
+          .catch(err => 
+           
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+    
+            })
+        )
+}
+
 export const loginUser = (userData) => dispatch => {
     console.log("user")
     axios.post('/login', userData)
         .then(res => {
             const { token } = res.data
+            console.log(res.data)
             localStorage.setItem('token', token)
             tokenHeader(token)
             const decrypt_data = jwt_decode(token)

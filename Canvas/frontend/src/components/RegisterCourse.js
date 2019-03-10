@@ -32,6 +32,7 @@ class RegisterCourse extends Component {
           
            
         })
+        console.log(this.state)
         //console.log("dsfdsf " + this.state.registeredCourses[0].CourseId)
        
     }
@@ -102,7 +103,7 @@ class RegisterCourse extends Component {
                              Registered students: {course.count} <br />
                              Capacity: {course.CourseCapacity} <br/>
                              Waitlist Capacity: {course.WaitlistCapacity}
-                             {course.status == "closed" ? <h1> Closed </h1> : null }
+                             {course.status === "closed" ? <h1> Closed </h1> : null }
                          
                             </div>
                           </div>

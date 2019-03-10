@@ -64,6 +64,7 @@ if (localStorage.token) {
   if (decoded.exp < time_now) {
      store.dispatch(resetProfile())
      store.dispatch(logout())
+     
      window.location.href = '/'
   }
 }

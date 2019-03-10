@@ -3,7 +3,11 @@ import SJSU_logo from '../public/sjsu-logo.png';
 import background_image from '../public/background.jpg'
 import Banner from './Banner'
 import { Link } from 'react-router-dom' 
+
+
 class Landing extends Component {
+ 
+ 
   render() {
       return (
           <div> 

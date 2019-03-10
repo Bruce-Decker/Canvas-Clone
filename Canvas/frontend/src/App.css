@@ -22,7 +22,7 @@
 
 
 
-@import url('https://fonts.googleapis.com/css?family=Bree+Serif|Lobster|Playfair+Display');
+@import url('https://fonts.googleapis.com/css?family=Bree+Serif|Lobster|Playfair+Display|PT+Serif');
 
 
 
@@ -101,6 +101,11 @@
 
 }
 
+.showRegisteredCourse {
+  width: 400px;
+  float: left;
+}
+
 
 
 .tableContainer {
@@ -135,6 +140,16 @@
   margin-top: 50px;
   width: 700px;
   margin-left: 450px;
+
+}
+
+.registerCourseContainer2 {
+ 
+  position: relative;    
+  margin-top: 50px;
+  width: 900px;
+  margin-left: 400px;
+  float: left;
 
 }
 .selectCourseContainer {
@@ -202,6 +217,7 @@
   height: 100%;
   overflow: auto;
   margin-right: 2200px;
+  font-family: 'PT Serif', serif;
 
 
 }

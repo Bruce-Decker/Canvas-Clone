@@ -15,6 +15,7 @@ export default function(state = initialState, action) {
              return {
                  ...state,
                  isAuthenticated: !isEmpty(action.payload),
+                 isFaculty: false,
                  user: action.payload
              }
         case ACTIVE_FACULTY:

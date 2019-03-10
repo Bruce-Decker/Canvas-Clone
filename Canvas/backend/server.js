@@ -10,6 +10,7 @@ var fs = require('fs')
 var axios = require('axios')
 const validateLogin = require('./validation/validateLogin')
 const validateRegister = require('./validation/validateRegister')
+const validateProfile = require('./validation/validateProfile')
 var multer = require('multer')
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -195,6 +196,8 @@ app.post('/login', function(req, res) {
    
     var email = req.body.email;
     var password = req.body.password
+    console.log(email)
+    console.log(password)
     pool.getConnection(function(err,connection){
         if (err) {
             res.json({"code" : 100, "status" : "Error in connection database"});
@@ -350,6 +353,13 @@ app.get('/retrieveUserProfileFromCourse/:Id', (req, res) => {
 })
 // passport.authenticate('jwt', { session: false }),
 app.post('/createProfile', upload.single('filename'),  (req, res) => {
+    const { errors, isValid } = validateProfile(req.body)
+   console.log(errors)
+    if (!isValid) {
+        console.log(errors)
+        return res.status(400).json(errors);
+    }
+
     var sql = 'REPLACE INTO profile SET ?'
     
     var image_path = req.file.path
@@ -412,9 +422,9 @@ app.get('/viewProfile/:email', function(req, res) {
     })
 })
 
+/// passport.authenticate('jwt', { session: false })
 
-
-app.post('/createCourse', passport.authenticate('jwt', { session: false }), function(req, res) {
+app.post('/createCourse',  function(req, res) {
     var sql = 'REPLACE INTO course SET ?'
 
     var email = req.body.email;
@@ -894,7 +904,7 @@ app.post('/announcement', function(req, res) {
 app.get('/announcement/:id', function(req, res) {
     console.log(req.params.id)
     id = req.params.id
-    var sql = `SELECT * FROM Announcement WHERE CourseId="${id}"`
+    var sql = `SELECT * FROM Announcement WHERE CourseId="${id}" order by time DESC`
     pool.getConnection(function(err,connection){
         if (err) {
             res.json({"code" : 100, "status" : "Error in connection database"});
