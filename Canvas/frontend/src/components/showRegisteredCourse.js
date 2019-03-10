@@ -85,7 +85,7 @@ class showRegisteredCourse extends Component {
               <Banner />
               { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
               <div className = "registerCourseContainer2">
-              <h1> Your registered courses </h1>
+              <h1 className = "Abril_Fatface"> Your registered courses </h1>
                {  this.state.courses.map(course =>  
                     
                     // <h1 key = {course.CourseId}> <Link to = {`/CourseProfile/${course.CourseId}`} params = {course.CourseId}> {course.CourseId}   {course.CourseName}</Link>   { this.state.listVisibility ? <ListButton value = {course.CourseId} onClick = {this.onClick}/> : null } </h1>

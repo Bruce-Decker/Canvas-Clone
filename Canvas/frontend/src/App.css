@@ -22,7 +22,7 @@
 
 
 
-@import url('https://fonts.googleapis.com/css?family=Bree+Serif|Lobster|Playfair+Display|PT+Serif');
+@import url('https://fonts.googleapis.com/css?family=Bree+Serif|Lobster|Playfair+Display|PT+Serif|Abril+Fatface');
 
 
 
@@ -33,6 +33,10 @@
   left: 50%;
   transform: translate(-50%, -50%);
   
+}
+
+.Abril_Fatface {
+  font-family: 'Abril Fatface', cursive;
 }
 
 .playfairFont {
@@ -142,6 +146,16 @@
   margin-left: 450px;
 
 }
+
+.showCourseContainer {
+ 
+  position: relative;    
+  margin-top: 50px;
+  width: 700px;
+  margin-left: 520px;
+
+}
+
 
 .registerCourseContainer2 {
  
