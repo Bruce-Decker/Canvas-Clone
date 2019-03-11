@@ -22,7 +22,7 @@
 
 
 
-@import url('https://fonts.googleapis.com/css?family=Bree+Serif|Lobster|Playfair+Display|PT+Serif|Abril+Fatface');
+@import url('https://fonts.googleapis.com/css?family=Bree+Serif|Lobster|Playfair+Display|PT+Serif|Abril+Fatface|Cinzel');
 
 
 
@@ -49,6 +49,10 @@
 
 .BreeSerif {
   font-family: 'Bree Serif', serif;
+}
+
+.Cinzel {
+  font-family: 'Cinzel', serif;
 }
 
 
@@ -202,6 +206,15 @@
   margin-top: 50px;
   width: 500px;
   margin-left: 450px;
+
+}
+
+.studentTokenContainer {
+ 
+    
+  margin-top: 50px;
+  width: 500px;
+  margin-left: 500px;
 
 }
 

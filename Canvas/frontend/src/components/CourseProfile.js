@@ -45,6 +45,7 @@ class CourseProfile extends Component {
                     { this.props.auth.isFaculty ? null : <h1> <Link to ={`/ViewGrades/${this.props.match.params.CourseId}/${this.props.auth.user.email}`}> <i className="fas fa-archive"></i> View Grades </Link> </h1>}
                     { this.props.auth.isFaculty ? <h1> <Link to ={`/uploadCourseFile/${this.props.match.params.CourseId}`}><i className="fas fa-upload"></i> Upload Lectures and Files  </Link> </h1> : null}
                     <h1> <Link to ={`/ListCourseFile/${this.props.match.params.CourseId}`}> <i className="fas fa-chart-bar"></i> View Course Files and Lectures  </Link> </h1>
+                    { this.props.auth.isFaculty ? <h1> <Link to ={`/FacultyGenerateToken/${this.props.match.params.CourseId}`}><i className="fas fa-key"></i> Generate Token  </Link> </h1> : null}
                
              </div>
             </div>

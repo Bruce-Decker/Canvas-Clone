@@ -25,6 +25,7 @@ class SideBar_Custom extends Component {
       <Link className = "active" to = "/showRegisteredCourse">  <i className ="fas fa-home"></i> Home </Link>
       <Link className="registerCourse" to = "/registerCourse"> <i className="fas fa-graduation-cap"></i> Register Courses </Link>
       <Link to = "/searchCourse"> <i className="fas fas fa-book"></i> Search Course </Link>
+      <Link to = "/StudentRegisterToken"> <i className="fas fa-key"></i> Register Via Token </Link>
       <Link className = "profile" to = "/profile"> <i className="fas fa-user"></i> Update Profile</Link>
       <Link to = "/viewMyProfile"> <i className="fas fa-user-circle"></i> My Profile </Link>
      

@@ -29,6 +29,9 @@ import ViewStudentProfile from './components/ViewStudentProfile'
 import ViewMyProfile from './components/MyProfile'
 import SearchCourse from './components/SearchCourse'
 
+import FacultyGenerateToken from './components/FacultyGenerateToken'
+import StudentRegisterToken from './components/StudentRegisterToken'
+
 import ListCourseFiles from './components/ListCourseFiles'
 import jwt_decode from 'jwt-decode'
 import tokenHeader from './utility/tokenHeader'
@@ -122,6 +125,10 @@ class App extends Component {
                   
 
                     <Route exact path="/ViewStudentUploadedHW/:CourseId/:assignmentName/:email" component={ViewStudentUploadedHW} />
+
+                    <Route exact path="/FacultyGenerateToken/:CourseId" component={FacultyGenerateToken} />
+                    <Route exact path="/StudentRegisterToken" component={StudentRegisterToken} />
+
                     <Route exact path="/test" component={Test} />
                    
                 

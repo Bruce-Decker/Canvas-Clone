@@ -12,6 +12,10 @@ const validateLogin = require('./validation/validateLogin')
 const validateRegister = require('./validation/validateRegister')
 const validateProfile = require('./validation/validateProfile')
 var multer = require('multer')
+const uuidv1 = require('uuid/v1');
+const shortid = require('shortid');
+
+
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
        cb(null, './uploads/')
@@ -1597,7 +1601,98 @@ app.get('/getFile/:CourseId/:item_name', function(req, res) {
 })
 
 
+app.get('/createCourseAddTokenTable', (req, res) => {
+    var sql = `CREATE TABLE Token(uuid VARCHAR (255), email VARCHAR(255), CourseId VARCHAR(255), 
+    token VARCHAR(255), time VARCHAR(255), PRIMARY KEY(uuid))`
+    db.query(sql, (err, result) => {
+         if (err) throw err;
+         console.log(result);
+         res.send("Created Table Successfully")
 
+    })
+})
+
+
+app.post('/generateCourseToken/:CourseId', function(req, res) {
+   var sql = 'REPLACE INTO Token SET ?'
+   var uuid = uuidv1()
+   var token = shortid.generate()
+   var email = req.body.email
+   var CourseId = req.params.CourseId
+   var present_time = new Date()
+   var time = present_time.getMonth() + "/" + present_time.getDate() + "/"
+   time = time + present_time.getFullYear() + " " + present_time.getHours()
+   time = time + ":" + present_time.getMinutes() + ":" + present_time.getSeconds()
+   time = time + ":" + present_time.getMilliseconds()
+   
+   var data = {
+       uuid,
+       email,
+       CourseId,
+       token,
+       time
+   }
+   pool.getConnection(function(err,connection){
+    if (err) {
+        res.json({"code" : 100, "status" : "Error in connection database"});
+        return;
+      }   
+
+      connection.query(sql, data, (err, result) => {
+          if (err) {
+              throw err
+          } else {
+              res.send(data)
+          }
+      })
+})
+})
+
+app.post('/verifyCourseToken', function(req, res) {
+    var token = req.body.token
+    var CourseId = req.body.CourseId
+    var sql = `SELECT * FROM Token WHERE token="${token}" AND CourseId="${CourseId}"`
+    var sql2 = 'REPLACE INTO CourseList SET ?'
+    var email = req.body.email;
+    
+    var uuid = email + CourseId
+    var status = "added via token"
+    
+    var data = {
+       uuid,
+       email,
+       CourseId,
+       status
+    }
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+          connection.query(sql, (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  console.log(sql)
+                  console.log(result)
+                  //res.send(result[0])
+                  if (result[0]) {
+                    connection.query(sql2, data, (err, result2) => {
+                        if (err) {
+                            throw err
+                        } else {
+                           
+                            res.send(result2)
+                        }
+                    })
+                  } else {
+                      res.send(result)
+                  }
+                 
+              }
+          })
+    })
+ })
 
  
 

@@ -23,7 +23,7 @@ class StudentGradePage extends Component {
         return (
             <div className = "pageDesign">
               <Banner />
-             
+            
               { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
               <div className = "registerCourseContainer">
               <h1> <Link to ={`/viewStudentProfile/${this.props.match.params.email}`}><i className="fas fa-user"></i>  View Profile </Link> </h1> 
