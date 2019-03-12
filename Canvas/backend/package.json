@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "client-install": "npm install --prefix frontend",
-    "start": "node server.js",
+    "start_server": "node server.js",
     "server": "nodemon server.js",
     "frontend": "cd .. && npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run frontend\"",
+    "start": "concurrently \"npm run server\" \"npm run frontend\"",
     "test": "mocha"
   },
   "author": "Bruce Decker",

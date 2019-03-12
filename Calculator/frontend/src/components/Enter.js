@@ -9,7 +9,7 @@ class Enter extends Component {
         
         return (
           <div className = "enter">
-             {this.props.input}
+             <h3 className = "enterText"> {this.props.input} </h3>
           </div>
         )
     }

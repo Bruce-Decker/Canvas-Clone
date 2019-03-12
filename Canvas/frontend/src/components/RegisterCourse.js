@@ -7,6 +7,7 @@ import React, { Component } from 'react'
 import faker from 'faker'
 import { Link } from 'react-router-dom'
 
+
 class RegisterCourse extends Component {
     constructor() {
         super();
@@ -85,8 +86,10 @@ class RegisterCourse extends Component {
       
         return (
             <div className = "pageDesign">
-               <Banner />
-                <Sidebar_Custom />
+            <Banner/>
+             
+             
+                <Sidebar_Custom/>
           
                 <div className = "selectCourseContainer">
                      {  this.state.courses.map(course =>  

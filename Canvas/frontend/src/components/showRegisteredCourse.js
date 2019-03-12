@@ -34,7 +34,7 @@ class showRegisteredCourse extends Component {
      
 
         axios.post('/dropCourse', data)
-        .then(res => this.componentDidMount())
+        .then(res => window.location.reload())
         .catch(err => console.log(err))
 
         
@@ -43,18 +43,12 @@ class showRegisteredCourse extends Component {
 
 
 
+
+
    async componentDidMount() {
        
         const response = await axios.get('/registerCourse/' + this.props.auth.user.email)
        
-        for (var i = 0; i < response.data.length; i++) {
-            console.log("sdsdfs " + faker.image.avatar())
-            // console.log(response.data[i].CourseId)
-            
-            // image_store[response.data[i].CourseId] = faker.image.abstract();
-            // console.log("Sdfsdf " + image_store[response.data[i].CourseId])
-            //image_array.push(faker.image.abstract())
-        } 
         this.setState({
             courses: response.data,
           
@@ -67,25 +61,30 @@ class showRegisteredCourse extends Component {
             listVisibility: true
            
         })
+        } else {
+            this.setState({
+           
+                listVisibility: false
+               
+            })
+
         }
 
        
     }
 
-    generate_image = () => {
-        console.log('sfdsdf')
-        console.log(faker.image.abstract())
-        return faker.image.abstract();
-    }
+  
 
     render() {
       
         return (
             <div>
-              <Banner />
+              <Banner style = {{position: "fixed"}}/>
               { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
               <div className = "registerCourseContainer2">
               <h1 className = "Abril_Fatface"> Your registered courses </h1>
+              { this.state.listVisibility ?
+               <div>
                {  this.state.courses.map(course =>  
                     
                     // <h1 key = {course.CourseId}> <Link to = {`/CourseProfile/${course.CourseId}`} params = {course.CourseId}> {course.CourseId}   {course.CourseName}</Link>   { this.state.listVisibility ? <ListButton value = {course.CourseId} onClick = {this.onClick}/> : null } </h1>
@@ -112,6 +111,7 @@ class showRegisteredCourse extends Component {
         </div>
       </div>
                 )}
+                </div> : null }
                 </div>
           </div>
         )

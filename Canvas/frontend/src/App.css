@@ -129,7 +129,7 @@
   margin-top: 10px;
   margin-bottom: 50px;
   width: 500px;
-  margin-left: 490px;
+  margin-left: 470px;
 
 }
 
@@ -138,7 +138,7 @@
   position: relative;    
   margin-top: 50px;
   width: 500px;
-  margin-left: 520px;
+  margin-left: 470px;
 
 }
 
@@ -170,12 +170,22 @@
   float: left;
 
 }
+
+.registerCourseContainer3 {
+ 
+  position: relative;    
+  margin-top: 50px;
+  width: 900px;
+  margin-left: 550px;
+  float: left;
+
+}
 .selectCourseContainer {
  
   position: relative;    
   margin-top: 50px;
   width: 600px;
-  margin-left: 400px;
+  margin-left: 450px;
 
 }
 
@@ -191,13 +201,20 @@
   float: right;
 }
 
+
+
 .pageContainer {
  
   position: relative;    
   margin-top: 50px;
   width: 500px;
-  margin-left: 450px;
+  margin-left: 470px;
 
+}
+
+.SJSU_Logo2 {
+  margin-left: 10px;
+  margin-bottom: 10px;
 }
 
 .profileContainer {
@@ -231,6 +248,13 @@
 
 }
 
+.fixed {
+  position: fixed;
+  top: 0; 
+  left: 0;
+  width: 100%;
+}
+
 
 
 
@@ -245,7 +269,7 @@
   overflow: auto;
   margin-right: 2200px;
   font-family: 'PT Serif', serif;
-
+  
 
 }
 

@@ -776,6 +776,35 @@ app.post('/dropCourse', function(req, res) {
 
 })
 
+app.post('/deleteCourse', function(req, res) {
+    var data = req.body;
+    var delete_data = {
+        email: data.email,
+        CourseId: data.CourseId
+    }
+    
+    var sql = "DELETE FROM course WHERE email  = ? AND CourseId = ?"
+    console.log(sql)
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, [delete_data.email, delete_data.CourseId], (err, result) => {
+              if (err) {
+                  throw err
+              } else {
+                  res.send(result)
+              }
+
+          })
+        
+    })
+
+
+})
+
 
 app.post('/registerCourse',  function(req, res) {
     var sql = 'REPLACE INTO CourseList SET ?'
@@ -822,7 +851,7 @@ app.get('/registerCourse/:email', function(req, res) {
     
    
     console.log(email)
-    var sql = `SELECT courseId FROM CourseList WHERE email = ?`
+    var sql = `SELECT courseId FROM CourseList WHERE email = ? AND status = "open"`
     
     pool.getConnection(function(err,connection){
         if (err) {
@@ -1653,10 +1682,11 @@ app.post('/verifyCourseToken', function(req, res) {
     var CourseId = req.body.CourseId
     var sql = `SELECT * FROM Token WHERE token="${token}" AND CourseId="${CourseId}"`
     var sql2 = 'REPLACE INTO CourseList SET ?'
+    var sql3 = `DELETE FROM token WHERE token="${token}"`
     var email = req.body.email;
     
     var uuid = email + CourseId
-    var status = "added via token"
+    var status = "open"
     
     var data = {
        uuid,
@@ -1681,8 +1711,15 @@ app.post('/verifyCourseToken', function(req, res) {
                         if (err) {
                             throw err
                         } else {
+                             connection.query(sql3, (err, result3) => {
+                                 if (err) {
+                                     throw err
+                                 } else {
+                                    res.send(result2)
+                                 }
+                             })
                            
-                            res.send(result2)
+                            //res.send(result2)
                         }
                     })
                   } else {

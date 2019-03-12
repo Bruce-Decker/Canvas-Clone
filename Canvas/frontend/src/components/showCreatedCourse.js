@@ -26,6 +26,24 @@ class showCreatedCourse extends Component {
        
     }
 
+    onClick = (courseId) => {
+        // console.log(courseId)
+        // console.log(this.props.auth.user.email)
+        var data = {
+            email: this.props.auth.user.email,
+            CourseId: courseId
+        }
+     
+
+        axios.post('/deleteCourse', data)
+        .then(res => window.location.reload())
+        .catch(err => console.log(err))
+
+        
+
+    }
+
+
 
 
 
@@ -37,7 +55,21 @@ class showCreatedCourse extends Component {
           
            
         })
-    console.log(this.state.courses)
+        if (this.state.courses[0].CourseId !== null) {
+           
+            this.setState({
+              
+               listVisibility: true
+              
+           })
+           } else {
+               this.setState({
+              
+                   listVisibility: false
+                  
+               })
+   
+           }
        
     }
 
@@ -70,7 +102,7 @@ class showCreatedCourse extends Component {
                        <Link to ={`/ViewAssignments/${course.CourseId}/${this.props.auth.user.email}`}>  <i className="far fa-file-alt fa-lg"></i> </Link>
                        <Link to ={`/ListCourseFile/${course.CourseId}`}> <i className="fas fa-sticky-note fa-lg"></i> </Link>
                         
-                       
+                       { this.state.listVisibility ? <ListButton value = {course.CourseId} onClick = {this.onClick}/> : null }
                         </div>
                       </div>
                     </div>
@@ -97,6 +129,15 @@ var Image = (props) => ({
     }
 })
 
+var ListButton = (props) => ({
+    
+    render: function() {
+        return (
+            <button className="ui red button drop_button" onClick={() => this.props.onClick(this.props.value)}> Delete Course </button>
+
+        )
+    }
+})
 
 
 

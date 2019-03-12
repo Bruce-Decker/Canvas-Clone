@@ -6,7 +6,7 @@
   
 }
 
-.calc-wrapper {
+.calculatorContainer {
   width: 495px;
   height: 600px;
   border: 2px solid black;
@@ -46,7 +46,7 @@
 }
 
 .enter {
-  height: 4em;
+  height: 100px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -55,9 +55,12 @@
   background-color:grey;
   font-weight: bold;
   color: white;
- 
   outline: 2px solid grey;
   border: 2px solid black;
+}
+
+.enterText {
+  margin-right: 15px;
 }
 
 .clear {

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "client-install": "npm install --prefix frontend",
-    "start": "node server.js",
+    "start_server": "node server.js",
     "server": "nodemon server.js",
     "client": "cd .. && npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "morgan": "^1.9.1",
     "nodemon": "^1.18.10"

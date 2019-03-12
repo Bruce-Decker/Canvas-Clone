@@ -43,7 +43,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-       <div className="calc-wrapper">
+       <div className="calculator">
      
        <Enter input = {this.state.input} />
        <div className="row">

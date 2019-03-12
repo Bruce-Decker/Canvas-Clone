@@ -22,6 +22,8 @@ class SideBar_Custom extends Component {
     return (
       <div className="sidebar">
        <img className = "SJSU_image" src={SJSU_logo}/>
+       <Link className = "active" to = "/showRegisteredCourse"> <i className="fas fa-envelope"></i>  {this.props.auth.user.email}  </Link>
+       <Link className = "active" to = "/showRegisteredCourse"> <i className="fa fa-child" aria-hidden="true"></i> Student  </Link>
       <Link className = "active" to = "/showRegisteredCourse">  <i className ="fas fa-home"></i> Home </Link>
       <Link className="registerCourse" to = "/registerCourse"> <i className="fas fa-graduation-cap"></i> Register Courses </Link>
       <Link to = "/searchCourse"> <i className="fas fas fa-book"></i> Search Course </Link>

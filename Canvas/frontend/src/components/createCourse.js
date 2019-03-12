@@ -79,6 +79,16 @@ class createCourse extends Component {
                             <label> Course Department </label>
                             <input type="text" name="CourseDept" placeholder="Course Department"  onChange = {this.textField}/>
                         </div>
+                        {/* <div className="ui form">
+                              <div className="field">
+                             <label>Course Description</label>
+                              <textarea  name="CourseDescription"  onChange = {this.textField}></textarea>
+                             </div>
+                          </div>
+                          <div className="field">
+                          
+                          </div> */}
+                        
                         <div className="field">
                             <label> Course Description </label>
                             <input type="text" name="CourseDescription" placeholder="Course Description"  onChange = {this.textField}/>
