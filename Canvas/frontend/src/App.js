@@ -50,6 +50,9 @@ import SecureRoutes  from './components/SecureRoutes'
 import './App.css';
 
 if (localStorage.token) {
+  if (localStorage.getItem('token') == "undefined") {
+    localStorage.removeItem('token')
+  }
   tokenHeader(localStorage.token)
   const decoded = jwt_decode(localStorage.token)
   
@@ -63,13 +66,13 @@ if (localStorage.token) {
     store.dispatch(activeUser(decoded));
   }
  
-  const time_now = Date.now() / 1000;
-  if (decoded.exp < time_now) {
-     store.dispatch(resetProfile())
-     store.dispatch(logout())
+  // const time_now = Date.now() / 1000;
+  // if (decoded.exp < time_now) {
+  //    store.dispatch(resetProfile())
+  //    store.dispatch(logout())
      
-     window.location.href = '/'
-  }
+  //    window.location.href = '/'
+  // }
 }
 
 

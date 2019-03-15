@@ -6,37 +6,39 @@ import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import faker from 'faker'
 import { Link } from 'react-router-dom'
-
+import StickyHeader from 'react-sticky-header';
 
 class RegisterCourse extends Component {
     constructor() {
         super();
         this.state = {
-          
-          
-            courses: [],
+            //courses: [],
             registeredCourses: []
+           
         }
     }
 
     async componentDidMount() {
        
-        const response = await axios.get('/showRegisterCourseInfo')
+        const response = await axios.get('/showRegisterCourseInfo3/'+ this.props.auth.user.email)
+        console.log(response.data)
         
-       // console.log(response.data)
-        //console.log(this.props.auth.user.email)
-        const response2 = await axios.get('/listRegisteredCourses/' + this.props.auth.user.email)
-       // console.log(response2.data)
+        // console.log(response.data)
+        // console.log(this.props.auth.user.email)
+        // const response2 = await axios.get('/listRegisteredCourses/' + this.props.auth.user.email)
+       
         this.setState({
-            courses: response.data,
-            registeredCourses: response2.data
+            //courses: response.data,
+            registeredCourses: response.data
           
            
         })
-        console.log(this.state)
+       
         //console.log("dsfdsf " + this.state.registeredCourses[0].CourseId)
        
     }
+
+    
 
     onClick = (courseId, status) => {
         // console.log(courseId)
@@ -49,7 +51,7 @@ class RegisterCourse extends Component {
      
 
         axios.post('/registerCourse', data)
-        .then(res => this.componentDidMount())
+        .then(res => window.location.reload())
         .catch(err => console.log(err))
 
         
@@ -59,12 +61,10 @@ class RegisterCourse extends Component {
     ListButton = (ID, status) =>  {
         var found
        
-        this.state.registeredCourses.forEach(function(element) {
+      
              
-             if (element.CourseId == ID) {
-                 found = true
-             }
-         })
+           
+         
     
             if (!found && status == "open") {
                 return (
@@ -87,12 +87,14 @@ class RegisterCourse extends Component {
         return (
             <div className = "pageDesign">
             <Banner/>
+      
              
              
                 <Sidebar_Custom/>
           
                 <div className = "selectCourseContainer">
-                     {  this.state.courses.map(course =>  
+                
+                     {  this.state.registeredCourses.map(course =>  
                      <div class="card">
                      <div class="card-body">
                           <h1>{course.CourseId} {course.CourseName} </h1>
@@ -118,6 +120,7 @@ class RegisterCourse extends Component {
                 
                 
                 </div>
+                
             </div>
        
              

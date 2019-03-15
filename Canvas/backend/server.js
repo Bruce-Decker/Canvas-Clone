@@ -99,6 +99,39 @@ var db = mysql.createConnection({
     multipleStatements: true
 });
 
+var db_config = {
+      host: 'localhost',
+      user: 'root',
+      password: 'root',
+      database: 'Canvas273',
+      multipleStatements: true
+  };
+
+  var connection;
+
+function handleDisconnect() {
+  connection = mysql.createConnection(db_config); // Recreate the connection, since
+                                                  // the old one cannot be reused.
+
+  connection.connect(function(err) {              // The server is either down
+    if(err) {                                     // or restarting (takes a while sometimes).
+      console.log('error when connecting to db:', err);
+      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+    }                                     // to avoid a hot loop, and to allow our node script to
+  });                                     // process asynchronous requests in the meantime.
+                                          // If you're also serving http, display a 503 error.
+  connection.on('error', function(err) {
+    console.log('db error', err);
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+      handleDisconnect();                         // lost due to either server restart, or a
+    } else {                                      // connnection idle timeout (the wait_timeout
+      throw err;                                  // server variable configures this)
+    }
+  });
+}
+
+  
+
 // pool.connect((error) => {
 //     if (error) {
 //         throw error;
@@ -280,6 +313,7 @@ app.post('/createBasicUser', function(req,res) {
             });            
         })
         })
+        connection.release()
     })
 })
 
@@ -405,6 +439,7 @@ app.post('/createProfile', upload.single('filename'),  (req, res) => {
                   res.send(result)
               }
           })
+          connection.release()
     })
 })
 
@@ -423,7 +458,9 @@ app.get('/viewProfile/:email', function(req, res) {
                   res.send(result)
               }
           })
+          connection.release()
     })
+   
 })
 
 /// passport.authenticate('jwt', { session: false })
@@ -468,6 +505,7 @@ app.post('/createCourse',  function(req, res) {
               }
 
           })
+          connection.release()
         
     })
 
@@ -646,9 +684,9 @@ app.post('/searchCoursebyName',  function(req, res) {
     })
 })
 
-app.post('/searchCoursebyValue',  function(req, res) {
+app.post('/searchCoursebyValueGreaterThan',  function(req, res) {
     
-    console.log("sfsf " + req.body.CourseId)
+   
    
     var courseId = req.body.CourseId
     
@@ -661,6 +699,156 @@ app.post('/searchCoursebyValue',  function(req, res) {
           }   
 
           connection.query(sql, courseId, (err, results) => {
+              if (err) {
+                  throw err
+              } else {
+                var count = results.length;
+                if (count) {
+                    var course_capacity_array = results.map(result => result.CourseCapacity)
+                    var waitlist_capacity_array = results.map(result => result.WaitlistCapacity)
+                    var courseId_array = results.map(result => result.CourseId)
+                   console.log(results)
+                    var sql2 = `SELECT CourseId, COUNT(*) as count FROM CourseList GROUP BY CourseId ORDER BY count`
+                     connection.query(sql2, (err, results2) => {
+                        if (err) {
+                            throw err
+                        } else {
+                        console.log()
+                        console.log(results2)
+                        results3 = []
+                        results.forEach(function(element) {
+                            //console.log()
+                            //console.log(element2.CourseId)
+                            var data = {
+                                CourseName: element.CourseName,
+                                CourseId: element.CourseId,
+                                email: element.email,
+                                CourseDescription: element.CourseDescription,
+                                CourseRoom: element.CourseRoom,
+                                CourseTerm: element.CourseTerm,
+                                count: 0,
+                                CourseCapacity: element.CourseCapacity,
+                                WaitlistCapacity: element.WaitlistCapacity,
+                                status: "open"
+
+                            }
+                            
+                            results2.forEach(function(element2) {
+                                if (element2.CourseId == element.CourseId) {
+                                     
+                                    data.count = element2.count
+                                    if (data.count >= element.CourseCapacity && data.count < (element.CourseCapacity + element.WaitlistCapacity)) {
+                                        data.status = "waitlist"
+                                    } 
+                                    if (data.count > (element.CourseCapacity + element.WaitlistCapacity)) {
+                                        data.status = "closed"
+                                    }
+                                }
+                            })
+                            results3.push(data)
+                        })
+                        res.send(results3)
+                        }
+                        
+                    }) 
+                 } else {
+                     res.send([{CourseId: null, CourseName: null, count: 0, CourseCapacity: null, WaitlistCapacity: null, status: "open"}])
+                 }
+              }
+          })       
+    })
+})
+
+app.post('/searchCoursebyValueLessThan',  function(req, res) {
+    
+   
+   
+    var courseId = req.body.CourseId
+    
+    var sql = `SELECT * FROM course WHERE CourseId < ?`
+
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, courseId, (err, results) => {
+              if (err) {
+                  throw err
+              } else {
+                var count = results.length;
+                if (count) {
+                    var course_capacity_array = results.map(result => result.CourseCapacity)
+                    var waitlist_capacity_array = results.map(result => result.WaitlistCapacity)
+                    var courseId_array = results.map(result => result.CourseId)
+                   console.log(results)
+                    var sql2 = `SELECT CourseId, COUNT(*) as count FROM CourseList GROUP BY CourseId ORDER BY count`
+                     connection.query(sql2, (err, results2) => {
+                        if (err) {
+                            throw err
+                        } else {
+                        console.log()
+                        console.log(results2)
+                        results3 = []
+                        results.forEach(function(element) {
+                            //console.log()
+                            //console.log(element2.CourseId)
+                            var data = {
+                                CourseName: element.CourseName,
+                                CourseId: element.CourseId,
+                                email: element.email,
+                                CourseDescription: element.CourseDescription,
+                                CourseRoom: element.CourseRoom,
+                                CourseTerm: element.CourseTerm,
+                                count: 0,
+                                CourseCapacity: element.CourseCapacity,
+                                WaitlistCapacity: element.WaitlistCapacity,
+                                status: "open"
+
+                            }
+                            
+                            results2.forEach(function(element2) {
+                                if (element2.CourseId == element.CourseId) {
+                                     
+                                    data.count = element2.count
+                                    if (data.count >= element.CourseCapacity && data.count < (element.CourseCapacity + element.WaitlistCapacity)) {
+                                        data.status = "waitlist"
+                                    } 
+                                    if (data.count > (element.CourseCapacity + element.WaitlistCapacity)) {
+                                        data.status = "closed"
+                                    }
+                                }
+                            })
+                            results3.push(data)
+                        })
+                        res.send(results3)
+                        }
+                        
+                    }) 
+                 } else {
+                     res.send([{CourseId: null, CourseName: null, count: 0, CourseCapacity: null, WaitlistCapacity: null, status: "open"}])
+                 }
+              }
+          })       
+    })
+})
+
+app.post('/searchCoursebyTerm',  function(req, res) {
+    
+   
+   
+    var CourseTerm = req.body.CourseTerm
+    
+    var sql = `SELECT * FROM course WHERE CourseTerm = ${CourseTerm}`
+
+    pool.getConnection(function(err,connection){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }   
+
+          connection.query(sql, (err, results) => {
               if (err) {
                   throw err
               } else {
@@ -758,6 +946,7 @@ app.post('/dropCourse', function(req, res) {
     console.log(sql)
     pool.getConnection(function(err,connection){
         if (err) {
+            connection.end();
             res.json({"code" : 100, "status" : "Error in connection database"});
             return;
           }   
@@ -766,10 +955,13 @@ app.post('/dropCourse', function(req, res) {
               if (err) {
                   throw err
               } else {
+                  
                   res.send(result)
+                 
               }
 
           })
+          connection.release()
         
     })
 
@@ -787,6 +979,7 @@ app.post('/deleteCourse', function(req, res) {
     console.log(sql)
     pool.getConnection(function(err,connection){
         if (err) {
+            connection.end();
             res.json({"code" : 100, "status" : "Error in connection database"});
             return;
           }   
@@ -799,6 +992,7 @@ app.post('/deleteCourse', function(req, res) {
               }
 
           })
+          connection.release()
         
     })
 
@@ -823,6 +1017,7 @@ app.post('/registerCourse',  function(req, res) {
     
     pool.getConnection(function(err,connection){
         if (err) {
+            connection.end();
             res.json({"code" : 100, "status" : "Error in connection database"});
             return;
           }   
@@ -831,12 +1026,15 @@ app.post('/registerCourse',  function(req, res) {
               if (err) {
                   throw err
               } else {
+                  //connection.release()
                   res.send(result)
               }
 
           })
-        
+          connection.release()
+         
     })
+    
 
 })
 
@@ -855,6 +1053,7 @@ app.get('/registerCourse/:email', function(req, res) {
     
     pool.getConnection(function(err,connection){
         if (err) {
+            handleDisconnect();
             res.json({"code" : 100, "status" : "Error in connection database"});
             return;
           }   
@@ -869,18 +1068,22 @@ app.get('/registerCourse/:email', function(req, res) {
                     var sql2 = `SELECT * FROM course WHERE courseId in  ('${course_array.join("','")}')`
                     connection.query(sql2, (err, results2) => {
                         if (err) {
+                            
                             throw err
                         } else {
                         res.send(results2)
                         }
                         
                     }) 
+                   
                  } else {
                      res.send([{CourseId: null, CourseName: null}])
                  }
               
               }
-          })       
+          })  
+          connection.release() 
+          
     })
 
 })
@@ -967,6 +1170,245 @@ app.get('/createAnnouncementTable', (req, res) => {
     })
 })
 
+app.get('/showRegisterCourseInfo2/:email', function(req, res) {
+    var email = req.params.email
+    var CourseId = req.params.id;
+    //var sql = `SELECT COUNT(*) as count FROM CourseList WHERE CourseId =?`
+    var sql = `SELECT * FROM course`
+    var listRegisteredCourses
+    pool.getConnection(function(err,connection){
+        if (err) {
+            handleDisconnect();  
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }  
+
+          connection.query(sql, (err, results) => {
+            if (err) {
+                handleDisconnect();  
+                throw err
+            } else {
+                var count = results.length;
+                if (count) {
+                    var course_capacity_array = results.map(result => result.CourseCapacity)
+                    var waitlist_capacity_array = results.map(result => result.WaitlistCapacity)
+                    var courseId_array = results.map(result => result.CourseId)
+                  // console.log(results)
+                    var sql2 = `SELECT CourseId, COUNT(*) as count FROM CourseList GROUP BY CourseId ORDER BY count`
+                     connection.query(sql2, (err, results2) => {
+                        if (err) {
+                            handleDisconnect();  
+                            throw err
+                        } else {
+                        console.log()
+                       // console.log(results2)
+                        results3 = []
+                       
+                        results.forEach(function(element) {
+                            //console.log()
+                            //console.log(element2.CourseId)
+                            var data = {
+                                CourseName: element.CourseName,
+                                CourseId: element.CourseId,
+                                count: 0,
+                                CourseCapacity: element.CourseCapacity,
+                                WaitlistCapacity: element.WaitlistCapacity,
+                                status: "open"
+
+                            }
+                            
+                            results2.forEach(function(element2) {
+                                if (element2.CourseId == element.CourseId) {
+                                     
+                                    data.count = element2.count
+                                    if (data.count >= element.CourseCapacity && data.count < (element.CourseCapacity + element.WaitlistCapacity)) {
+                                        data.status = "waitlist"
+                                    } 
+                                    if (data.count > (element.CourseCapacity + element.WaitlistCapacity)) {
+                                        data.status = "closed"
+                                    }
+                                }
+                            })
+                            results3.push(data)
+                        })
+                        var sql3 = `SELECT * FROM CourseList WHERE email="${email}"`
+                        console.log(email)
+                        var finalResult = []
+                        pool.getConnection(function(err,connection){
+                        if (err) {
+                               handleDisconnect();  
+                               res.json({"code" : 100, "status" : "Error in connection database"});
+                               return;
+                         }   
+                        
+                        connection.query(sql3, (err, results4) => {
+                           
+                            if (err) {
+                                handleDisconnect();  
+                                throw err
+                            } else {
+                             
+                                var already_registered_id = []
+                                for (var i = 0; i < results4.length; i++) {
+                                   
+                                     already_registered_id.push(results4[i].CourseId)
+                                }
+                                for (var i = 0; i < results3.length; i++) {
+
+                                    if (!already_registered_id.includes(results3[i].CourseId)) {
+                                       
+                                        finalResult.push(results3[i])
+                                    }
+                                   // console.log("dsfs " + results4[i].CourseId)
+                                     //console.log("outer " + JSON.stringify(results4[i]))
+                                    // for (var j = 0; j < results3.length; j++) {
+                                    //     //console.log(results3[j])
+                                    //     if (results4[i].CourseId != results3[j].CourseId) {
+                                    //         console.log("inner" + JSON.stringify(results3[j]))
+                                    //         if (!finalResult.includes(results3[j])) {
+                                    //             finalResult.push(results3[j])
+                                    //         }
+                                           
+                                    //     }
+
+                                    // }
+                                    
+                                }
+                                res.send(finalResult)
+
+                            }
+                        })       
+                      })
+                      
+
+                        //res.send(finalResult)
+                        }
+                        
+                    }) 
+                 } else {
+                     res.send([{CourseId: null, CourseName: null, count: 0, CourseCapacity: null, WaitlistCapacity: null, status: "open"}])
+                 }
+
+                }
+                 
+            })
+
+            })
+})
+
+
+app.get('/showRegisterCourseInfo3/:email', function(req, res) {
+    var email = req.params.email
+    var CourseId = req.params.id;
+    var sql = `SELECT * FROM course`
+    var listRegisteredCourses
+    pool.getConnection(function(err,connection){
+        if (err) {
+            handleDisconnect();  
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }  
+
+          connection.query(sql, (err, results) => {
+            if (err) {
+                handleDisconnect();  
+                throw err
+            } else {
+                var count = results.length;
+                if (count) {
+                    var course_capacity_array = results.map(result => result.CourseCapacity)
+                    var waitlist_capacity_array = results.map(result => result.WaitlistCapacity)
+                    var courseId_array = results.map(result => result.CourseId)
+                  // console.log(results)
+                    var sql2 = `SELECT CourseId, COUNT(*) as count FROM CourseList GROUP BY CourseId ORDER BY count`
+                     connection.query(sql2, (err, results2) => {
+                        if (err) {
+                            handleDisconnect();  
+                            throw err
+                        } else {
+                        console.log()
+                       // console.log(results2)
+                        results3 = []
+                       
+                        results.forEach(function(element) {
+                            //console.log()
+                            //console.log(element2.CourseId)
+                            var data = {
+                                CourseName: element.CourseName,
+                                CourseId: element.CourseId,
+                                count: 0,
+                                CourseCapacity: element.CourseCapacity,
+                                WaitlistCapacity: element.WaitlistCapacity,
+                                status: "open"
+
+                            }
+                            
+                            results2.forEach(function(element2) {
+                                if (element2.CourseId == element.CourseId) {
+                                     
+                                    data.count = element2.count
+                                    if (data.count >= element.CourseCapacity && data.count < (element.CourseCapacity + element.WaitlistCapacity)) {
+                                        data.status = "waitlist"
+                                    } 
+                                    if (data.count > (element.CourseCapacity + element.WaitlistCapacity)) {
+                                        data.status = "closed"
+                                    }
+                                }
+                            })
+                            results3.push(data)
+                        })
+                        var sql3 = `SELECT * FROM CourseList WHERE email="${email}"`
+                        console.log(email)
+                        var finalResult = []
+                        
+                        
+                        connection.query(sql3, (err, results4) => {
+                           
+                            if (err) {
+                                handleDisconnect();  
+                                throw err
+                            } else {
+                             
+                                var already_registered_id = []
+                                for (var i = 0; i < results4.length; i++) {
+                                   
+                                     already_registered_id.push(results4[i].CourseId)
+                                }
+                                for (var i = 0; i < results3.length; i++) {
+
+                                    if (!already_registered_id.includes(results3[i].CourseId)) {
+                                       
+                                        finalResult.push(results3[i])
+                                    }
+                             
+                                }
+                                //connection.release()
+                                res.send(finalResult)
+                               
+                            }
+                        })       
+                      
+                      
+
+                        //res.send(finalResult)
+                        }
+                        
+                    }) 
+                    
+                 } else {
+                   
+                     res.send([{CourseId: null, CourseName: null, count: 0, CourseCapacity: null, WaitlistCapacity: null, status: "open"}])
+                 }
+
+                }
+                 
+            })
+            connection.release();
+
+            })
+})
+
+
 app.get('/showRegisterCourseInfo', function(req,res) {
     var CourseId = req.params.id;
     //var sql = `SELECT COUNT(*) as count FROM CourseList WHERE CourseId =?`
@@ -1022,11 +1464,13 @@ app.get('/showRegisterCourseInfo', function(req,res) {
                             })
                             results3.push(data)
                         })
+                        connection.end();
                         res.send(results3)
                         }
                         
                     }) 
                  } else {
+                    connection.end();
                      res.send([{CourseId: null, CourseName: null, count: 0, CourseCapacity: null, WaitlistCapacity: null, status: "open"}])
                  }
 
@@ -1054,7 +1498,8 @@ app.get('/listRegisteredCourses/:email', function(req, res) {
               } else {
                   res.send(result)
               }
-          })       
+          })  
+          connection.release()     
     })
      
 })

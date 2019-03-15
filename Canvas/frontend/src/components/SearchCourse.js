@@ -19,12 +19,15 @@ class SearchCourse extends Component {
           SearchByCourseValue: null,
           didSubmit: false,
           Courses: [],
+          value_option: '',
+          CourseTerm: 'Spring 2019',
           toggle: false
    
         }
     }
 
     onChange = (e) => {
+      
         this.setState({[e.target.name]: e.target.value})
     } 
 
@@ -35,6 +38,7 @@ class SearchCourse extends Component {
             CourseId: courseId
           
         }
+       
         console.log("onclick id " + courseId)
         console.log("status " + status)
         axios.post('/registerCourse', data)
@@ -52,12 +56,13 @@ class SearchCourse extends Component {
        this.setState({
          Courses: []
        })
-      
+       console.log("term " + this.state.CourseTerm)
         if (this.state.SearchByCourseId) {
           
             var data = {
                 id: this.state.SearchByCourseId
             }
+           
            axios.post('/searchCoursebyID', data )
               .then(res => this.helper(res))
               .catch(err => console.log(err)) 
@@ -73,12 +78,32 @@ class SearchCourse extends Component {
               .catch(err => console.log(err)) 
         }  
 
-        if (this.state.SearchByCourseValue) {
+        if (this.state.SearchByCourseValue && this.state.value_option == "greater_than") {
           
             var data = {
                 CourseId: this.state.SearchByCourseValue
             }
-           axios.post('/searchCoursebyValue', data )
+           axios.post('/searchCoursebyValueGreaterThan', data )
+              .then(res => this.helper(res))
+              .catch(err => console.log(err)) 
+        }  
+
+        if (this.state.SearchByCourseValue && this.state.value_option == "less_than") {
+          
+            var data = {
+                CourseId: this.state.SearchByCourseValue
+            }
+           axios.post('/searchCoursebyValueLessThan', data )
+              .then(res => this.helper(res))
+              .catch(err => console.log(err)) 
+        }  
+        if (this.state.CourseTerm) {
+            var CourseTerm = this.state.CourseTerm
+            var CourseTerm = "\"" + CourseTerm + "\"";
+            var data = {
+                CourseTerm: CourseTerm
+            }
+           axios.post('/searchCoursebyTerm', data )
               .then(res => this.helper(res))
               .catch(err => console.log(err)) 
         }  
@@ -139,8 +164,12 @@ class SearchCourse extends Component {
             <div className = "pageDesign">
               <Banner />
               { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
+              
               <div className = "profileContainer">
+
               <form onSubmit = {this.onSubmit} className="ui form">
+             
+             
                 <div className="field">
                 <label> Search By CourseId</label>
                 <input type="text" name="SearchByCourseId" placeholder="CourseId" value = {this.state.SearchByCourseId} onChange = {this.onChange}/>
@@ -153,17 +182,47 @@ class SearchCourse extends Component {
 
                 <div className="field">
                 <label> Search By Value</label>
+                <div>
+        <div className="field">
+          <div className="ui radio checkbox">
+            <input type="radio" name="value_option" id = "greater_than" value = "greater_than"  onChange = {this.onChange}/>
+            <label for = "greater_than">Greater than</label>
+          </div>
+        </div>
+        <div className="field">
+          <div className="ui radio checkbox">
+            <input type="radio" name="value_option" id = "less_than" value = "less_than" onChange = {this.onChange}/>
+            <label for = "less_than">Less than</label>
+          </div>
+        </div>
+       
+      </div>
+              
                 <input type="text" name="SearchByCourseValue" placeholder="Course Value" value = {this.state.SearchByCourseValue} onChange = {this.onChange}/>
                 </div>
                
                 <div className="field">
                 
                 </div>
+                <div className="field">
+                <select width = "50px" name="CourseTerm" onChange = {this.onChange}>
+                    <option value="Spring 2019" id = "Spring2019"  onChange = {this.onChange}>Spring 2019</option>
+                    <option value="Fall 2018" id = "Fall2018"  onChange = {this.onChange}>Fall 2018</option>
+                    <option value="Spring 2018" id = "Spring2018"  onChange = {this.onChange}>Spring 2018</option>
+                    <option value="Fall 2017" id = "Fall2017" onChange = {this.onChange}>Fall 2017</option>
+                </select>
+                </div>
+                <div className="field">
+                
+                </div>
                 <button className="ui button" type="submit">Submit</button>
+               
+  
                 <div className="space">
                 
                 </div>
             </form>
+           
 
           {this.state.toggle ? <div>
              {this.state.didSubmit ?  

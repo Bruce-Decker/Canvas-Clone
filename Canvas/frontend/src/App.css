@@ -249,21 +249,30 @@
 }
 
 .fixed {
-  position: fixed;
-  top: 0; 
-  left: 0;
-  width: 100%;
+  margin-top: 10px;
+  margin-left: 200px;
+  width: 100%;;
+
+}
+
+.relativeContainer {
+  position: relative;
 }
 
 
 
-
+.test {
+  width: 1350px;
+  float: right;
+  margin-left: 10px;
+}
 .sidebar {
   margin: 0;
   padding: 0;
   padding-bottom: 10 px;
   width: 170px;
   background-color: rgb(35, 85, 157);
+  position: absolute;
   position: fixed;
   height: 100%;
   overflow: auto;
@@ -297,10 +306,10 @@
 }
 
 /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
-div.content {
+/* div.content {
   margin-left: 200px;
   padding: 1px 16px;
   height: 1000px;
   z-index: 10;
-}
+} */
 
