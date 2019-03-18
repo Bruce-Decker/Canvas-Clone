@@ -52,3 +52,17 @@ Type in the urls in the browser.
 ### Upload PDFs
 ![alt text](../README_Files/Canvas_Uploads.png "PDF")
 
+
+### Show all Submissions
+![alt text](../README_Files/Canvas_Submissions.png "Submissions")
+
+### Take Quiz
+![alt text](../README_Files/Canvas_Quiz.png "Quiz")
+
+### Show all students from one course
+![alt text](../README_Files/Canvas_Students.png "Students")
+
+
+### Show Profile Page
+![alt text](../README_Files/Canvas_Profile.png "Profile")
+
