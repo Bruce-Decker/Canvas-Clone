@@ -35,4 +35,4 @@ Type in the urls in the browser.
 ![alt text](../README_Files/Canvas_Login.png "Login")
 
 ### Register Courses
-![alt text](../README_Files/Canvas_Register_Courses.png "Login")
+![alt text](../README_Files/Canvas_Register_Courses.gif "Login")
