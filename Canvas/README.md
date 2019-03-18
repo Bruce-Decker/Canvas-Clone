@@ -37,7 +37,14 @@ Type in the urls in the browser.
 ### Instructor's Dashboard
 ![alt text](../README_Files/Canvas_Instructor_Dashboard.png "Instructor Dashboard")
 
-
-
 ### Register Courses via a token
 ![alt text](../README_Files/Canvas_Token.png "token")
+
+
+### Register Courses
+![alt text](../README_Files/Canvas_Register_Courses.png "courses")
+
+
+### Instructor Functionalities
+![alt text](../README_Files/Canvas_Functionalities.png "Functionalities")
+
