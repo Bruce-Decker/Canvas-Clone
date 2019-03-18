@@ -10,5 +10,5 @@
 
 Make sure no other ports are using localhost:3000 or localhost:5000
 
-![alt text](README_Files/Calculator_Architecture.png "Description goes here")
-![alt text](README_Files/calculator_demo1.gif "Description goes here")
+![alt text](../README_Files/Calculator_Architecture.png "Description goes here")
+![alt text](../README_Files/calculator_demo1.gif "Description goes here")
