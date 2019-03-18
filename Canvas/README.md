@@ -7,7 +7,7 @@
 4. Execute ```npm install```
 5. cd into Calculator/backend folder
 6. Execute ```npm install```
-7. Finally, ```npm start``` or ```npm run dev``` (This will start both the Nodejs server and react app)
+7. Finally, ```npm start``` or ```npm run dev``` (This will start both the Nodejs server and the react app)
 8. Create a database named "Canvas273". Enter ```localhost:5000/createUserDB``` in the browser.  (GET request)
 9. There are a number of tables you will have to create in the "Canvas273" database
 10. You just have to hit the endpoints (GET requests) below to create them.
@@ -28,4 +28,8 @@ Type in the urls in the browser.
 | localhost:5000/createCourseAddTokenTable |
 
 
-![alt text](../README_Files/Canvas_Landing.png "Architecture")
+### Landing Page
+![alt text](../README_Files/Canvas_Landing.png "Landing")
+
+### Login Page
+![alt text](../README_Files/Canvas_Login.png "Login")
