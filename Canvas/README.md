@@ -48,3 +48,7 @@ Type in the urls in the browser.
 ### Instructor Functionalities
 ![alt text](../README_Files/Canvas_Functionalities.png "Functionalities")
 
+
+### Upload PDFs
+![alt text](../README_Files/Canvas_Uploads.png "PDF")
+
