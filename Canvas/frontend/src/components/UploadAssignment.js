@@ -21,7 +21,9 @@ class UploadAssignment extends Component {
             file_path: null,
             isVisible: false,
             file: null,
-            test: "1"
+            due_date: '',
+            upload_time: ''
+           
         }
          
     }
@@ -41,6 +43,7 @@ class UploadAssignment extends Component {
         let formdata = new FormData()
         formdata.append('assignment_name', this.props.match.params.assignmentName)
         formdata.append('email', this.props.auth.user.email)
+        formdata.append('now', Date.now())
         formdata.append('filename', file)
         console.log(formdata)
         for (var [key, value] of formdata.entries()) { 
@@ -90,20 +93,24 @@ class UploadAssignment extends Component {
        
         try {
          response = await axios.get('/upload/' + this.props.match.params.CourseId + "/" + this.props.match.params.assignmentName + "/" + this.props.auth.user.email)
-         console.log("File path " + response.data[0].file_path)
+         console.log("file path " + response.data[0].file_path)
+         var response2 = await axios.get('/viewAssignment/' + this.props.match.params.CourseId + "/" + this.props.match.params.assignmentName)
+         //console.log("File path " + response.data[0].file_path)
+         console.log(response.data[0])
         
        
             this.setState({
-                file_path: 'test',
+                file_path: response.data[0].file_path,
                 isVisible: true,
-                test: "2"
+                upload_time: response.data[0].time,
+                due_date: response2.data[0].time
             })
        
         } catch {
             this.setState({
                isVisible: false,
                
-                test: "3"
+               
             })
         }       
     }
@@ -120,13 +127,28 @@ class UploadAssignment extends Component {
                { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
                <div className = "registerCourseContainer">
                <div className="input-default-wrapper mt-3">
-        <h1> Upload your assignment for {this.props.match.params.assignmentName}</h1>
 
+        <h1> Upload your assignment for {this.props.match.params.assignmentName}</h1>
+        <h1>Deadline {this.state.due_date}</h1>
+        <div className = "space">
+     
+        </div>
+        <div className = "space">
+     
+     </div>
+        { this.props.auth.isFaculty ? null : <Link to = {`/ViewSubmissions/${this.props.match.params.CourseId}/${this.props.match.params.assignmentName}`}> <h1> View All Uploads </h1> </Link> }
+        <div className = "space">
+     
+     </div>
+     <div className = "space">
+  
+  </div>
         <form onSubmit = {this.onSubmit} className="ui form">
               <input type="file" id="file-with-current" name = "filename" className="input-default-js" onChange = {this.handleFile}/>
                 <label className="label-for-default-js rounded-right mb-3" htmlFor="file-with-current">
             
                 </label>
+
                 <button className="ui primary button">
                     Upload
               </button>
@@ -134,8 +156,14 @@ class UploadAssignment extends Component {
       </div>
       
       <div>
-      {this.state.isVisible ? <Link to ={`../../../${this.props.match.params.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} target="_blank">Download</Link> : null }
-        {this.state.isVisible ? <ShowPDF url = {`../../../${this.props.auth.user.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} /> : null}
+      {/* {this.state.isVisible ? <Link to ={`../../../${this.props.match.params.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} target="_blank">Download</Link> : null }
+        {this.state.isVisible ? <ShowPDF url = {`../../../${this.props.auth.user.email}${this.props.match.params.CourseId}${this.props.match.params.assignmentName}.pdf`} /> : null} */}
+
+     <div className = "space">
+     
+     </div>
+        {this.state.isVisible ? <Link to ={`../../../${response.data[0].uuid}.pdf`} target="_blank"><button className="ui primary button">Download this PDF </button></Link> : null }
+        {this.state.isVisible ? <ShowPDF url = {`../../../${response.data[0].uuid}.pdf`} /> : null} 
         
 {/* 
 {this.state.isVisible ? <Test url = {`../../PDFs/testX.pdf`} /> : <h1> 2 </h1>}

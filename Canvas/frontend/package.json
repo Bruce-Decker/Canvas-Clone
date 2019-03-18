@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
+    "expect": "^24.5.0",
     "faker": "^4.1.0",
     "jspdf": "^1.5.3",
     "jwt-decode": "^2.2.0",

@@ -7,6 +7,7 @@ import React, { Component } from 'react'
 import faker from 'faker'
 import { Link } from 'react-router-dom'
 import AnnouncementInput from './AnnouncementInput'
+import Sidebar_Faculty from './Sidebar_Faculty';
 
 class ViewAnnouncements extends Component {
     constructor() {
@@ -67,7 +68,7 @@ class ViewAnnouncements extends Component {
         return (
             <div className = "pageDesign">
               <Banner />
-              <Sidebar_Custom />
+              { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
             
               <div className = "announcementContainer">
               { this.props.auth.isFaculty ? <AnnouncementInput onClick = {this.onClick} onChange = {this.onChange}/> : null }

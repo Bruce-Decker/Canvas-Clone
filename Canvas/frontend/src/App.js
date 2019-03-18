@@ -23,6 +23,9 @@ import CreateQuiz from './components/CreateQuiz'
 import TakeQuiz from './components/TakeQuiz'
 import ViewQuizzes from './components/ViewQuizzes'
 import UploadAssignment from './components/UploadAssignment'
+import ViewSubmissions from './components/ViewSubmissions'
+
+
 import UploadCourseFile from './components/UploadCourseFile'
 import ViewEachCourseFile from './components/ViewEachCourseFile'
 import ViewStudentProfile from './components/ViewStudentProfile'
@@ -99,6 +102,8 @@ class App extends Component {
                     <Route exact path="/viewQuizzes/:CourseId" component={ViewQuizzes} />
                     <Route exact path="/takeQuiz/:CourseId/:quizName" component={TakeQuiz} />
                     <Route exact path="/ViewAssignments/:CourseId/:email" component={ViewAssignments} />
+                    <Route exact path="/ViewSubmissions/:CourseId/:assignmentName" component={ViewSubmissions} />
+
                     <Route exact path = "/ViewGrades/:CourseId/:email" component = {ViewGrades} />
                     <Route exact path = "/ViewStudentGrades/:CourseId/:email" component = {ViewStudentGrades} />
                     <Route exact path = "/studentGradePage/:CourseId/:email" component = {StudentGradePage} />

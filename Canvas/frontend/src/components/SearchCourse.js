@@ -14,9 +14,9 @@ class SearchCourse extends Component {
         super();
         this.state = {
         
-          SearchByCourseId: null,
-          SearchByCourseName: null,
-          SearchByCourseValue: null,
+          SearchByCourseId: '',
+          SearchByCourseName: '',
+          SearchByCourseValue: '',
           didSubmit: false,
           Courses: [],
           value_option: '',
@@ -117,6 +117,14 @@ class SearchCourse extends Component {
             didSubmit: true,
             toggle: true
         })
+
+        if (response.data[0].CourseId == null) {
+            this.setState({
+                courses: response.data,
+                didSubmit: true,
+                toggle: false
+            })
+        }
        
       
       }
@@ -206,6 +214,7 @@ class SearchCourse extends Component {
                 </div>
                 <div className="field">
                 <select width = "50px" name="CourseTerm" onChange = {this.onChange}>
+                   <option value="termSelect" id = "termSelect"  onChange = {this.onChange}>Please select a term</option>
                     <option value="Spring 2019" id = "Spring2019"  onChange = {this.onChange}>Spring 2019</option>
                     <option value="Fall 2018" id = "Fall2018"  onChange = {this.onChange}>Fall 2018</option>
                     <option value="Spring 2018" id = "Spring2018"  onChange = {this.onChange}>Spring 2018</option>

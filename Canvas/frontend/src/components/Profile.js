@@ -80,7 +80,6 @@ class Profile extends Component {
             <Banner />
             <Sidebar_Custom />
         <div className = "profileContainer">
-        
        
             <form onSubmit = {this.onSubmit} className="ui form">
                 <div className="field">

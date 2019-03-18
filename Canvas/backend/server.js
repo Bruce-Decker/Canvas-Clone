@@ -31,7 +31,7 @@ const pdfStorage = multer.diskStorage({
         cb(null, '../frontend/public/')
     },
     filename: function(req, file, cd) {
-        file.originalname = req.body.email  + req.params.id  + req.body.assignment_name + '.pdf'
+        file.originalname = req.body.email  + req.params.id  + req.body.assignment_name + req.body.now + '.pdf'
         cd(null, file.originalname)
     }
 })
@@ -41,7 +41,9 @@ const fileStorage = multer.diskStorage({
         cb(null, '../frontend/public')
     },
     filename: function(req, file, cd) {
-        file.originalname = req.params.id  + req.body.item_name + '.pdf'
+        var itemName = req.body.item_name
+        itemName = itemName.replace(/\s/g, '');
+        file.originalname = req.params.id  + itemName + '.pdf'
         cd(null, file.originalname)
     }
 })
@@ -386,8 +388,49 @@ app.get('/retrieveUserProfileFromCourse/:Id', (req, res) => {
             }
 
         })
+
+        connection.release()
      
  })
+})
+
+
+app.get('/retrieveUserProfileFromCourse2/:Id', (req, res) => {
+  
+    var Id = req.params.Id;
+    var sql = "SELECT * FROM CourseList where CourseId =?"
+   
+    db.connect(function(err){
+        if (err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+          }  
+          db.query(sql, Id, (err, result) => {
+            if (err) {
+                throw err
+            } else {
+              
+                var count = result.length
+                if (count) {
+                    var profile_array = result.map(i => i.email); 
+                    var sql2 = `SELECT * FROM profile WHERE email in  ('${profile_array.join("','")}')`
+                    db.query(sql2, (err, results2) => {
+                        if (err) {
+                            throw err
+                        } else {
+                        res.send(results2)
+                        }
+                        
+                    }) 
+                 } else {
+                     res.send([{CourseId: null, CourseName: null}])
+                 }
+            }
+
+        })
+     
+ })
+ 
 })
 // passport.authenticate('jwt', { session: false }),
 app.post('/createProfile', upload.single('filename'),  (req, res) => {
@@ -1101,10 +1144,12 @@ app.post('/announcement', function(req, res) {
     console.log(CourseId)
     var comment = req.body.comment
     var present_time = new Date()
-    var time = present_time.getMonth() + "/" + present_time.getDate() + "/"
-    time = time + present_time.getFullYear() + " " + present_time.getHours()
-    time = time + ":" + present_time.getMinutes() + ":" + present_time.getSeconds()
-    time = time + ":" + present_time.getMilliseconds()
+    // var time = present_time.getMonth() + "/" + present_time.getDate() + "/"
+    // time = time + present_time.getFullYear() + " " + present_time.getHours()
+    // time = time + ":" + present_time.getMinutes() + ":" + present_time.getSeconds()
+    // time = time + ":" + present_time.getMilliseconds()
+    var time = present_time.getHours() + ":" + present_time.getMinutes() + ":" + present_time.getSeconds()
+    time = time + " " + present_time.getMonth() + "/" + present_time.getDate() + "/" + present_time.getFullYear()
     var uuid = email + " " + time
     console.log(time)
     console.log(uuid)
@@ -1522,11 +1567,12 @@ app.post('/createAssignment', function(req, res) {
     var uuid = email + "-" + CourseId + "-" + assignment_name
     var description = req.body.description
     var full_points = req.body.full_points
-    var present_time = new Date()
-    var time = present_time.getMonth() + "/" + present_time.getDate() + "/"
-    time = time + present_time.getFullYear() + " " + present_time.getHours()
-    time = time + ":" + present_time.getMinutes() + ":" + present_time.getSeconds()
-    time = time + ":" + present_time.getMilliseconds()
+    var time = req.body.time
+   // var present_time = new Date()
+    //var time = present_time.getMonth() + "/" + present_time.getDate() + "/"
+    // time = time + present_time.getFullYear() + " " + present_time.getHours()
+    // time = time + ":" + present_time.getMinutes() + ":" + present_time.getSeconds()
+    // time = time + ":" + present_time.getMilliseconds()
     var data = {
         uuid,
         assignment_name,
@@ -1551,8 +1597,33 @@ app.post('/createAssignment', function(req, res) {
               }
 
           })
+          connection.release()
         
     })
+
+})
+
+app.get('/viewAssignment/:CourseId/:assignment_name', function(req, res) {
+    var CourseId = req.params.CourseId
+    var assignment_name = req.params.assignment_name
+    var sql = `SELECT * FROM Assignments WHERE CourseId="${CourseId}" AND assignment_name ="${assignment_name}"`
+    pool.getConnection(function(err,connection){
+      if (err) {
+          res.json({"code" : 100, "status" : "Error in connection database"});
+          return;
+        }   
+
+        connection.query(sql, (err, result) => {
+            if (err) {
+                throw err
+            } else {
+                res.send(result)
+            }
+        })   
+        
+        connection.release()
+  })
+  
 
 })
 
@@ -1571,7 +1642,9 @@ app.get('/listAssignments/:id', function(req, res) {
               } else {
                   res.send(result)
               }
-          })       
+          })   
+          
+          connection.release()
     })
     
  
@@ -1596,7 +1669,8 @@ app.post('/upload/:id', pdfUpload.single('filename'),  (req, res) => {
     var assignment_name = req.body.assignment_name
     var email = req.body.email
     var CourseId = req.params.id
-    var uuid = email +  CourseId +  assignment_name
+    var uuid = email +  CourseId +  assignment_name + req.body.now
+    
 
     var file_path = req.file.path
     
@@ -1645,7 +1719,7 @@ app.get('/upload/:CourseId/:assignment_name/:email', function(req, res) {
     var CourseId = req.params.CourseId
     var assignment_name = req.params.assignment_name
     var uuid = email + CourseId +  assignment_name
-    var sql = `SELECT * FROM Uploads WHERE uuid="${uuid}" LIMIT 1`
+    var sql = `SELECT * FROM Uploads WHERE email="${email}" AND CourseId = "${CourseId}" AND assignment_name = "${assignment_name}"  ORDER BY time DESC`
     pool.getConnection(function(err,connection){
         if (err) {
             res.json({"code" : 100, "status" : "Error in connection database"});
