@@ -8,4 +8,7 @@
 5. Execute ```npm install```
 6. Finally, ```npm start```
 
-![alt text](../README_Files/Calculator_Architecture.png "Description goes here")
+Make sure no other ports are using localhost:3000 or localhost:5000
+
+![alt text](Pictures/createTemporaryRegularUser.png "Description goes here")
+![alt text](Pictures/calculator_demo1.gif "Description goes here")
