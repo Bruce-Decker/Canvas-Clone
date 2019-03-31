@@ -91,26 +91,7 @@ class ViewAnnouncements extends Component {
   </div>
 </div>
                     
-                   
-                //     <div className="row">
-                //     <div className="col s12 m7">
-                //       <div className="card">
-                //       <div class="card-image">
-                //           <span class="card-title">{announcement.title}</span>
-                //           </div>
-                //         <div className="card-content">
-                //         <p className="flow-text"> {announcement.comment}</p>
-                //         <span className="card-title"> {announcement.time}</span>
-                //         </div>
-                //         <div className="card-action">
-                         
-                //           <Link to="/" target="/" onClick={(event) => {event.preventDefault(); window.open(this.makeHref("route"));}} > {announcement.email} </Link>
-                //         </div>
-                //       </div>
-                //     </div>
-                    
-                //   </div>
-                  
+
                
                 )}
                 </div>

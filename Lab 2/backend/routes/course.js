@@ -76,19 +76,398 @@ router.get('/createCourse/:email', function(req, res) {
     })
 })
 
+router.get('/listRegisteredCourses/:email', function(req, res) {
+    console.log(req.params.email)
+    email = req.params.email
+    Roster.find({email: email}, function(err, docs) {
+        if (err) {
+            res.send({"error": err})
+        } else {
+            res.send(docs)
+        }
+    })
+    // var sql = `SELECT * FROM CourseList WHERE email="${email}"`
+    // pool.getConnection(function(err,connection){
+    //     if (err) {
+    //         res.json({"code" : 100, "status" : "Error in connection database"});
+    //         return;
+    //       }   
+
+    //       connection.query(sql, (err, result) => {
+    //           if (err) {
+    //               throw err
+    //           } else {
+    //               res.send(result)
+    //           }
+    //       })  
+    //       connection.release()     
+    // })
+     
+})
+
 router.post('/searchCoursebyID', function(req, res) {
     var id = req.body.id
-    Course.find({CourseId: id}, function(err, result) {
-        if (docs) {
+    var all_course_info = []
+    var finalResult = []
+    Course.find({CourseId: id}, function(err, all_listed_courses) {
+        if (all_listed_courses) {
             //res.send(docs)
-            var count = results.length;
-            if (count) {
+           
 
-                Roster.find({CourseId: CourseId}).count()
-                   .then(res => console.log(res))
-                   .catch(err => console.log(err))
+            Roster.aggregate([
+                // {$match:
+                //     {'email': email } },
+                {
+                    $group: {
+                        _id: '$CourseId',  //$region is the column name in collection
+    
+                        count: {$sum: 1}
+                    }
+                }          
+            ], function(err, course_count) {
+             
+               if (err) {
+                   console.log(err)
+               }
+              //res.send(course_count)
+             console.log(course_count)
+                           
+                       all_listed_courses.forEach(function(element) {
+                                //console.log()
+                                //console.log(element2.CourseId)
+                                var data = {
+                                    faculty_email: element.email,
+                                    CourseName: element.CourseName,
+                                    CourseId: element.CourseId,
+                                    CourseDescription: element.CourseDescription,
+                                    CourseRoom: element.CourseRoom,
+                                    CourseTerm: element.CourseTerm,
+                                    count: 0,
+                                    CourseCapacity: element.CourseCapacity,
+                                    WaitlistCapacity: element.WaitlistCapacity,
+                                    status: "open"
+    
+                                }
+                                
+                                course_count.forEach(function(element2) {
+                                    
+                                    if (element2._id == element.CourseId) {
+                                         
+                                        data.count = element2.count
+                                        if (data.count >= element.CourseCapacity && data.count < (element.CourseCapacity + element.WaitlistCapacity)) {
+                                            data.status = "waitlist"
+                                        } 
+                                        if (data.count > (element.CourseCapacity + element.WaitlistCapacity)) {
+                                            data.status = "closed"
+                                        }
+                                    }
+                                })
+                                //console.log(data)
+                                all_course_info.push(data)
+                            })
+    
+                           res.send(all_course_info)   
+              });
+    
 
-            }
+            
+
+        } else {
+            res.send({"error": err})
+        }
+    })
+})
+
+router.post('/searchCoursebyName', function(req, res) {
+    var courseName = req.body.courseName
+    var all_course_info = []
+    var finalResult = []
+    Course.find({CourseName: courseName}, function(err, all_listed_courses) {
+        if (all_listed_courses) {
+            //res.send(docs)
+           
+
+            Roster.aggregate([
+                // {$match:
+                //     {'email': email } },
+                {
+                    $group: {
+                        _id: '$CourseId',  //$region is the column name in collection
+    
+                        count: {$sum: 1}
+                    }
+                }          
+            ], function(err, course_count) {
+             
+               if (err) {
+                   console.log(err)
+               }
+              //res.send(course_count)
+             console.log(course_count)
+                           
+                       all_listed_courses.forEach(function(element) {
+                                //console.log()
+                                //console.log(element2.CourseId)
+                                var data = {
+                                    faculty_email: element.email,
+                                    CourseName: element.CourseName,
+                                    CourseId: element.CourseId,
+                                    CourseDescription: element.CourseDescription,
+                                    CourseRoom: element.CourseRoom,
+                                    CourseTerm: element.CourseTerm,
+                                    count: 0,
+                                    CourseCapacity: element.CourseCapacity,
+                                    WaitlistCapacity: element.WaitlistCapacity,
+                                    status: "open"
+    
+                                }
+                                
+                                course_count.forEach(function(element2) {
+                                    
+                                    if (element2._id == element.CourseId) {
+                                         
+                                        data.count = element2.count
+                                        if (data.count >= element.CourseCapacity && data.count < (element.CourseCapacity + element.WaitlistCapacity)) {
+                                            data.status = "waitlist"
+                                        } 
+                                        if (data.count > (element.CourseCapacity + element.WaitlistCapacity)) {
+                                            data.status = "closed"
+                                        }
+                                    }
+                                })
+                                //console.log(data)
+                                all_course_info.push(data)
+                            })
+    
+                           res.send(all_course_info)   
+              });
+    
+
+            
+
+        } else {
+            res.send({"error": err})
+        }
+    })
+})
+
+
+router.post('/searchCoursebyValueGreaterThan', function(req, res) {
+    var CourseId = req.body.CourseId
+    var all_course_info = []
+    var finalResult = []
+    Course.find({CourseId: {$gt: CourseId}}, function(err, all_listed_courses) {
+        if (all_listed_courses) {
+            //res.send(docs)
+           
+
+            Roster.aggregate([
+                // {$match:
+                //     {'email': email } },
+                {
+                    $group: {
+                        _id: '$CourseId',  //$region is the column name in collection
+    
+                        count: {$sum: 1}
+                    }
+                }          
+            ], function(err, course_count) {
+             
+               if (err) {
+                   console.log(err)
+               }
+              //res.send(course_count)
+             console.log(course_count)
+                           
+                       all_listed_courses.forEach(function(element) {
+                                //console.log()
+                                //console.log(element2.CourseId)
+                                var data = {
+                                    faculty_email: element.email,
+                                    CourseName: element.CourseName,
+                                    CourseId: element.CourseId,
+                                    CourseDescription: element.CourseDescription,
+                                    CourseRoom: element.CourseRoom,
+                                    CourseTerm: element.CourseTerm,
+                                    count: 0,
+                                    CourseCapacity: element.CourseCapacity,
+                                    WaitlistCapacity: element.WaitlistCapacity,
+                                    status: "open"
+    
+                                }
+                                
+                                course_count.forEach(function(element2) {
+                                    
+                                    if (element2._id == element.CourseId) {
+                                         
+                                        data.count = element2.count
+                                        if (data.count >= element.CourseCapacity && data.count < (element.CourseCapacity + element.WaitlistCapacity)) {
+                                            data.status = "waitlist"
+                                        } 
+                                        if (data.count > (element.CourseCapacity + element.WaitlistCapacity)) {
+                                            data.status = "closed"
+                                        }
+                                    }
+                                })
+                                //console.log(data)
+                                all_course_info.push(data)
+                            })
+    
+                           res.send(all_course_info)   
+              });
+    
+
+            
+
+        } else {
+            res.send({"error": err})
+        }
+    })
+})
+
+
+router.post('/searchCoursebyValueLessThan', function(req, res) {
+    var CourseId = req.body.CourseId
+    var all_course_info = []
+    var finalResult = []
+    Course.find({CourseId: {$lt: CourseId}}, function(err, all_listed_courses) {
+        if (all_listed_courses) {
+            //res.send(docs)
+           
+
+            Roster.aggregate([
+                // {$match:
+                //     {'email': email } },
+                {
+                    $group: {
+                        _id: '$CourseId',  //$region is the column name in collection
+    
+                        count: {$sum: 1}
+                    }
+                }          
+            ], function(err, course_count) {
+             
+               if (err) {
+                   console.log(err)
+               }
+              //res.send(course_count)
+             console.log(course_count)
+                           
+                       all_listed_courses.forEach(function(element) {
+                                //console.log()
+                                //console.log(element2.CourseId)
+                                var data = {
+                                    faculty_email: element.email,
+                                    CourseName: element.CourseName,
+                                    CourseId: element.CourseId,
+                                    CourseDescription: element.CourseDescription,
+                                    CourseRoom: element.CourseRoom,
+                                    CourseTerm: element.CourseTerm,
+                                    count: 0,
+                                    CourseCapacity: element.CourseCapacity,
+                                    WaitlistCapacity: element.WaitlistCapacity,
+                                    status: "open"
+    
+                                }
+                                
+                                course_count.forEach(function(element2) {
+                                    
+                                    if (element2._id == element.CourseId) {
+                                         
+                                        data.count = element2.count
+                                        if (data.count >= element.CourseCapacity && data.count < (element.CourseCapacity + element.WaitlistCapacity)) {
+                                            data.status = "waitlist"
+                                        } 
+                                        if (data.count > (element.CourseCapacity + element.WaitlistCapacity)) {
+                                            data.status = "closed"
+                                        }
+                                    }
+                                })
+                                //console.log(data)
+                                all_course_info.push(data)
+                            })
+    
+                           res.send(all_course_info)   
+              });
+    
+
+            
+
+        } else {
+            res.send({"error": err})
+        }
+    })
+})
+
+router.post('/searchCoursebyTerm', function(req, res) {
+    var CourseTerm = req.body.CourseTerm
+    CoursTerm = CourseTerm.replace(/['"]+/g, '')
+    console.log(CourseTerm)
+    var all_course_info = []
+    var finalResult = []
+    Course.find({CourseTerm: CourseTerm}, function(err, all_listed_courses) {
+        if (all_listed_courses) {
+            //res.send(docs)
+            console.log("sdfsdf")
+           
+
+            Roster.aggregate([
+                // {$match:
+                //     {'email': email } },
+                {
+                    $group: {
+                        _id: '$CourseId',  //$region is the column name in collection
+    
+                        count: {$sum: 1}
+                    }
+                }          
+            ], function(err, course_count) {
+             
+               if (err) {
+                   console.log(err)
+               }
+              //res.send(course_count)
+             console.log(course_count)
+                           
+                       all_listed_courses.forEach(function(element) {
+                                //console.log()
+                                //console.log(element2.CourseId)
+                                var data = {
+                                    faculty_email: element.email,
+                                    CourseName: element.CourseName,
+                                    CourseId: element.CourseId,
+                                    CourseDescription: element.CourseDescription,
+                                    CourseRoom: element.CourseRoom,
+                                    CourseTerm: element.CourseTerm,
+                                    count: 0,
+                                    CourseCapacity: element.CourseCapacity,
+                                    WaitlistCapacity: element.WaitlistCapacity,
+                                    status: "open"
+    
+                                }
+                                
+                                course_count.forEach(function(element2) {
+                                    
+                                    if (element2._id == element.CourseId) {
+                                         
+                                        data.count = element2.count
+                                        if (data.count >= element.CourseCapacity && data.count < (element.CourseCapacity + element.WaitlistCapacity)) {
+                                            data.status = "waitlist"
+                                        } 
+                                        if (data.count > (element.CourseCapacity + element.WaitlistCapacity)) {
+                                            data.status = "closed"
+                                        }
+                                    }
+                                })
+                                //console.log(data)
+                                all_course_info.push(data)
+                            })
+    
+                           res.send(all_course_info)   
+              });
+    
+
+            
 
         } else {
             res.send({"error": err})
@@ -174,8 +553,16 @@ router.get('/registerCourse/:email', function(req, res) {
                     }
              
                 }
-                res.send(finalResult)
+                if ( finalResult === undefined || finalResult.length == 0) {
+                    // array empty or does not exist
+                    res.send([{CourseId: null, CourseName: null}])
+                } else {
+                    res.send(finalResult)
+                }
+                
                })
+          } else {
+              res.send([{CourseId: null, CourseName: null}])
           }
          
 	})

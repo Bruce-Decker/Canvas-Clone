@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { logout  } from '../actions/authActions'
 import { resetProfile } from '../actions/userProfileAction'
+import { resetCourse } from '../actions/courseAction'
 import SJSU_logo from '../public/SJSU.png';
 
 class SideBar_Custom extends Component {
@@ -13,6 +14,7 @@ class SideBar_Custom extends Component {
     
     this.props.resetProfile();
     this.props.logout();
+    this.props.resetCourse();
   }
   
 
@@ -46,4 +48,4 @@ const mapStateToProps = (state) => ({
     auth: state.auth
 })
  
-export default connect(mapStateToProps, { logout, resetProfile })(SideBar_Custom);
+export default connect(mapStateToProps, { logout, resetProfile, resetCourse })(SideBar_Custom);

@@ -19,6 +19,10 @@ const pdfUpload = multer({
     storage : pdfStorage
 })
 
+function seconds_with_leading_zeros(dt) { 
+  return (dt < 10 ? '0' : '') + dt;
+}
+
 router.post('/upload/:id', pdfUpload.single('filename'),  (req, res) => {
     var assignment_name = req.body.assignment_name
     var email = req.body.email
@@ -28,7 +32,8 @@ router.post('/upload/:id', pdfUpload.single('filename'),  (req, res) => {
     var present_time = new Date()
     var time = present_time.getMonth() + "/" + present_time.getDate() + "/"
     time = time + present_time.getFullYear() + " " + present_time.getHours()
-    time = time + ":" + present_time.getMinutes() + ":" + present_time.getSeconds()
+    var now_seconds = seconds_with_leading_zeros(present_time.getSeconds())
+    time = time + ":" + present_time.getMinutes() + ":" + now_seconds
     time = time + ":" + present_time.getMilliseconds()
     var data = {
         uuid,

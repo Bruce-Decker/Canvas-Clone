@@ -1,4 +1,4 @@
-import { RETRIEVE_COURSE } from '../actions/types'
+import { RETRIEVE_COURSE, ACTIVE_COURSE, RESET_COURSE } from '../actions/types'
 
 const firstState = {
     info: null
@@ -11,6 +11,17 @@ export default function(state = firstState, action) {
           return {
               ...state,
               info: action.payload,
+          }
+
+    case ACTIVE_COURSE:
+          return {
+              ...state,
+              info: action.payload,
+          }
+    case RESET_COURSE:
+          return {
+              ...state,
+              info: null
           }
       default:
           return state;

@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-
+import { retrieveProfile } from '../actions/userProfileAction'
 
 var items = [200, 201, 202, 204, 206, 207, 211, 217, 227, 281, 290, 291, 292, 295, 301, 302, 304, 305]
 class showCreatedCourse extends Component {
@@ -42,6 +42,10 @@ class showCreatedCourse extends Component {
         
 
     }
+
+    componentWillMount() {
+        this.props.retrieveProfile(this.props.auth.user.email);
+      }
 
 
 
@@ -150,4 +154,4 @@ const mapStateToProps = (state) => ({
 })
 
 
-export default connect(mapStateToProps)(showCreatedCourse)
+export default connect(mapStateToProps, { retrieveProfile })(showCreatedCourse)

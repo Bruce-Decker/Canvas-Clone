@@ -6,13 +6,19 @@ import axios from 'axios'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import React, { Component } from 'react'
+import { DataTable } from 'react-data-components'
+
+
 
 
 class ViewStudents extends Component {
+    users1 = []
     constructor() {
         super();
         this.state = {
-            students: []
+            students: [],
+            users: []
+           
          
         }
 
@@ -38,22 +44,58 @@ class ViewStudents extends Component {
        
         console.log(this.props.match.params.CourseId)
         const response = await axios.get('/profile/retrieveUserProfileFromCourse/' + this.props.match.params.CourseId + '/' + this.props.match.params.faculty_email)
-        console.log(response)
+        
         this.setState({
             students: response.data,
+       
+           
+        })
+
+       
+        var users2 = []
+        var courseId_url = this.props.match.params.CourseId
+        response.data.forEach(function(element) {
+              
+              
+              var each_user = {
+                  image: <img src = {"../../../" + element.image_path} height = "190" width = "220" key = {element.eamil}/>,
+                  name: <Link to ={`/studentGradePage/${courseId_url}/${element.email}`}> {element.name} </Link>,
+                  email: element.email
+              }
+
+            
+              
+              users2.push(each_user)
+ 
+        })
+
+        this.setState({
+            users: users2
        
            
         })
     }
 
     render() {
+
+
+   
+      
+
+        var columns = [
+            { title: 'Image', prop: 'image'  },
+            { title: 'Name', prop: 'name' },
+            { title: 'Email', prop: 'email' }
+          ];
+         
+         
       
         return (
             <div className = "pageDesign">
               <Banner />
               { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
               <div className = "tableContainer">
-                <table className="ui celled table">
+                {/* <table className="ui celled table">
 
                  { this.state.tableVisibility ? <Table /> : null }
              <tbody>
@@ -75,8 +117,24 @@ class ViewStudents extends Component {
 
 
         </tbody>
-        </table>
+        </table> */}
+      
+     <DataTable
+      className="container"
+      keys="id"
+      columns={columns}
+      initialData={this.state.users}
+      initialPageLength={1}
+      initialSortBy={{ prop: 'name', order: 'descending' }}
+      pageLengthOptions={[ 5, 20, 50 ]}
+
+      
+    />
+
+    
+    
         </div>
+        
             </div>
         )
     }

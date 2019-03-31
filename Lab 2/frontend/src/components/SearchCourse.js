@@ -20,7 +20,7 @@ class SearchCourse extends Component {
           didSubmit: false,
           Courses: [],
           value_option: '',
-          CourseTerm: 'Spring 2019',
+          CourseTerm: '',
           toggle: false
    
         }
@@ -31,17 +31,18 @@ class SearchCourse extends Component {
         this.setState({[e.target.name]: e.target.value})
     } 
 
-    onClick = (courseId, status) => {
+    onClick = (courseId, status, faculty_email) => {
         var data = {
             email: this.props.auth.user.email,
             status: status,
-            CourseId: courseId
+            CourseId: courseId,
+            faculty_email: faculty_email
           
         }
        
         console.log("onclick id " + courseId)
         console.log("status " + status)
-        axios.post('/registerCourse', data)
+        axios.post('/course/registerCourse', data)
         .then(res => this.componentDidMount())
         .catch(err => console.log(err))
 
@@ -56,8 +57,10 @@ class SearchCourse extends Component {
        this.setState({
          Courses: []
        })
+
        console.log("term " + this.state.CourseTerm)
-        if (this.state.SearchByCourseId) {
+       console.log("ID " + this.state.SearchByCourseId)
+        if (this.state.SearchByCourseId !== '') {
           
             var data = {
                 id: this.state.SearchByCourseId
@@ -73,7 +76,7 @@ class SearchCourse extends Component {
             var data = {
                 courseName: this.state.SearchByCourseName
             }
-           axios.post('/searchCoursebyName', data )
+           axios.post('/course/searchCoursebyName', data )
               .then(res => this.helper(res))
               .catch(err => console.log(err)) 
         }  
@@ -83,7 +86,7 @@ class SearchCourse extends Component {
             var data = {
                 CourseId: this.state.SearchByCourseValue
             }
-           axios.post('/searchCoursebyValueGreaterThan', data )
+           axios.post('/course/searchCoursebyValueGreaterThan', data )
               .then(res => this.helper(res))
               .catch(err => console.log(err)) 
         }  
@@ -93,17 +96,17 @@ class SearchCourse extends Component {
             var data = {
                 CourseId: this.state.SearchByCourseValue
             }
-           axios.post('/searchCoursebyValueLessThan', data )
+           axios.post('/course/searchCoursebyValueLessThan', data )
               .then(res => this.helper(res))
               .catch(err => console.log(err)) 
         }  
         if (this.state.CourseTerm) {
             var CourseTerm = this.state.CourseTerm
-            var CourseTerm = "\"" + CourseTerm + "\"";
+            //var CourseTerm = "\"" + CourseTerm + "\"";
             var data = {
                 CourseTerm: CourseTerm
             }
-           axios.post('/searchCoursebyTerm', data )
+           axios.post('/course/searchCoursebyTerm', data )
               .then(res => this.helper(res))
               .catch(err => console.log(err)) 
         }  
@@ -111,7 +114,7 @@ class SearchCourse extends Component {
     }
 
     helper = (response) => {
-        console.log("response " + JSON.stringify(response.data[0]))
+        console.log("response " + JSON.stringify(response.data))
         this.setState({
             courses: response.data,
             didSubmit: true,
@@ -129,7 +132,7 @@ class SearchCourse extends Component {
       
       }
 
-      ListButton = (ID, status) =>  {
+      ListButton = (ID, status, faculty_email) =>  {
         var found
        
         this.state.registeredCourses.forEach(function(element) {
@@ -141,20 +144,20 @@ class SearchCourse extends Component {
     
             if (!found && status == "open") {
                 return (
-                    <button className="ui blue button drop_button" onClick={() => this.onClick(ID, status)}> Add </button>
+                    <button className="ui blue button drop_button" onClick={() => this.onClick(ID, status, faculty_email)}> Add </button>
     
                 )
             } 
             if (!found && status == "waitlist") {
                 return (
-                    <button className="ui blue button drop_button" onClick={() => this.onClick(ID, status)}> Waitlist </button>
+                    <button className="ui blue button drop_button" onClick={() => this.onClick(ID, status, faculty_email)}> Waitlist </button>
     
                 )
             } 
         }
 
     async componentDidMount() {
-        const response2 = await axios.get('/listRegisteredCourses/' + this.props.auth.user.email)
+        const response2 = await axios.get('/course/listRegisteredCourses/' + this.props.auth.user.email)
        // console.log(response2.data)
         this.setState({
           
@@ -242,7 +245,7 @@ class SearchCourse extends Component {
                     <div class="card-body">
                  
                         <h3 className = "BreeSerif"> {course.CourseId} {course.CourseName}</h3>
-                        <h3 className = "BreeSerif"> Instructor email: {course.email} </h3>
+                        <h3 className = "BreeSerif"> Instructor email: {course.faculty_email} </h3>
                         <h3 className = "BreeSerif"> Course Description: {course.CourseDescription} </h3>
                         <h3 className = "BreeSerif"> Course Room: {course.CourseRoom} </h3>
                         <h3 className = "BreeSerif"> Course Capacity: {course.CourseCapacity} </h3>
@@ -252,7 +255,7 @@ class SearchCourse extends Component {
                        
 
                         {/* <button className="ui button blue" type="submit" onClick = {() => this.onClick(course.CourseId)}> Register </button> */}
-                        {this.ListButton(course.CourseId, course.status)}
+                        {this.ListButton(course.CourseId, course.status, course.faculty_email)}
                     </div>
                     </div>
                   

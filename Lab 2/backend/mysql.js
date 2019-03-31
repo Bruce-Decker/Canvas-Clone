@@ -893,6 +893,8 @@ app.post('/searchCoursebyTerm',  function(req, res) {
    
    
     var CourseTerm = req.body.CourseTerm
+    //someStr.replace(/['"]+/g, '')
+    CoursTerm = CourseTerm.replace(/['"]+/g, '')
     
     var sql = `SELECT * FROM course WHERE CourseTerm = ${CourseTerm}`
 

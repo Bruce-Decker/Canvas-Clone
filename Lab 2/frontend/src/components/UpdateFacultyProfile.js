@@ -3,7 +3,7 @@ import Banner from './Banner'
 import '../App.css';
 import axios from 'axios'
 import { connect } from 'react-redux'
-import { createProfile } from '../actions/authActions'
+import { createProfile } from '../actions/userProfileAction'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 

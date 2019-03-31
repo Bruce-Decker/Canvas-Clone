@@ -19,6 +19,7 @@ const quizRouter = require('./routes/quiz')
 const gradeRouter = require('./routes/grade')
 const fileRouter = require('./routes/file')
 const tokenRouter = require('./routes/token')
+const messageRouter = require('./routes/message')
 
 
 
@@ -46,6 +47,7 @@ app.use('/quiz', quizRouter)
 app.use('/grade', gradeRouter)
 app.use('/file', fileRouter)
 app.use('/token', tokenRouter)
+app.use('/message', messageRouter)
 
 app.post('/test', function(req, res) {
     res.send("test")

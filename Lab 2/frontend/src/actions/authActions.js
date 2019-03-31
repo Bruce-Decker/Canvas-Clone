@@ -31,24 +31,24 @@ export const registerUser = (userData, history) => dispatch => {
          )
 }
 
-export const createProfile = (userData) => dispatch => {
-    //axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
-    console.log("sdfsdf")
-    console.log(userData )
-     axios.post('/profile/createProfile', userData)
-          .then(res => {
-              //console.log(res.data)
-              window.location.reload()
-          })
-          .catch(err => 
+// export const createProfile = (userData) => dispatch => {
+//     //axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
+//     console.log("sdfsdf")
+//     console.log(userData )
+//      axios.post('/profile/createProfile', userData)
+//           .then(res => {
+//               //console.log(res.data)
+//               window.location.reload()
+//           })
+//           .catch(err => 
            
-            dispatch({
-                type: GET_ERRORS,
-                payload: err.response.data
+//             dispatch({
+//                 type: GET_ERRORS,
+//                 payload: err.response.data
     
-            })
-        )
-}
+//             })
+//         )
+// }
 
 export const loginUser = (userData) => dispatch => {
     console.log("user")
@@ -100,6 +100,8 @@ export const loginFaculty = (userData) => dispatch => {
 export const logout = () => dispatch => {
     localStorage.removeItem('token')
     localStorage.removeItem('isFaculty')
+    localStorage.removeItem('profile')
+    localStorage.removeItem('course')
     tokenHeader(false)
    
     dispatch(activeUser({}))

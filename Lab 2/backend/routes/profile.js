@@ -77,7 +77,7 @@ router.post('/createProfile', upload.single('filename'), function(req,res) {
 				 	res.send("Fail")
 				 } else {
 				 	console.log(result)
-	 				res.send("Update successfully")
+	 				res.send(data)
 	 			 }
 			})
 		} else {
@@ -87,7 +87,7 @@ router.post('/createProfile', upload.single('filename'), function(req,res) {
 						console.log("Error Data");
 						 res.send({msg: "False"});
 					} else {
-						 res.send({msg: "True"});
+						 res.send(newlyCreated);
 					}
 			   })
 

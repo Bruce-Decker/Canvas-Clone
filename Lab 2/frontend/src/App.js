@@ -41,7 +41,8 @@ import jwt_decode from 'jwt-decode'
 import tokenHeader from './utility/tokenHeader'
 import { activeUser, activeFaculty } from './actions/authActions'
 import { logout } from './actions/authActions'
-import { resetProfile } from './actions/userProfileAction'
+import { resetProfile, activeProfile } from './actions/userProfileAction'
+import {  activeCourse } from './actions/courseAction'
 
 import Test from './components/ShowPDF'
 
@@ -49,6 +50,11 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { Provider } from 'react-redux';
 import store from './store'
 import SecureRoutes  from './components/SecureRoutes'
+
+
+import SendMessage from './components/SendMessage'
+import ViewMessages from './components/ViewMessages'
+import ViewExchangedMessages from './components/ViewExchangedMessages'
 
 
 import './App.css';
@@ -62,11 +68,12 @@ if (localStorage.token) {
   
   console.log(decoded)
   if (localStorage.getItem('isFaculty') == 'yes') {
+    decoded.token = localStorage.getItem('token')
     store.dispatch(activeFaculty(decoded));
     
 
   } else {
-    
+    decoded.token = localStorage.getItem('token')
     store.dispatch(activeUser(decoded));
   }
  
@@ -78,6 +85,24 @@ if (localStorage.token) {
      window.location.href = '/'
   }
 }
+
+if (localStorage.profile) {
+ 
+    var profile = localStorage.getItem('profile')
+    profile = JSON.parse(profile)
+    store.dispatch(activeProfile(profile))
+  
+
+}
+
+if (localStorage.course) {
+ 
+    var course = localStorage.getItem('course')
+    course = JSON.parse(course)
+    store.dispatch(activeCourse(course))
+}
+
+
 
 
 
@@ -137,6 +162,9 @@ class App extends Component {
 
                     <Route exact path="/FacultyGenerateToken/:CourseId" component={FacultyGenerateToken} />
                     <Route exact path="/StudentRegisterToken" component={StudentRegisterToken} />
+                    <Route exact path = "/SendMessage" component = {SendMessage} />
+                    <Route exact path = "/ViewMessages" component = {ViewMessages} />
+                    <Route exact path = "/ViewExchangedMessages/:receiver_email/:sender_email/:subject" component = {ViewExchangedMessages} />
 
                     <Route exact path="/test" component={Test} />
                    

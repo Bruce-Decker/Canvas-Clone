@@ -4,7 +4,7 @@ import '../App.css';
 import axios from 'axios'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
-import { createProfile } from '../actions/authActions'
+import { createProfile } from '../actions/userProfileAction'
 import PropTypes from 'prop-types'
 
 class Profile extends Component {
@@ -64,8 +64,11 @@ class Profile extends Component {
 
        // axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
       //  console.log(this.state.file)
-      console.log(formdata)
+      
+        
         this.props.createProfile(formdata)
+        
+       
         // axios.post('/profile/createProfile', formdata)
         // .then(res => console.log(res.data))
         // .catch(err => console.log(err))
