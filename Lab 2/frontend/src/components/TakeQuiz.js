@@ -28,9 +28,10 @@ class TakeQuiz extends Component {
         console.log(this.state)
         //window.location.reload();
         var data = this.state
-        data['email'] = this.props.auth.user.email
+     
+       
         delete data['questions']
-        axios.post('/quiz/submitQuiz/' + this.props.match.params.CourseId + '/' + this.props.match.params.quizName, data)
+        axios.post('/quiz/submitQuiz/' + this.props.match.params.CourseId + '/' + this.props.match.params.quizName + '/' + this.props.match.params.faculty_email + '/' + this.props.auth.user.email, data)
            .then(res => window.location.reload())
            .catch(err => console.log(err))
     }

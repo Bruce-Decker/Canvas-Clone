@@ -32,7 +32,7 @@ class ViewStudents extends Component {
             email: email,
             CourseId: courseId
         }
-        axios.post('/dropCourse', data)
+        axios.post('/course/dropCourse', data)
         .then(res => this.componentDidMount())
         .catch(err => console.log(err))
 
@@ -54,13 +54,20 @@ class ViewStudents extends Component {
        
         var users2 = []
         var courseId_url = this.props.match.params.CourseId
+        var onClick = this.onClick
         response.data.forEach(function(element) {
               
               
               var each_user = {
-                  image: <img src = {"../../../" + element.image_path} height = "190" width = "220" key = {element.eamil}/>,
-                  name: <Link to ={`/studentGradePage/${courseId_url}/${element.email}`}> {element.name} </Link>,
-                  email: element.email
+                  image: <Link to ={`/studentGradePage/${courseId_url}/${element.email}`}> <img src = {"../../../" + element.image_path} height = "190" width = "220" key = {element.eamil}/> </Link>,
+                //   name: <Link to ={`/studentGradePage/${courseId_url}/${element.email}`}> {element.name} </Link>,
+                   name: element.name,
+                  email: <div>
+                     
+                  {element.email }
+                 
+                  <ListButton2 CourseId = {courseId_url} email = {element.email} onClick = {onClick}/>
+                  </div>
               }
 
             
@@ -118,6 +125,7 @@ class ViewStudents extends Component {
 
         </tbody>
         </table> */}
+        <h1> Please click on the image to go to student profile</h1>
       
      <DataTable
       className="container"
@@ -160,6 +168,16 @@ var ListButton = (props) => ({
     render: function() {
         return (
             <button className="ui red button drop_button" onClick={() => this.props.onClick(this.props.CourseId, this.props.email)}> Drop Student </button>
+
+        )
+    }
+})
+
+var ListButton2 = (props) => ({
+    
+    render: function() {
+        return (
+            <button className="ui red button drop_button2" onClick={() => this.props.onClick(this.props.CourseId, this.props.email)}> Drop Student </button>
 
         )
     }

@@ -20,7 +20,7 @@ class RegisterCourse extends Component {
 
     async componentDidMount() {
        
-        const response = await axios.get('course/showRegisterCourseInfo3/'+ this.props.auth.user.email)
+        const response = await axios.get('/course/showRegisterCourseInfo3/'+ this.props.auth.user.email)
         console.log(response.data)
         
         // console.log(response.data)

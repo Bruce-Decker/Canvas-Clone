@@ -36,6 +36,7 @@ export const createProfile = (userData) => dispatch => {
             // console.log(JSON.stringify(profile))
             //localStorage.removeItem('profile')
            
+           
             dispatch({
                 type: ACTIVE_PROFILE,
                 payload: res.data

@@ -131,6 +131,7 @@ class showRegisteredCourse extends Component {
                 title: element.CourseName,
                 description: element.CourseDescription,
                 CourseTerm: element.CourseTerm,
+                CourseDept: element.CourseDept,
                 label: element.CourseTerm,
                 cardColor: '#FFD700',
                 cardStyle: {borderRadius: 6, boxShadow: '0 0 6px 1px #BD3B36', marginBottom: 15},
@@ -209,7 +210,7 @@ class showRegisteredCourse extends Component {
 
               { this.state.listVisibility ?
                <div>
-                    <Board data={data} draggable = {true}  customCardLayout = {true} style={{padding: '30px 20px',fontFamily: 'Verdana', backgroundColor: '#6495ED'}} className="boardContainer">
+                    <Board data={data} draggable = {true}  customCardLayout = {true} style={{padding: '10px 30px',fontFamily: 'Helvetica', backgroundColor: '#6495ED'}} className="boardContainer">
                     <CustomCard data={data} onClick = {this.onClick}/>
                     </Board>
                    
@@ -260,27 +261,32 @@ const CustomCard = (props) => {
    
     return (
       <div>
+          <Image2 />
         <header
           style={{
             borderBottom: '1px solid #eee',
-            paddingBottom: 6,
+            paddingBottom: 10,
             marginBottom: 10,
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
             color: props.cardColor
           }}>
-          <div style={{fontSize: 14, fontWeight: 'bold'}}>{props.id} {props.title}</div>
+         
+          <div style={{fontSize: 16, fontWeight: 'bold'}}>{props.id} {props.title}</div>
+         
          
         </header>
-        <div style={{fontSize: 12}}>
-          <div style={{color: '#4C4C4C', fontWeight: 'bold'}}>Description: {props.description}</div>
+        <div style={{fontSize: 14, height: 120}}>
+          <div style={{color: '#4C4C4C', fontWeight: 'bold'}}>Department: {props.CourseDept}</div>
          
           <div style={{padding: '5px 0px'}}>
           <div>
             <i>Instructor Email: {props.email}</i>
             </div>
+            <div>
             <i>Term: {props.CourseTerm}</i>
+            </div>
             <ListButton value = {props.id} onClick = {props.onClick}/>
           </div>
          
@@ -299,6 +305,18 @@ var Image = (props) => ({
             // <img src = {`http://lorempixel.com/400/200/nature?${Math.random()}}`} style = {{height: "150px"}}/>
             
             <img src = {`https://picsum.photos/400/${items[Math.floor(Math.random()*items.length)]}`} style = {{height: "150px"}}/>
+           
+        )
+    }
+})
+
+var Image2 = (props) => ({
+    
+    render: function() {
+        return (
+            // <img src = {`http://lorempixel.com/400/200/nature?${Math.random()}}`} style = {{height: "150px"}}/>
+            
+            <img src = {`https://picsum.photos/400/${items[Math.floor(Math.random()*items.length)]}`} style = {{height: "125px", width: "100%"}}/>
            
         )
     }

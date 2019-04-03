@@ -38,7 +38,7 @@ class UploadAssignment extends Component {
 
     onSubmit = (e) => {
       e.preventDefault()
-      console.log("sdfsdfsfd")
+     
         let file = this.state.file
         let formdata = new FormData()
         formdata.append('assignment_name', this.props.match.params.assignmentName)

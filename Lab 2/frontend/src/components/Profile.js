@@ -66,7 +66,7 @@ class Profile extends Component {
       //  console.log(this.state.file)
       
         
-        this.props.createProfile(formdata)
+      this.props.createProfile(formdata)
         
        
         // axios.post('/profile/createProfile', formdata)

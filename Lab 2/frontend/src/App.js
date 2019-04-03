@@ -43,6 +43,7 @@ import { activeUser, activeFaculty } from './actions/authActions'
 import { logout } from './actions/authActions'
 import { resetProfile, activeProfile } from './actions/userProfileAction'
 import {  activeCourse } from './actions/courseAction'
+import {  activeGrade } from './actions/gradeAction'
 
 import Test from './components/ShowPDF'
 
@@ -102,6 +103,13 @@ if (localStorage.course) {
     store.dispatch(activeCourse(course))
 }
 
+if (localStorage.grade) {
+ 
+  var grade = localStorage.getItem('grade')
+  grade = JSON.parse(grade)
+  store.dispatch(activeGrade(grade))
+}
+
 
 
 
@@ -123,7 +131,7 @@ class App extends Component {
                        <SecureRoutes exact path="/createCourse" component={createCourse} />
                     </Switch>
 
-                    <Route exact path="/createAssignment/:CourseId" component={CreateAssignment} />
+                    <Route exact path="/createAssignment/:CourseId/:email" component={CreateAssignment} />
                     <Route exact path="/createQuiz/:CourseId" component={CreateQuiz} />
                     <Route exact path="/viewQuizzes/:CourseId/:faculty_email" component={ViewQuizzes} />
                     <Route exact path="/takeQuiz/:CourseId/:quizName/:faculty_email" component={TakeQuiz} />

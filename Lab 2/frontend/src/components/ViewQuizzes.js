@@ -20,12 +20,14 @@ class ViewQuizzes extends Component {
     }
 
     async componentDidMount() {
+        console.log(this.props.match.params.CourseId)
+        console.log(this.props.match.params.email)
        
-        const response = await axios.get('/quiz/quizzes/' + this.props.match.params.CourseId)
+        const response = await axios.get('/quiz/quizzes/' + this.props.match.params.CourseId + "/" + this.props.match.params.faculty_email)
         this.setState({
             quizzes: response.data,
         })
-
+       
         console.log(response.data)
       
        

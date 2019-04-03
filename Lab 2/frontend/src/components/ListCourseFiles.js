@@ -21,7 +21,7 @@ class ListCourseFile extends Component {
 
     async componentDidMount() {
        
-        const response = await axios.get('/file/listFiles/' + this.props.match.params.CourseId)
+        const response = await axios.get('/file/listFiles/' + this.props.match.params.CourseId + '/' + this.props.auth.user.email)
         this.setState({
             items: response.data,
            

@@ -45,30 +45,7 @@ class ViewEachCourseFile extends Component {
     }
   
   
-      onSubmit = (e) => {
-        
-      //   axios.post(`/upload/${this.props.match.params.CourseId}`, formdata)
-      //     .then(res => this.props.history.push(`/viewAssignments/${this.props.match.params.CourseId}`))
-      //     .catch(err => console.log("Error"))
-         console.log(this.state.points)
-         var CourseId = this.props.match.params.CourseId
-         var item_name = this.props.match.params.assignmentName
-         var earned_points = this.state.points
-         var email = this.props.match.params.email
-  
-         var data = {
-             CourseId,
-             item_name, 
-             earned_points,
-             email
-         }
-  
-  
-         axios.post('/submitGrade', data)
-         .then(res => console.log(res.data))
-         .catch(err => console.log(err))
-         
-      }
+     
       onDocumentComplete = (pages) => {
           this.setState({ page: 1, pages });
         }
@@ -109,7 +86,7 @@ class ViewEachCourseFile extends Component {
       async componentDidMount() {
          
           try {
-           response = await axios.get('/file/getFile/' + this.props.match.params.CourseId + "/" +  this.props.match.params.item_name)
+           response = await axios.get('/file/getFile/' + this.props.match.params.CourseId + "/" +  this.props.match.params.item_name + "/" + this.props.auth.user.email)
            console.log("File path " + response.data[0].file_path)
           
          

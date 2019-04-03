@@ -2,7 +2,12 @@ var express = require('express')
 var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-const url = process.env.MONGODB_URI || "mongodb://localhost:27017/Canvas"
+var kafka = require('./kafka/client')
+
+//const url = process.env.MONGODB_URI || "mongodb://localhost:27017/Canvas"
+const db_url = require('./config/keys').mlab_url
+const url = process.env.MONGODB_URI || db_url
+
 var passport = require('passport')
 
 const morgan = require('morgan')

@@ -6,6 +6,7 @@ import axios from 'axios'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { retrieveGrade } from '../actions/gradeAction'
 
 class ViewGrades extends Component {
     constructor() {
@@ -14,6 +15,10 @@ class ViewGrades extends Component {
             grades: [],
             isTableVisible: false
         }
+    }
+
+    componentWillMount() {
+         this.props.retrieveGrade(this.props.match.params.CourseId, this.props.auth.user.email)
     }
 
     async componentDidMount() {
@@ -75,4 +80,4 @@ const mapStateToProps = (state) => ({
 })
 
 
-export default connect(mapStateToProps)(ViewGrades)
+export default connect(mapStateToProps, { retrieveGrade })(ViewGrades)

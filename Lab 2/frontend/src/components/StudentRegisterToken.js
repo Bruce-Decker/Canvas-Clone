@@ -12,7 +12,8 @@ class StudentRegisterToken extends Component {
         super();
         this.state = {
           CourseId: '',
-          token: ''
+          token: '',
+          faculty_email: ''
         }
     }
 
@@ -23,12 +24,14 @@ class StudentRegisterToken extends Component {
     onSubmit = (e) => {
        e.preventDefault()
        var CourseId = this.state.CourseId
+       var faculty_email = this.state.faculty_email
        var token = this.state.token
        var email = this.props.auth.user.email
        console.log(CourseId)
        console.log(token)
        var data = {
            CourseId,
+           faculty_email,
            token,
            email
        }
@@ -47,6 +50,10 @@ class StudentRegisterToken extends Component {
                 <div className = "studentTokenContainer">
                 <h1> Add a course via token </h1>
                 <form onSubmit= {this.onSubmit}>
+                           <div className="form-group">
+                            <label htmlFor="exampleFormControlInput1">Faculty Email</label>
+                            <input type="register" className="form-control" name="faculty_email"  onChange = {this.onChange}/>
+                            </div>
                             <div className="form-group">
                             <label htmlFor="exampleFormControlInput1">CourseId</label>
                             <input type="register" className="form-control" name="CourseId"  onChange = {this.onChange}/>
