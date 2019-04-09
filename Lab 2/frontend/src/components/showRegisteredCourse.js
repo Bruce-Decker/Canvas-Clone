@@ -16,7 +16,17 @@ import Board from 'react-trello'
 import { DragDropContext } from 'react-beautiful-dnd'
 import { Droppable} from 'react-beautiful-dnd'
 
-var items = [200, 201, 202, 204, 206, 207, 211, 217, 227, 281, 290, 291, 292, 295, 301, 302, 304, 305]
+// var items = [200, 201, 202, 204, 206, 207, 211, 217, 227, 281, 290, 291, 292, 295, 301, 302, 304, 305]
+
+var items = ["1.png", "2.png", 
+            "3.jpeg", "4.jpeg", "5.jpeg", 
+            "6.jpeg", "7.jpeg", "8.png", 
+            "9.jpeg", "10.jpeg", "11.jpeg", 
+            "12.jpeg", "13.jpeg", "14.jpeg", 
+            "15.jpeg", "16.jpeg", "17.jpeg", 
+            "18.jpeg", "19.jpeg", "20.jpeg", 
+            "21.jpeg", "22.jpeg", "23.jpeg", "24.jpeg", "25.jpeg"]
+
 
 const data = {
     lanes: [
@@ -301,11 +311,12 @@ const CustomCard = (props) => {
 var Image = (props) => ({
     
     render: function() {
+      console.log(items[Math.floor(Math.random()*items.length)])
         return (
             // <img src = {`http://lorempixel.com/400/200/nature?${Math.random()}}`} style = {{height: "150px"}}/>
             
-            <img src = {`https://picsum.photos/400/${items[Math.floor(Math.random()*items.length)]}`} style = {{height: "150px"}}/>
-           
+            // <img src = {`https://picsum.photos/400/${items[Math.floor(Math.random()*items.length)]}`} style = {{height: "150px"}}/>
+            <img src = {`./public_image/${items[Math.floor(Math.random()*items.length)]}`} style = {{height: "150px"}}/>
         )
     }
 })
@@ -316,8 +327,9 @@ var Image2 = (props) => ({
         return (
             // <img src = {`http://lorempixel.com/400/200/nature?${Math.random()}}`} style = {{height: "150px"}}/>
             
-            <img src = {`https://picsum.photos/400/${items[Math.floor(Math.random()*items.length)]}`} style = {{height: "125px", width: "100%"}}/>
-           
+            // <img src = {`https://picsum.photos/400/${items[Math.floor(Math.random()*items.length)]}`} style = {{height: "125px", width: "100%"}}/>
+            
+            <img src = {`./public_image/${items[Math.floor(Math.random()*items.length)]}`} style = {{height: "125px", width: "100%"}}/>
         )
     }
 })

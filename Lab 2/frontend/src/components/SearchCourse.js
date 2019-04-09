@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Sidebar_Faculty from './Sidebar_Faculty';
-
+import Pagination from './Pagination'
 
 class SearchCourse extends Component {
     constructor() {
@@ -18,13 +18,28 @@ class SearchCourse extends Component {
           SearchByCourseName: '',
           SearchByCourseValue: '',
           didSubmit: false,
-          Courses: [],
+          courses: [],
+          currentCourses: [],
           value_option: '',
           CourseTerm: '',
-          toggle: false
+          toggle: false,
+          currentPage: null, 
+          totalPages: null ,
    
         }
     }
+
+    onPageChanged = data => {
+       
+        console.log(data)
+        const { courses }  = this.state;
+        const { currentPage, totalPages, pageLimit } = data;
+    
+        const offset = (currentPage - 1) * pageLimit;
+        const currentCourses = courses.slice(offset, offset + pageLimit);
+    
+        this.setState({ currentPage, currentCourses, totalPages });
+      }
 
     onChange = (e) => {
       
@@ -169,6 +184,11 @@ class SearchCourse extends Component {
     }
 
     render() {
+
+        const { courses, currentCourses, currentPage, totalPages } = this.state;
+        const totalCourses = courses.length;
+        console.log("totalCourses " + totalCourses)
+        console.log(currentCourses)
      
         return (
            
@@ -239,7 +259,12 @@ class SearchCourse extends Component {
           {this.state.toggle ? <div>
              {this.state.didSubmit ?  
              <div>
-                 {  this.state.courses.map(course =>  
+
+<div className="d-flex flex-row py-4 align-items-center">
+
+<Pagination totalRecords={ totalCourses } pageLimit={1} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+</div>
+                 {  this.state.currentCourses.map(course =>  
               
                     <div class="card">
                     <div class="card-body">

@@ -57,6 +57,9 @@ exports.courseService = function courseService(info, callback) {
     }
 }
 
+function seconds_with_leading_zeros(dt) { 
+    return (dt < 10 ? '0' : '') + dt;
+}
 
 function post_createCourse(info, callback) {
     var email = info.message.email;
@@ -640,8 +643,11 @@ function post_announcement(info, callback) {
     console.log(CourseId)
     var comment = info.message.comment
     var present_time = new Date()
-    var time = present_time.getHours() + ":" + present_time.getMinutes() + ":" + present_time.getSeconds()
-    time = time + " " + present_time.getMonth() + "/" + present_time.getDate() + "/" + present_time.getFullYear()
+    var time = present_time.getMonth() + "/" + present_time.getDate() + "/"
+    time = time + present_time.getFullYear() + " " + present_time.getHours()
+    var now_seconds = seconds_with_leading_zeros(present_time.getSeconds())
+    time = time + ":" + present_time.getMinutes() + ":" + now_seconds
+    time = time + ":" + present_time.getMilliseconds()
     var uuid = email + " " + time
     console.log(time)
     console.log(uuid)
@@ -669,15 +675,21 @@ function post_announcement(info, callback) {
 function get_announcement(info, callback) {
     var id = info.id
     console.log(id)
-    Announcement.find({CourseId: id}, function(err, result) {
-        if (result) {
-            //res.send(result)
-            callback(null, result)
-        } else {
-            //res.send({"error": err})
-            callback(null, {"error": err})
-        }
-    })
+    Announcement.find({CourseId: id})
+        .sort({'time': 'desc'})
+        .exec(function(err, docs) {
+            if (docs) {
+                //  var result = []
+                //  result.push(docs)
+                 //res.send(docs)
+                 callback(null, docs)
+             } else {
+                 //res.send({})
+                 callback(null, {})
+             }
+
+        })
+
 }
 
 function get_showRegisterCourseInfo(info, callback) {

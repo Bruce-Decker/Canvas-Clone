@@ -79,12 +79,12 @@ if (localStorage.token) {
   }
  
   const time_now = Date.now() / 1000;
-  if (decoded.exp < time_now) {
-     store.dispatch(resetProfile())
-     store.dispatch(logout())
+  // if (decoded.exp < time_now) {
+  //    store.dispatch(resetProfile())
+  //    store.dispatch(logout())
      
-     window.location.href = '/'
-  }
+  //    window.location.href = '/'
+  // }
 }
 
 if (localStorage.profile) {
