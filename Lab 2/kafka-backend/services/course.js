@@ -130,12 +130,13 @@ function post_deleteCourse(info, callback) {
 
 function  get_createCourse(info, callback) {
     Course.find({email: info.email}, function(err, docs) {
-        if (docs) {
+        if (docs.length != 0) {
             //res.send(docs)
             callback(null, docs)
         } else {
             //res.send({"error": err})
-            callback(null, {"error": err})
+           // callback(null, {"error": err})
+           callback(null, [{CourseId: null, CourseName: null}])
         }
     })
 }

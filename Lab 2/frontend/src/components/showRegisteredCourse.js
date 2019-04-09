@@ -6,17 +6,17 @@ import axios from 'axios'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import faker from 'faker'
+// import { BrowserRouter, Route, Switch } from 'react-router-dom'
+// import faker from 'faker'
 import { retrieveProfile } from '../actions/userProfileAction'
-import ReactDOM from 'react-dom';
-import Draggable from 'react-draggable';
+// import ReactDOM from 'react-dom';
+// import Draggable from 'react-draggable';
 import Board from 'react-trello'
 
-import { DragDropContext } from 'react-beautiful-dnd'
-import { Droppable} from 'react-beautiful-dnd'
+// import { DragDropContext } from 'react-beautiful-dnd'
+// import { Droppable} from 'react-beautiful-dnd'
 
-// var items = [200, 201, 202, 204, 206, 207, 211, 217, 227, 281, 290, 291, 292, 295, 301, 302, 304, 305]
+
 
 var items = ["1.png", "2.png", 
             "3.jpeg", "4.jpeg", "5.jpeg", 
