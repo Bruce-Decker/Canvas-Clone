@@ -4,8 +4,9 @@ const Course = require('../schema/Course')
 const Roster = require('../schema/Roster')
 const Announcement = require('../schema/Announcement')
 const kafka = require('../kafka/client')
+const passport = require('passport');
 
-router.post('/createCourse', function(req, res) {
+router.post('/createCourse', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('course', {"method": "post_createCourse", "message": req.body}, function(error, result) {
         if (error) {
             console.log(error)
@@ -67,7 +68,7 @@ router.post('/createCourse', function(req, res) {
 // })
 
 
-router.post('/deleteCourse', function(req, res) {
+router.post('/deleteCourse', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('course', {"method": "post_deleteCourse", "message": req.body}, function(error, result) {
         if (error) {
             console.log(error)
@@ -91,7 +92,7 @@ router.post('/deleteCourse', function(req, res) {
 // })
 
 
-router.get('/createCourse/:email', function(req, res) {
+router.get('/createCourse/:email', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('course', {"method": "get_createCourse", "email": req.params.email}, function(error, result) {
         if (error) {
             console.log(error)
@@ -113,7 +114,7 @@ router.get('/createCourse/:email', function(req, res) {
 // })
 
 
-router.get('/listRegisteredCourses/:email', function(req, res) {
+router.get('/listRegisteredCourses/:email', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('course', {"method": "get_listRegisteredCourses", "email": req.params.email}, function(error, result) {
         if (error) {
             console.log(error)
@@ -139,7 +140,7 @@ router.get('/listRegisteredCourses/:email', function(req, res) {
 // })
 
 
-router.post('/searchCoursebyID', function(req, res) {
+router.post('/searchCoursebyID', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('course', {"method": "post_searchCoursebyID", "message": req.body}, function(error, result) {
         if (error) {
             console.log(error)
@@ -224,7 +225,7 @@ router.post('/searchCoursebyID', function(req, res) {
 // })
 
 
-router.post('/searchCoursebyName', function(req, res) {
+router.post('/searchCoursebyName', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('course', {"method": "post_searchCoursebyName", "message": req.body}, function(error, result) {
         if (error) {
             console.log(error)
@@ -309,7 +310,7 @@ router.post('/searchCoursebyName', function(req, res) {
 // })
 
 
-router.post('/searchCoursebyValueGreaterThan', function(req, res) {
+router.post('/searchCoursebyValueGreaterThan', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('course', {"method": "post_searchCoursebyValueGreaterThan", "message": req.body}, function(error, result) {
         if (error) {
             console.log(error)
@@ -395,7 +396,7 @@ router.post('/searchCoursebyValueGreaterThan', function(req, res) {
 // })
 
 
-router.post('/searchCoursebyValueLessThan', function(req, res) {
+router.post('/searchCoursebyValueLessThan', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('course', {"method": "post_searchCoursebyValueLessThan", "message": req.body}, function(error, result) {
         if (error) {
             console.log(error)
@@ -481,7 +482,7 @@ router.post('/searchCoursebyValueLessThan', function(req, res) {
 // })
 
 
-router.post('/searchCoursebyTerm', function(req, res) {
+router.post('/searchCoursebyTerm', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('course', {"method": "post_searchCoursebyTerm", "message": req.body}, function(error, result) {
         if (error) {
             console.log(error)
@@ -568,7 +569,7 @@ router.post('/searchCoursebyTerm', function(req, res) {
 //     })
 // })
 
-router.post('/dropCourse', function(req, res) {
+router.post('/dropCourse', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('course', {"method": "post_dropCourse", "message": req.body}, function(error, result) {
         if (error) {
             console.log(error)
@@ -589,7 +590,7 @@ router.post('/dropCourse', function(req, res) {
 // })
 
 
-router.post('/registerCourse', function(req, res) {
+router.post('/registerCourse', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('course', {"method": "post_registerCourse", "message": req.body}, function(error, result) {
         if (error) {
             console.log(error)
@@ -640,7 +641,7 @@ router.post('/registerCourse', function(req, res) {
 // })
 
 
-router.get('/registerCourse/:email', function(req, res) {
+router.get('/registerCourse/:email', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('course', {"method": "get_registerCourse", "email": req.params.email}, function(error, result) {
         if (error) {
             console.log(error)
@@ -695,7 +696,7 @@ router.get('/registerCourse/:email', function(req, res) {
 // 	})
 // })
 
-router.post('/announcement', function(req, res) {
+router.post('/announcement', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('course', {"method": "post_announcement", "message": req.body}, function(error, result) {
         if (error) {
             console.log(error)
@@ -743,7 +744,7 @@ router.post('/announcement', function(req, res) {
 // })
 
 
-router.get('/announcement/:id', function(req, res) {
+router.get('/announcement/:id', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('course', {"method": "get_announcement", "id": req.params.id}, function(error, result) {
         if (error) {
             console.log(error)
@@ -769,7 +770,7 @@ router.get('/announcement/:id', function(req, res) {
 // })
 
 
-router.get('/showRegisterCourseInfo3/:email', function(req, res) {
+router.get('/showRegisterCourseInfo3/:email', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('course', {"method": "get_showRegisterCourseInfo", "email": req.params.email}, function(error, result) {
         if (error) {
             console.log(error)
@@ -871,7 +872,7 @@ router.get('/showRegisterCourseInfo3/:email', function(req, res) {
 // })
 
 
-router.get('/retriveCourse/:CourseId/:faculty_email', function(req, res) {
+router.get('/retriveCourse/:CourseId/:faculty_email', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('course', {"method": "get_retriveCourse", "CourseId": req.params.CourseId, "faculty_email": req.params.faculty_email}, function(error, result) {
         if (error) {
             console.log(error)

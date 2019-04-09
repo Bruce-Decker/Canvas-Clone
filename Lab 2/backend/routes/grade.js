@@ -6,9 +6,10 @@ const Grade = require('../schema/Grade')
 const Assignment = require('../schema/Assignment')
 
 const kafka = require('../kafka/client')
+const passport = require('passport');
 
 
-router.get('/getGrades/:CourseId/:email', function(req, res) {
+router.get('/getGrades/:CourseId/:email', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('grade', {"method": "get_getGrades", "CourseId": req.params.CourseId, "email": req.params.email}, function(error, result) {
         if (error) {
             console.log(error)
@@ -33,7 +34,7 @@ router.get('/getGrades/:CourseId/:email', function(req, res) {
 
 
 
-router.post('/submitGrade', function(req, res) {
+router.post('/submitGrade', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('grade', {"method": "post_submitGrade", "message": req.body}, function(error, result) {
         if (error) {
             console.log(error)

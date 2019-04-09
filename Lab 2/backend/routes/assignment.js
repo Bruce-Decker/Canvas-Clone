@@ -3,8 +3,9 @@ const router = express.Router();
 var multer = require('multer')
 const kafka = require('../kafka/client')
 const Assignment = require('../schema/Assignment')
+const passport = require('passport');
 
-router.post('/createAssignment', function(req, res) {
+router.post('/createAssignment', passport.authenticate('jwt', { session: false }), function(req, res) {
 
     kafka.make_request('assignment', {"method": "post_createAssignment", "message": req.body}, function(error, result) {
         if (error) {
@@ -59,7 +60,7 @@ router.post('/createAssignment', function(req, res) {
 	// })
 })
 
-router.get('/viewAssignment/:CourseId/:assignment_name', function(req, res) {
+router.get('/viewAssignment/:CourseId/:assignment_name', passport.authenticate('jwt', { session: false }), function(req, res) {
     
     kafka.make_request('assignment', {"method": "get_viewAssignment", "CourseId": req.params.CourseId, "assignment_name": req.params.assignment_name}, function(error, result) {
         if (error) {
@@ -86,7 +87,7 @@ router.get('/viewAssignment/:CourseId/:assignment_name', function(req, res) {
 
 
 
-router.get('/listAssignments/:id/:faculty_email', function(req, res) {
+router.get('/listAssignments/:id/:faculty_email', passport.authenticate('jwt', { session: false }), function(req, res) {
     
     kafka.make_request('assignment', {"method": "get_listAssignments", "id": req.params.id, "faculty_email": req.params.faculty_email}, function(error, result) {
         if (error) {
@@ -115,7 +116,7 @@ router.get('/listAssignments/:id/:faculty_email', function(req, res) {
 // })
 
 
-router.get('/listStudentAssignments/:id', function(req, res) {
+router.get('/listStudentAssignments/:id', passport.authenticate('jwt', { session: false }), function(req, res) {
     
     kafka.make_request('assignment', {"method": "get_listStudentAssignments", "id": req.params.id}, function(error, result) {
         if (error) {

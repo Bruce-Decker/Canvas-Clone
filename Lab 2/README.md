@@ -31,3 +31,9 @@
 ### Profile
 ![alt text](./README_Files/Canvas_Profile.png "Profile")
 
+### Token
+![alt text](./README_Files/Canvas_Token.png "Token")
+
+### Search
+![alt text](./README_Files/Canvas_Search.png "Search")
+

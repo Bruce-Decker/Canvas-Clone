@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 var multer = require('multer')
+const passport = require('passport');
 
 const File = require('../schema/File')
 const Assignment = require('../schema/Assignment')
@@ -23,7 +24,7 @@ const fileUpload = multer({
     storage : fileStorage
 })
 
-router.post('/createFile/:id', fileUpload.single('filename'),  function(req, res) {
+router.post('/createFile/:id', fileUpload.single('filename'), passport.authenticate('jwt', { session: false }),  function(req, res) {
     kafka.make_request('file', {"method": "post_createFile", "message": req.body, "id": req.params.id, "file": req.file}, function(error, result) {
         if (error) {
             console.log(error)
@@ -89,7 +90,7 @@ router.post('/createFile/:id', fileUpload.single('filename'),  function(req, res
 // })
 
 
-router.get('/listFiles/:CourseId/:email', function(req, res) {
+router.get('/listFiles/:CourseId/:email', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('file', {"method": "get_listFiles", "CourseId": req.params.CourseId , "email": req.params.email}, function(error, result) {
         if (error) {
             console.log(error)
@@ -114,7 +115,7 @@ router.get('/listFiles/:CourseId/:email', function(req, res) {
 // })
 
 
-router.get('/getFile/:CourseId/:item_name/:email', function(req, res) {
+router.get('/getFile/:CourseId/:item_name/:email', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('file', {"method": "get_getFile", "CourseId": req.params.CourseId, "item_name": req.params.item_name, "email": req.params.email}, function(error, result) {
         if (error) {
             console.log(error)

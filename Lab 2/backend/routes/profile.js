@@ -5,6 +5,8 @@ var validateProfile = require('../validation/validateProfile')
 const Profile = require('../schema/Profile')
 const Roster = require('../schema/Roster')
 const kafka = require('../kafka/client')
+const passport = require('passport');
+
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -35,7 +37,7 @@ const upload = multer({
 })
 
 
-router.post('/createProfile', upload.single('filename'), function(req,res) {
+router.post('/createProfile', upload.single('filename'), passport.authenticate('jwt', { session: false }), function(req,res) {
     const { errors, isValid } = validateProfile(req.body)
     console.log(errors)
     if (!isValid) {
@@ -123,7 +125,7 @@ router.post('/createProfile', upload.single('filename'), function(req,res) {
 
 // })
 
-router.get('/viewProfile/:email', function(req, res) {
+router.get('/viewProfile/:email', passport.authenticate('jwt', { session: false }), function(req, res) {
     
     kafka.make_request('profile', {"method": "get_viewProfile", "email": req.params.email}, function(error, result) {
         if (error) {
@@ -147,7 +149,7 @@ router.get('/viewProfile/:email', function(req, res) {
 // })
 
 
-router.get('/retrieveUserProfileFromCourse/:Id/:faculty_email', function(req, res) {
+router.get('/retrieveUserProfileFromCourse/:Id/:faculty_email', passport.authenticate('jwt', { session: false }), function(req, res) {
     
     kafka.make_request('profile', {"method": "get_profileFromCourse", "Id": req.params.Id, "faculty_email": req.params.faculty_email}, function(error, result) {
         if (error) {

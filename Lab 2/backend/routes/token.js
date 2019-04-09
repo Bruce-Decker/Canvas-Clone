@@ -5,11 +5,12 @@ const Roster = require('../schema/Roster')
 
 const uuidv1 = require('uuid/v1');
 const shortid = require('shortid');
+const passport = require('passport');
 
 const kafka = require('../kafka/client')
 
 
-router.post('/generateCourseToken/:CourseId', function(req, res) {
+router.post('/generateCourseToken/:CourseId', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('token', {"method": "post_generateCourseToken", "CourseId": req.params.CourseId, "message": req.body}, function(error, result) {
         if (error) {
             console.log(error)
@@ -50,7 +51,7 @@ router.post('/generateCourseToken/:CourseId', function(req, res) {
 //    })
 //  })
 
-router.post('/verifyCourseToken', function(req, res) {
+router.post('/verifyCourseToken', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('token', {"method": "post_verifyCourseToken", "message": req.body}, function(error, result) {
         if (error) {
             console.log(error)

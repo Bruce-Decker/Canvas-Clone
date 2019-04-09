@@ -3,6 +3,7 @@ const router = express.Router();
 var multer = require('multer')
 
 const kafka = require('../kafka/client')
+const passport = require('passport');
 
 const Quiz = require('../schema/Quiz')
 const Grade = require('../schema/Grade')
@@ -10,7 +11,7 @@ const mongoose = require('mongoose')
 var db = mongoose.connection;
 
 
-router.post('/createQuiz/:id', function(req, res) {
+router.post('/createQuiz/:id', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('quiz', {"method": "post_createQuiz", "message": req.body, "id": req.params.id}, function(error, result) {
         if (error) {
             console.log(error)
@@ -89,7 +90,7 @@ router.post('/createQuiz/:id', function(req, res) {
 
 // })
 
-router.get('/quizzes/:CourseId/:email', function(req, res) {
+router.get('/quizzes/:CourseId/:email', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('quiz', {"method": "get_quizzes", "CourseId": req.params.CourseId, "email": req.params.email}, function(error, result) {
         if (error) {
             console.log(error)
@@ -128,7 +129,7 @@ router.get('/quizzes/:CourseId/:email', function(req, res) {
 // })
 
 
-router.get('/takeQuiz/:CourseId/:quizName/:faculty_email', function(req, res) {
+router.get('/takeQuiz/:CourseId/:quizName/:faculty_email', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('quiz', {"method": "get_takeQuiz", "CourseId": req.params.CourseId, "quizName": req.params.quizName, "faculty_email": req.params.faculty_email}, function(error, result) {
         if (error) {
             console.log(error)
@@ -155,7 +156,7 @@ router.get('/takeQuiz/:CourseId/:quizName/:faculty_email', function(req, res) {
 
 
 
-router.post('/submitQuiz/:CourseId/:quizName/:faculty_email/:student_email', function(req, res) {
+router.post('/submitQuiz/:CourseId/:quizName/:faculty_email/:student_email', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('quiz', {"method": "post_submitQuiz", "CourseId": req.params.CourseId, "quizName": req.params.quizName, "faculty_email": req.params.faculty_email, "student_email": req.params.student_email, "message": req.body}, function(error, result) {
         if (error) {
             console.log(error)

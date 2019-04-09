@@ -5,6 +5,7 @@ var multer = require('multer')
 const Upload = require('../schema/Upload')
 
 const kafka = require('../kafka/client')
+const passport = require('passport');
 
 const pdfStorage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -26,7 +27,7 @@ function seconds_with_leading_zeros(dt) {
 }
 
 
-router.post('/upload/:id', pdfUpload.single('filename'), (req, res) => {
+router.post('/upload/:id', pdfUpload.single('filename'), passport.authenticate('jwt', { session: false }), (req, res) => {
     kafka.make_request('upload', {"method": "post_upload", "message": req.body, "id": req.params.id, "file": req.file}, function(error, result) {
         if (error) {
             console.log(error)
@@ -87,7 +88,7 @@ router.post('/upload/:id', pdfUpload.single('filename'), (req, res) => {
 // })
 
 
-router.get('/upload/:CourseId/:assignment_name/:email', function(req, res) {
+router.get('/upload/:CourseId/:assignment_name/:email', passport.authenticate('jwt', { session: false }), function(req, res) {
     kafka.make_request('upload', {"method": "get_upload", "CourseId": req.params.CourseId, "assignment_name": req.params.assignment_name, "email": req.params.email}, function(error, result) {
         if (error) {
             console.log(error)
