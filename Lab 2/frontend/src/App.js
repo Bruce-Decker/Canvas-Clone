@@ -44,6 +44,9 @@ import { logout } from './actions/authActions'
 import { resetProfile, activeProfile } from './actions/userProfileAction'
 import {  activeCourse } from './actions/courseAction'
 import {  activeGrade } from './actions/gradeAction'
+import {  activeAssignment } from './actions/assignmentAction'
+import {  activeQuiz } from './actions/quizAction'
+import {  activeToken } from './actions/tokenAction'
 
 import Test from './components/ShowPDF'
 
@@ -110,6 +113,28 @@ if (localStorage.grade) {
   store.dispatch(activeGrade(grade))
 }
 
+
+if (localStorage.assignment) {
+ 
+  var assignment = localStorage.getItem('assignment')
+  assignment = JSON.parse(assignment)
+  store.dispatch(activeAssignment(assignment))
+}
+
+if (localStorage.quiz) {
+ 
+  var quiz = localStorage.getItem('quiz')
+  quiz = JSON.parse(quiz)
+  store.dispatch(activeQuiz(quiz))
+}
+
+
+if (localStorage.courseToken) {
+ 
+  var courseToken = localStorage.getItem('courseToken')
+  courseToken = JSON.parse(courseToken)
+  store.dispatch(activeToken(courseToken))
+}
 
 
 

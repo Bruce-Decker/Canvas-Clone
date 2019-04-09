@@ -4,7 +4,7 @@ import '../App.css';
 import axios from 'axios'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
-
+import { createAssignment } from '../actions/assignmentAction'
 
 class CreateAssignment extends Component {
     constructor() {
@@ -38,9 +38,11 @@ class CreateAssignment extends Component {
             time,
             email
         }
-        axios.post('/assignment/createAssignment', data)
-        .then(res => console.log(res.data))
-        .catch(err => console.log(err))
+
+        this.props.createAssignment(data)
+        // axios.post('/assignment/createAssignment', data)
+        // .then(res => console.log(res.data))
+        // .catch(err => console.log(err))
 
     }
 
@@ -100,4 +102,4 @@ const mapStateToProps = (state) => ({
 })
 
 
-export default connect(mapStateToProps)(CreateAssignment)
+export default connect(mapStateToProps, { createAssignment })(CreateAssignment)

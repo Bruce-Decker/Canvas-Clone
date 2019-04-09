@@ -17,12 +17,39 @@ class ViewExchangedMessages extends Component {
            currentMessages: [],
            currentPage: null, 
            totalPages: null ,
-           isVisible: false
+           isVisible: false,
+           message: ''
          
         }
 
        
     }
+
+    onChange = (e) => {
+        this.setState({[e.target.name]: e.target.value})
+    }
+
+    onSubmit = (e) => {
+        e.preventDefault()
+        var receiver_email = this.props.match.params.sender_email
+        var sender_email = this.props.match.params.receiver_email
+        var subject = this.props.match.params.subject
+        var message = this.state.message
+      
+        var data = {
+            receiver_email,
+            sender_email,
+            subject,
+            message
+        }
+        console.log(data)
+        axios.post('/message/sendMessage', data)
+           .then(res => window.location.reload())
+           .catch(err => console.log(err))
+      
+ 
+     }
+ 
 
     onPageChanged = data => {
        
@@ -60,9 +87,23 @@ class ViewExchangedMessages extends Component {
               <Banner />
               { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
               <div className = "registerCourseContainer">
+              
               <h1><i className="fas fa-envelope"></i> Conversation with {this.props.match.params.sender_email} </h1>
+              
 
               {this.state.isVisible ? <div>
+                <form id="messageForm" onSubmit= {this.onSubmit}>
+            
+            <div className="field">
+            <label>Message</label>
+              <textarea rows="5" name = "message" ref = "message" onChange = {this.onChange}></textarea>
+            </div>
+           
+            <button className="ui primary button" >
+                  Quick Reply
+            </button>
+            </form>
+                  
 
              
            <div className="d-flex flex-row py-4 align-items-center">
@@ -83,6 +124,7 @@ class ViewExchangedMessages extends Component {
                         </div>
                     )}
                      </div> : null}
+                     
               </div>
             </div>
            

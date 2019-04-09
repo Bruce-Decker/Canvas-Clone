@@ -26,7 +26,7 @@ function seconds_with_leading_zeros(dt) {
 }
 
 
-router.post('/upload/:id', function(req, res) {
+router.post('/upload/:id', pdfUpload.single('filename'), (req, res) => {
     kafka.make_request('upload', {"method": "post_upload", "message": req.body, "id": req.params.id, "file": req.file}, function(error, result) {
         if (error) {
             console.log(error)
@@ -39,9 +39,11 @@ router.post('/upload/:id', function(req, res) {
 
 
 // router.post('/upload/:id', pdfUpload.single('filename'),  (req, res) => {
+   
 //     var assignment_name = req.body.assignment_name
 //     var email = req.body.email
 //     var CourseId = req.params.id
+//     console.log("sdfsdf2323 " + CourseId)
 //     var uuid = email +  CourseId +  assignment_name + req.body.now
 //     var file_path = req.file.path
 //     var present_time = new Date()
@@ -58,6 +60,8 @@ router.post('/upload/:id', function(req, res) {
 //         file_path,
 //         time
 //     }
+
+//     console.log(data)
 //     Upload.findOne({uuid: uuid}, function(err, docs) {
 // 		if (docs) {
 // 			Upload.findOneAndUpdate({uuid: uuid}, data, function(err, result) {

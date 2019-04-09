@@ -72,8 +72,8 @@ function post_verifyCourseToken(info, callback) {
                      callback(null, "Fail")
                  } else {
                     Token.deleteOne({token: token, CourseId: CourseId})
-                        .then(result => res.send(result))
-                        .catch(err =>  res.send(err))
+                        .then(result => console.log(result))
+                        .catch(err =>  console.log(err))
                      //res.send("Added to course")
                      callback(null, "Added to course")
                   }

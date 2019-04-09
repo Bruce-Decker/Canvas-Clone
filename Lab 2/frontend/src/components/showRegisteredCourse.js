@@ -123,7 +123,6 @@ class showRegisteredCourse extends Component {
 
         axios.post('/course/dropCourse', data)
         .then(res => window.location.reload())
-        .catch(err => console.log(err))
     }
       
         const response = await axios.get('/course/registerCourse/' + this.props.auth.user.email)
@@ -140,6 +139,7 @@ class showRegisteredCourse extends Component {
                 email: element.email,
                 title: element.CourseName,
                 description: element.CourseDescription,
+                CourseName: element.CourseName,
                 CourseTerm: element.CourseTerm,
                 CourseDept: element.CourseDept,
                 label: element.CourseTerm,
@@ -214,7 +214,7 @@ class showRegisteredCourse extends Component {
               { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
               <div className = "registerCourseContainer2">
               <h1 className = "Abril_Fatface"> Your registered courses </h1>
-              <h1 className = "Abril_Fatface"> react-trello </h1>
+            
              
      
 
@@ -283,8 +283,8 @@ const CustomCard = (props) => {
             color: props.cardColor
           }}>
          
-          <div style={{fontSize: 16, fontWeight: 'bold'}}>{props.id} {props.title}</div>
-         
+          {/* <div style={{fontSize: 16, fontWeight: 'bold'}}>{props.id} {props.title}</div> */}
+          <div style={{fontSize: 16, fontWeight: 'bold'}}> <Link to = {`/CourseProfile/${props.id}/${props.email}`} params = {props.id}  >{props.CourseTerm}-{props.id}-{props.CourseName}</Link></div>
          
         </header>
         <div style={{fontSize: 14, height: 120}}>

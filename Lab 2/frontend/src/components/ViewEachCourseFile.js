@@ -86,7 +86,7 @@ class ViewEachCourseFile extends Component {
       async componentDidMount() {
          
           try {
-           response = await axios.get('/file/getFile/' + this.props.match.params.CourseId + "/" +  this.props.match.params.item_name + "/" + this.props.auth.user.email)
+           response = await axios.get('/file/getFile/' + this.props.match.params.CourseId + "/" +  this.props.match.params.item_name + "/" + this.props.match.params.faculty_email)
            console.log("File path " + response.data[0].file_path)
           
          

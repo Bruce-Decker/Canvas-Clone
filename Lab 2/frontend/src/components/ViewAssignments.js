@@ -7,27 +7,37 @@ import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Sidebar_Faculty from './Sidebar_Faculty';
+import { retrieveAssginment } from '../actions/assignmentAction'
 
 class ViewAssignments extends Component {
     constructor() {
         super();
         this.state = {
-           assignments: []
+           //assignments: [],
+           show: false
          
         }
 
        
     }
 
+  
+
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.errors) {
+          this.setState({ errors: nextProps.errors });
+        }
+
+        this.setState({
+            show: true
+        })
+    
+    }
+
     async componentDidMount() {
        
-        const response = await axios.get('/assignment/listAssignments/' + this.props.match.params.CourseId + '/' + this.props.match.params.faculty_email)
-        this.setState({
-            assignments: response.data,
-           
-        })
-        console.log(response.data)
-      
+        this.props.retrieveAssginment(this.props.match.params.CourseId, this.props.match.params.faculty_email)
        
     }
 
@@ -37,7 +47,12 @@ class ViewAssignments extends Component {
               <Banner />
               { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
               <div className = "registerCourseContainer">
-              {  this.state.assignments.map(assignment =>  
+
+
+            {this.state.show ? 
+               <div>
+
+              {  this.props.assignments.assignments.map(assignment =>  
                <div class="card">
                <div class="card-body">
                 {this.props.auth.isFaculty ?  <h1> {assignment.assignment_name}</h1> :  <Link to = {`/uploadAssignment/${this.props.match.params.CourseId}/${assignment.assignment_name}`}> <h3> {assignment.assignment_name}</h3></Link>}
@@ -47,6 +62,7 @@ class ViewAssignments extends Component {
                    </div>
 
               )}
+               </div> : null }
               </div>
             </div>
 
@@ -57,8 +73,9 @@ class ViewAssignments extends Component {
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
+    assignments: state.assignment,
     errors: state.errors
 })
 
 
-export default connect(mapStateToProps)(ViewAssignments)
+export default connect(mapStateToProps, { retrieveAssginment })(ViewAssignments)

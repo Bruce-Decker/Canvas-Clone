@@ -33,9 +33,17 @@ app.use(morgan('dev'))
 app.use(passport.initialize());
 require('./config/passport')(passport);
 
-mongoose.connect(url, { useNewUrlParser : true })
-     .then(() => console.log("Mongo Database is alive"))
-     .catch(err => console.log(err))
+mongoose.connect(url, { 
+    socketTimeoutMS: 0,
+    keepAlive: true,
+    reconnectTries: 30,
+    useNewUrlParser : true,
+    poolSize: 500
+
+}).then(() => console.log("Mongo Database is alive"))
+  .catch(err => console.log(err))
+//console.log("port is " + process.env.PORT || 5000)
+console.log("port is " +  5000)
 const port = process.env.PORT || 5000;
 
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit:50000}));
@@ -60,4 +68,5 @@ app.post('/test', function(req, res) {
 
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
+module.exports = app
 

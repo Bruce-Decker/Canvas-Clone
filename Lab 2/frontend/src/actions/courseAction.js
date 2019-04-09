@@ -1,4 +1,4 @@
-import { RETRIEVE_COURSE, ACTIVE_COURSE, RESET_COURSE } from '../actions/types'
+import { RETRIEVE_COURSE, ACTIVE_COURSE, RESET_COURSE, GET_ERRORS } from '../actions/types'
 import axios from 'axios'
 
 export const retriveCourse = (data) => dispatch => {
@@ -21,6 +21,20 @@ export const retriveCourse = (data) => dispatch => {
              })
         )
 }
+
+
+export const createCourseItem = data => dispatch => {
+    axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
+    axios.post('/course/createCourse', data)
+         .then(res => console.log(res.data))
+         .catch(err => 
+            dispatch({
+                type: GET_ERRORS,
+                payload: err
+            })
+         )
+}
+
 
 
 export const activeCourse = (course) => {

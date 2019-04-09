@@ -11,6 +11,7 @@ exports.fileService = function fileService(info, callback) {
             break    
         case "get_getFile":
             get_getFile(info, callback)
+            break
     }
 }
 

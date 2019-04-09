@@ -4,9 +4,13 @@ var mongoose = require('mongoose');
 const db_url = require('./config/keys').mlab_url
 const url = process.env.MONGODB_URI || db_url
 
-mongoose.connect(url, { useNewUrlParser : true })
-     .then(() => console.log("Mongo Database is alive"))
-     .catch(err => console.log(err))
+mongoose.connect(url, { 
+    useNewUrlParser : true,
+    poolSize: 500
+}).then(() => console.log("Mongo Database is alive"))
+  .catch(err => console.log(err))
+
+
 
 //Services
 var profile = require('./services/profile')
@@ -18,6 +22,7 @@ var grade = require('./services/grade')
 var inbox = require('./services/message')
 var quiz = require('./services/quiz')
 var token = require('./services/token')
+var upload = require('./services/upload')
 
 
 function handleTopicRequest(topic_name,fname){
@@ -63,6 +68,13 @@ function handleTopicRequest(topic_name,fname){
                 break
             case 'file':
                 file.fileService(data.data, function(err, res) {
+                    response(data, res, producer)
+                    return
+                })
+                break
+
+            case 'upload':
+                 upload.uploadService(data.data, function(err, res) {
                     response(data, res, producer)
                     return
                 })
@@ -124,4 +136,5 @@ handleTopicRequest("grade", grade)
 handleTopicRequest("message", inbox)
 handleTopicRequest("quiz", quiz)
 handleTopicRequest("token", token)
+handleTopicRequest("upload", upload)
 

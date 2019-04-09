@@ -5,6 +5,7 @@ import axios from 'axios'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { createToken } from '../actions/tokenAction'
 
 class FacultyGenerateToken extends Component {
     constructor() {
@@ -23,7 +24,12 @@ class FacultyGenerateToken extends Component {
             email
         }
         axios.post('/token/generateCourseToken/' + this.props.match.params.CourseId, data)
-            .then(res => this.setState({generated_token: res.data.token, generated_status: true}))
+            .then(res => {
+                this.setState({generated_token: res.data.token, generated_status: true})
+                this.props.createToken(res.data)
+            }
+                 
+            )
             .catch(err =>  console.log(err))
     }
 
@@ -68,4 +74,4 @@ const mapStateToProps = (state) => ({
 })
 
 
-export default connect(mapStateToProps)(FacultyGenerateToken)
+export default connect(mapStateToProps, { createToken })(FacultyGenerateToken)

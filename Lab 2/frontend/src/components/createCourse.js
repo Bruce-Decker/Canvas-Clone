@@ -4,7 +4,7 @@ import '../App.css';
 import axios from 'axios'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
-
+import { createCourseItem } from '../actions/courseAction'
 class createCourse extends Component {
 
     constructor() {
@@ -52,9 +52,10 @@ class createCourse extends Component {
             CourseTerm: CourseTerm
         }
         axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
-        axios.post('/course/createCourse', data)
-          .then(res => console.log(res.data))
-          .catch(err => console.log(err))
+        this.props.createCourseItem(data)
+        // axios.post('/course/createCourse', data)
+        //   .then(res => console.log(res.data))
+        //   .catch(err => console.log(err))
 
     }
 
@@ -128,10 +129,9 @@ class createCourse extends Component {
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
-    
     errors: state.errors
 })
 
 
 
-export default connect(mapStateToProps)(createCourse);
+export default connect(mapStateToProps, {createCourseItem})(createCourse);

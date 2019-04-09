@@ -21,14 +21,20 @@ function post_upload(info, callback) {
     var assignment_name = info.message.assignment_name
     var email = info.message.email
     var CourseId = info.id
-    var uuid = email +  CourseId +  assignment_name + req.body.now
-    var file_path = info.file.path
+    var uuid = email +  CourseId +  assignment_name + info.message.now
+    
     var present_time = new Date()
     var time = present_time.getMonth() + "/" + present_time.getDate() + "/"
-    time = time + present_time.getFullYear() + " " + present_time.getHours()
+    time = time + present_time.getFullYear() + " " + seconds_with_leading_zeros(present_time.getHours())
     var now_seconds = seconds_with_leading_zeros(present_time.getSeconds())
     time = time + ":" + present_time.getMinutes() + ":" + now_seconds
     time = time + ":" + present_time.getMilliseconds()
+    
+    console.log("test\ info")
+    console.log(info)
+    //var file_path = info.file.path
+    var file_path = "../frontend/public/pdf_uploads/" + uuid + '.pdf'
+    
     var data = {
         uuid,
         assignment_name,
@@ -37,6 +43,8 @@ function post_upload(info, callback) {
         file_path,
         time
     }
+    console.log("rwr3e")
+    console.log(data)
     Upload.findOne({uuid: uuid}, function(err, docs) {
 		if (docs) {
 			Upload.findOneAndUpdate({uuid: uuid}, data, function(err, result) {
