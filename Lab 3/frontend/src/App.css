@@ -1,0 +1,370 @@
+
+.fa-folder-open {
+  font-size: 50px;
+}
+
+.drop_student_button {
+  margin-left: 1450px;
+  color: blue;
+}
+
+.landingcontainer {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.landingImage {
+  width: 100%;
+  height: 60%;
+  margin-right: 1450px;
+}
+
+
+
+@import url('https://fonts.googleapis.com/css?family=Bree+Serif|Lobster|Playfair+Display|PT+Serif|Abril+Fatface|Cinzel');
+
+
+
+/* Centered text */
+.centered {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+}
+
+.Abril_Fatface {
+  font-family: 'Abril Fatface', cursive;
+}
+
+.playfairFont {
+  font-family: 'Playfair Display', serif;
+}
+
+.lobster {
+  font-family: 'Lobster', cursive;
+}
+
+.BreeSerif {
+  font-family: 'Bree Serif', serif;
+}
+
+.Cinzel {
+  font-family: 'Cinzel', serif;
+}
+
+
+.welcome {
+  display:inline-block;
+  
+ 
+}
+
+
+
+.logo {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.float_class {
+  display:inline-block;
+  
+ 
+}
+
+.inputError {
+
+  color: red;
+}
+
+.space {
+ padding-bottom: 10px;
+ 
+}
+
+.extra_space {
+  padding-bottom: 50px;
+  
+ }
+
+.SJSU_image {
+  width: 170px;
+  height: 100px;
+  z-index: 10;
+}
+
+.SJSU2_image {
+  width: 100px;
+  height: 50px;
+  z-index: 10;
+}
+
+.bannerContainer {
+ margin-top: 20px;
+ text-align: center;
+ z-index: 0;
+
+}
+
+.showRegisteredCourse {
+  width: 400px;
+  float: left;
+}
+
+.RegisteredCourseContainer {
+  width: 40px;
+}
+
+
+
+.tableContainer {
+  margin-top: 50px;
+  width: 700px;
+  text-align: center;
+  margin-left: 340px;
+}
+
+.loginContainer {
+ 
+  position: relative;    
+  margin-top: 10px;
+  margin-bottom: 50px;
+  width: 500px;
+  margin-left: 470px;
+
+}
+
+.registerContainer {
+  
+  position: relative;    
+  margin-top: 50px;
+  width: 500px;
+  margin-left: 470px;
+
+}
+
+.registerCourseContainer {
+ 
+  position: relative;    
+  margin-top: 50px;
+  width: 700px;
+  margin-left: 450px;
+
+}
+
+.showCourseContainer {
+ 
+  position: relative;    
+  margin-top: 50px;
+  width: 700px;
+  margin-left: 520px;
+
+}
+
+
+.registerCourseContainer2 {
+ 
+  position: relative;    
+  margin-top: 50px;
+  width: 900px;
+  margin-left: 400px;
+  float: left;
+
+}
+
+.registerCourseContainer3 {
+ 
+  position: relative;    
+  margin-top: 50px;
+  width: 900px;
+  margin-left: 550px;
+  float: left;
+
+}
+.selectCourseContainer {
+ 
+  position: relative;    
+  margin-top: 50px;
+  width: 600px;
+  margin-left: 450px;
+
+}
+
+.announcementContainer {
+  position: relative;    
+  margin-top: 50px;
+  width: 700px;
+  margin-left: 420px;
+
+}
+
+.drop_button {
+  float: right;
+}
+
+.drop_button2 {
+  margin-top: 50px;
+}
+
+
+
+.pageContainer {
+ 
+  position: relative;    
+  margin-top: 50px;
+  width: 500px;
+  margin-left: 470px;
+
+}
+
+.SJSU_Logo2 {
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.profileContainer {
+ 
+    
+  margin-top: 50px;
+  width: 500px;
+  margin-left: 450px;
+
+}
+
+.studentTokenContainer {
+ 
+    
+  margin-top: 50px;
+  width: 500px;
+  margin-left: 500px;
+
+}
+
+.input-group-text {
+  width: 70px;
+}
+
+.createCourseContainer {
+ 
+    
+  margin-top: 50px;
+  width: 500px;
+  margin-left: 450px;
+
+}
+
+.fixed {
+  margin-top: 10px;
+  margin-left: 200px;
+  width: 100%;;
+
+}
+
+.relativeContainer {
+  position: relative;
+}
+
+
+
+.test {
+  width: 1350px;
+  float: right;
+  margin-left: 10px;
+}
+.sidebar {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 10 px;
+  width: 170px;
+  background-color: rgb(35, 85, 157);
+  position: absolute;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+  margin-right: 2200px;
+  font-family: 'PT Serif', serif;
+  
+
+}
+
+/* Sidebar links */
+.sidebar a {
+  display: block;
+  color: black;
+  padding: 16px;
+  text-decoration: none;
+  z-index: 10;
+}
+
+/* Active/current link */
+.sidebar a.active {
+  background-color: white;;
+  color: blue;
+  z-index: 10;
+}
+
+/* Links on mouse-over */
+.sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+  z-index: 10;
+}
+
+/* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+/* div.content {
+  margin-left: 200px;
+  padding: 1px 16px;
+  height: 1000px;
+  z-index: 10;
+} */
+
+
+
+
+/* Declare some variables */
+/* Define Styles */
+.current-page {
+  font-size: 1.5rem;
+  vertical-align: middle; }
+
+.country-card-container {
+  height: 60px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden; }
+
+.country-name {
+  font-size: 0.9rem; }
+
+.country-region {
+  font-size: 0.7rem; }
+
+.current-page,
+.country-name,
+.country-region {
+  line-height: 1; }
+
+/* Override some Bootstrap pagination styles */
+ul.pagination {
+  margin-top: 0;
+  margin-bottom: 0;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); }
+  ul.pagination li.page-item.active a.page-link {
+    color: #445565 !important;
+    background-color: #e3e7eb !important;
+    border-color: #ced4da !important; }
+  ul.pagination a.page-link {
+    padding: 0.75rem 1rem;
+    min-width: 3.5rem;
+    text-align: center;
+    box-shadow: none !important;
+    border-color: #ced4da !important;
+    color: #6b88a4;
+    font-weight: 900;
+    font-size: 1rem; }
+    ul.pagination a.page-link:hover {
+      background-color: #f4f4f4; }
+

@@ -20,9 +20,7 @@ function post_createFile(info, callback) {
     item_name = item_name.replace(/\s/g, '');
     var email = info.message.email
     var CourseId = info.id
-    
     var uuid = info.message.email + info.id + item_name
-
     var file_path = info.file.path
     
     var present_time = new Date()
