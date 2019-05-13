@@ -39,17 +39,17 @@ class createCourse extends Component {
        
         createCourse().then(data => {
             console.log(data)
-            this.setState({
-                email: '',
-                CourseId: '',
-                CourseName: '',
-                CourseDept: '',
-                CourseDescription: '',
-                CourseRoom: '',
-                CourseCapacity: '',
-                WaitlistCapacity: '',
-                CourseTerm: ''
-            })
+            // this.setState({
+            //     email: '',
+            //     CourseId: '',
+            //     CourseName: '',
+            //     CourseDept: '',
+            //     CourseDescription: '',
+            //     CourseRoom: '',
+            //     CourseCapacity: '',
+            //     WaitlistCapacity: '',
+            //     CourseTerm: ''
+            // })
             window.location.reload()
             
         })

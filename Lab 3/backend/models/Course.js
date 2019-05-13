@@ -13,11 +13,11 @@ const CourseSchema = new Schema({
     },
     CourseName: {
         type: String,
-        required: true
+      
     },
     CourseDept: {
         type: String,
-        required: true
+      
     },
     CourseDescription: {
         type: String,

@@ -95,7 +95,7 @@ exports.resolvers = {
        },
        createCourse: async (root, { email, CourseId, CourseName, CourseDept, CourseDescription, 
             CourseRoom, CourseCapacity, WaitlistCapacity,  CourseTerm}, {Auth}) => {
-            const course = Course.findOne({email, CourseId})
+            const course = await Course.findOne({email, CourseId})
             var data = {
                 email: email,
                 CourseId: CourseId,
