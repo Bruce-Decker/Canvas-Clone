@@ -45,4 +45,23 @@ export const GET_UNREGISTERED_COURSES = gql`
    }
 `
 
+export const GET_PROFILE = gql`
+   query($email: String!) {
+    getProfile(email: $email) {
+      name
+      email
+      phone_number
+      about_me
+      city
+      country
+      school
+      hometown
+      languages
+      gender   
+      company
+    
+     }
+   }
+`
+
 

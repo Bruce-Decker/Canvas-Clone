@@ -30,7 +30,7 @@ class SideBar_Custom extends Component {
       </Link>
       <Link className="createCourse" to = "/createCourse"><i className="fas fa-graduation-cap"></i> Create  Course </Link>
       <Link to = "/searchCourse"> <i className="fas fa-book"></i> Search Course </Link>
-      <Link className = "UpdateFacultyProfile" to = "/updateFacultyProfile"><i className="fas fa-user"></i> Update Profile</Link>
+      <Link className = "UpdateFacultyProfile" to = "/changeProfile"><i className="fas fa-user"></i> Update Profile</Link>
      
       <Link to = "viewMyProfile"> <i className="fas fa-user-circle"></i> My Profile </Link>
       <Link to = "/SendMessage"> <i className="fas fa-comment-alt"></i> Send Messages</Link>

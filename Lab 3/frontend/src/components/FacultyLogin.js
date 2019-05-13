@@ -3,8 +3,10 @@ import LoginBanner from './LoginBanner'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
-
-
+import { Query, Mutation } from 'react-apollo'
+import { LOGIN } from '../mutations/index'
+import { loginFaculty } from '../actions/authActions'
+import { connect } from 'react-redux'
 
 class FacultyLogin extends Component {
     constructor() {
@@ -16,22 +18,11 @@ class FacultyLogin extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.auth.isAuthenticated) {
-           
-             this.props.history.push('/showCreatedCourse')
-        }
-        if (nextProps.errors) {
-          
-            this.setState({errors: nextProps.errors})
-        }
-    }
-
     onChange = (e) => {
         this.setState({[e.target.name]: e.target.value})
     }
 
-    onSubmit = (e) => {
+    onSubmit = (e, login) => {
         e.preventDefault()
         const user = {
            
@@ -40,17 +31,29 @@ class FacultyLogin extends Component {
            
         }
         console.log(user)
-        localStorage.setItem('isFaculty', 'yes')
+     
    
-       this.props.loginFaculty(user)
-       //this.state.errors = null
-       //  axios.post('/createBasicUser', newUser)
-       //     .then(result => console.log(result.data))
-       //     .catch(err => this.setState({errors: err.response.data}))
+        login().then(({data}) => {
+          
+            console.log(data)
+            console.log(data.login)
+            localStorage.setItem('jwtToken', data.login.jwtToken)
+            this.setState({
+                email: "",
+                password: ""
+            })
+            this.props.loginFaculty(user)
+            this.props.history.push('/showCreatedCourse')
+           
+        })
+ 
      }
 
   render() {
      const { errors } = this.state
+ 
+     const {email, password } = this.state
+
 
       return (
           <div className = "Login">
@@ -61,7 +64,11 @@ class FacultyLogin extends Component {
 
         <div className = "loginContainer">
            <div className = "well">
-                <form onSubmit = {this.onSubmit} className="ui large form">
+
+           <Mutation mutation = {LOGIN} variables = {{ email, password  }}>
+                  {(login, { data, loading, error}) => {
+                      return (
+                <form  onSubmit = { e => this.onSubmit(e, login)} className="ui large form">
                                     <div className="field">
                                     <label> Email </label>
                                     <input  type="text" 
@@ -108,10 +115,13 @@ class FacultyLogin extends Component {
                                     
                                     </div>
                                     <button className="ui button" type="submit">Submit</button>
+                                    { error ? <p>{error.message}</p> : null}
                                     <div className="space">
                                     
                                     </div>
                   </form>
+                   )}}
+                   </Mutation>
                   </div>
               </div>
               </div>
@@ -132,4 +142,5 @@ const mapStateToProps = (state) => ({
     errors: state.errors
 })
 
-export default withRouter(FacultyLogin)
+export default connect(mapStateToProps, { loginFaculty })(FacultyLogin);
+

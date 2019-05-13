@@ -11,6 +11,7 @@ const { graphiqlExpress, graphqlExpress } = require('apollo-server-express')
 const Auth = require('./models/AuthModel')
 const Course = require('./models/Course')
 const Roster = require('./models/Roster')
+const Profile = require('./models/Profile')
 
 const { typeDefs } = require('./schema/schema')
 const { resolvers } = require("./resolvers/resolvers");
@@ -76,7 +77,8 @@ app.use('/graphql',
         Auth,
         Course,
         activeUser,
-        Roster
+        Roster,
+        Profile
     }
 }))
 )

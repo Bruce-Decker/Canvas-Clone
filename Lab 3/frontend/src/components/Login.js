@@ -42,7 +42,7 @@ class Login extends Component {
                 password: ""
             })
             this.props.loginUser(user)
-            //this.props.history.push('/showCreatedCourse')
+            this.props.history.push('/showRegisteredCourse')
            
         })
    

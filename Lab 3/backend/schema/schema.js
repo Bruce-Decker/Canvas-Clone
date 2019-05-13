@@ -13,6 +13,20 @@ type Course {
   CourseTerm: String
 }
 
+type Profile {
+   name: String!,
+   email: String!,
+   phone_number: String,
+   about_me: String,
+   city: String,
+   country: String,
+   school: String,
+   hometown: String,
+   languages: String,
+   gender: String
+   company: String
+}
+
 type Roster {
   uuid: String,
   email: String!,
@@ -38,11 +52,12 @@ type jwtToken {
     showCreatedCourses(email: String!): [Course]
     showRegisteredCourses(email: String!): [Course]
     showUnregisteredCourses(email: String!): [Course]
+    getProfile(email: String!): Profile
   
   }
   
    type Mutation {
-    register(name: String!, email: String!, password: String! ): jwtToken
+    register(first_name: String!, last_name: String!, email: String!, password: String! ): jwtToken
 
     login(email: String!, password: String! ): jwtToken
 
@@ -54,6 +69,9 @@ type jwtToken {
 
     deleteCreatedCourse(email: String!, CourseId: String!): Course
     deleteRegisteredCourse(email: String!, CourseId: String!): Course
+
+    createProfile(name: String!, email: String!, phone_number: String, about_me: String, city: String 
+      country: String, company: String, school: String,  hometown: String, languages: String, gender: String): Profile
   }
 
   

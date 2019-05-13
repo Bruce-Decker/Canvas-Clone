@@ -18,7 +18,8 @@ class Register extends Component {
     constructor() {
         super();
         this.state = {
-            name: '',
+            first_name: '',
+            last_name: '',
             email: '',
             password: '',
             password2: '',
@@ -33,14 +34,7 @@ class Register extends Component {
 
   onSubmit = (e, register) => {
      e.preventDefault()
-     const newUser = {
-         name: this.state.name, 
-         email: this.state.email,
-         password: this.state.password,
-         password2: this.state.password2
-     }
-     console.log(newUser)
-
+    
      if (!Validator.isEmail(this.state.email)) {
 
         this.state.errors.email = 'Email is invalid';
@@ -52,9 +46,9 @@ class Register extends Component {
             password2: ""
         })
       }
-     if (isEmpty(this.state.name)) {
-         console.log("empty")
-        this.state.errors.name = 'Name is empty';
+     if (isEmpty(this.state.first_name)) {
+         console.log("first name empty")
+        this.state.errors.first_name = 'First Name is empty';
         this.setState({
             errors: this.state.errors,
             email: "",
@@ -63,6 +57,18 @@ class Register extends Component {
             password2: ""
         })
       } 
+
+      if (isEmpty(this.state.last_name)) {
+        console.log("empty")
+       this.state.errors.last_name = 'Last Name is empty';
+       this.setState({
+           errors: this.state.errors,
+           email: "",
+           name: "",
+           password: "",
+           password2: ""
+       })
+     } 
 
       if (isEmpty(this.state.email)) {
         console.log("empty")
@@ -111,17 +117,21 @@ class Register extends Component {
             password2: ""
         })
       }
+
+      console.log(this.state.errors)
      if (Object.entries(this.state.errors).length === 0)
      
         register().then(data => {
             console.log(data)
-            this.props.registerUser()
+           // this.props.registerUser()
+           window.location.reload()
         })
   }
 
   render() {
       const { errors } = this.state;
-      var name = this.state.name
+      var first_name = this.state.first_name
+      var last_name = this.state.last_name
       var email = this.state.email
       var password = this.state.password
      
@@ -151,31 +161,66 @@ class Register extends Component {
           </Query> */}
            
            
-              <Mutation mutation = {REGISTER} variables = {{ name, email, password  }}>
+              <Mutation mutation = {REGISTER} variables = {{ first_name, last_name, email, password  }}>
                   {(register, { data, loading, error}) => {
                       return (
                                 <form className="ui form" onSubmit = {e => this.onSubmit(e, register)}>
                                     <div className="field">
-                                    <label>Name</label>
+                                    <label>First Name</label>
 
 
                                     <input type="text" 
                                            placeholder="Name" 
-                                           name="name" 
+                                           name="first_name" 
                                            id="okta-signin-username"  
                                            aria-label="Name" 
                                            autoComplete="off" 
-                                           value = {this.state.name}
+                                           value = {this.state.first_name}
                                            onChange = {this.onChange}
                                                                  
                                     /> 
                                     <div className = "inputError">
-                                            {errors.name }
+                                            {errors.first_name }
+                                    </div>
+                                    
+
+
+
+                                    </div>
+
+                                    <div className="field">
+                                    <label>Last Name</label>
+
+
+                                    <input type="text" 
+                                           placeholder="Last Name" 
+                                           name="last_name" 
+                                           id="okta-signin-username"  
+                                           aria-label="Name" 
+                                           autoComplete="off" 
+                                           value = {this.state.last_name}
+                                           onChange = {this.onChange}
+                                                                 
+                                    /> 
+                                    <div className = "inputError">
+                                            {errors.last_name }
+                                    </div>
+                                    
+
+
+
                                     </div>
 
 
 
-                                    </div>
+
+
+
+
+
+
+
+
                                     <div className="field">
                                     <label> Email </label>
 

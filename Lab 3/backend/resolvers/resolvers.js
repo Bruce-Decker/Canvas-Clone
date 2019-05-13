@@ -46,24 +46,29 @@ exports.resolvers = {
            console.log(email)
            const allCreatedCourses = await Course.find({email})
            return allCreatedCourses
+       },
+       getProfile: async (root, { email }) => {
+            const profileInfo = await Profile.findOne({email})
+            return profileInfo
        }
-       
+
    },
     Mutation: {
 
 
-        register: async (root, { name, email, password }, { Auth }) => {
+        register: async (root, { first_name, last_name, email, password }, { Auth }) => {
             const user = await Auth.findOne({ email });
             if (user) {
                 throw new Error('User already exists')
             }
             
-            console.log("name in resolver " + name)
+           
             console.log("email in resolver " + email)
             console.log("password in resolver " + password)
    
             const newUser = await new Auth({
-                name,
+                first_name,
+                last_name,
                 email,
                 password 
             }).save()
@@ -132,6 +137,31 @@ exports.resolvers = {
     
         return data
      },
+
+     createProfile: async (root, { name, email, phone_number, about_me, city, 
+        country, company, school,  hometown, languages, gender}, { Profile } ) => {
+        const profile = await Profile.findOne({email: email})
+        var data = {
+            name,
+            email,
+            phone_number,
+            about_me,
+            city,
+            country,
+            company, 
+            school,
+            hometown,
+            languages,
+            gender
+        }
+        if (!profile) {
+           await Profile.create(data)
+        } else {
+            await Profile.findOneAndUpdate({email}, data)
+        }
+       
+     },
+
 
      deleteCreatedCourse: async (root, {email, CourseId}, { Course } ) => {
           const course = await Course.findOneAndRemove({ email: email, CourseId: CourseId })
