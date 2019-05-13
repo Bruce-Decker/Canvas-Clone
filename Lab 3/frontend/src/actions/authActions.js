@@ -17,3 +17,23 @@ export const activeUser = (decrypt_data) => {
         payload: decrypt_data
     }
 }
+
+export const loginUser = (userData) => dispatch => {
+  
+            var token = localStorage.getItem('jwtToken')
+          
+            const decrypt_data = jwt_decode(token)
+            decrypt_data.token = token
+         
+            dispatch(activeUser(decrypt_data))
+           
+
+}
+
+export const logout = () => dispatch => {
+    localStorage.removeItem('jwtToken')
+  
+    
+   
+    dispatch(activeUser({}))
+}

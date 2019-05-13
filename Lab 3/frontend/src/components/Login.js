@@ -4,7 +4,8 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { Query, Mutation } from 'react-apollo'
 import { LOGIN } from '../mutations/index'
-
+import { loginUser } from '../actions/authActions'
+import { connect } from 'react-redux'
 
 class Login extends Component {
     constructor() {
@@ -40,6 +41,9 @@ class Login extends Component {
                 email: "",
                 password: ""
             })
+            this.props.loginUser(user)
+            //this.props.history.push('/showCreatedCourse')
+           
         })
    
    
@@ -122,5 +126,9 @@ class Login extends Component {
 
 }
 
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+    errors: state.errors
+})
 
-export default withRouter(Login)
+export default connect(mapStateToProps, { loginUser })(Login);

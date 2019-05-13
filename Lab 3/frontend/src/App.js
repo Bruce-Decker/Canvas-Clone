@@ -4,6 +4,10 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Landing from './components/Landing'
 import Register from './components/Register'
 import FacultyLogin from './components/FacultyLogin'
+import ShowCreatedCourse from './components/showCreatedCourse'
+import ShowRegisteredCourse from './components/showRegisteredCourse'
+import RegisterCourse from './components/RegisterCourse'
+import CreateCourse from './components/createCourse'
 import Login from './components/Login'
 import jwt_decode from 'jwt-decode'
 import { Provider } from 'react-redux';
@@ -11,6 +15,7 @@ import store from './store'
 import './App.css';
 import ApolloClient from 'apollo-boost'
 import { ApolloProvider } from 'react-apollo'
+import { activeUser} from './actions/authActions'
 
 const client = new ApolloClient({
   uri: 'http://localhost:5000/graphql',
@@ -19,7 +24,7 @@ const client = new ApolloClient({
   },
   request: operation => {
       const jwtToken = localStorage.getItem('jwtToken')
-      console.log("34324 " + jwtToken)
+     
       operation.setContext({
           headers: {
               authorization: jwtToken
@@ -41,6 +46,7 @@ if (localStorage.jwtToken) {
     localStorage.removeItem('jwtToken')
   }
   const decoded = jwt_decode(localStorage.jwtToken)
+  store.dispatch(activeUser(decoded));
   console.log(decoded)
   
 }
@@ -57,6 +63,10 @@ class App extends Component {
             <Route exact path="/facultyLogin" component={FacultyLogin} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/showCreatedCourse" component={ShowCreatedCourse} />
+            <Route exact path="/createCourse" component={CreateCourse} />
+            <Route exact path="/showRegisteredCourse" component={ShowRegisteredCourse} />
+            <Route exact path="/registerCourse" component={RegisterCourse} />
          
             </div>
             </BrowserRouter>

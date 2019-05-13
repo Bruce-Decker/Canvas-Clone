@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 const CourseSchema = new Schema({
+ 
     email: {
         type: String,
         required: true
@@ -20,23 +21,23 @@ const CourseSchema = new Schema({
     },
     CourseDescription: {
         type: String,
-        required: true
+      
     },
     CourseRoom: {
         type: String,
-        required: true
+       
     },
     CourseCapacity: {
         type: String,
-        required: true
+      
     },
     WaitlistCapacity: {
         type: String,
-        required: true
+       
     },
     CourseTerm: {
         type: String,
-        required: true
+       
     }
 })
 

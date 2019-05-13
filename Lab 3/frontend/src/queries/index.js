@@ -9,3 +9,40 @@ query {
 }
 `
 
+export const GET_CREATED_COURSES = gql`
+   query($email: String!) {
+    showCreatedCourses(email: $email) {
+        CourseDept
+        CourseId
+        email
+        CourseName
+        CourseTerm
+     }
+   }
+`
+
+export const GET_REGISTERED_COURSES = gql`
+   query($email: String!) {
+    showRegisteredCourses(email: $email) {
+        CourseDept
+        CourseId
+        email
+        CourseName
+        CourseTerm
+     }
+   }
+`
+
+export const GET_UNREGISTERED_COURSES = gql`
+   query($email: String!) {
+    showUnregisteredCourses(email: $email) {
+        CourseDept
+        CourseId
+        email
+        CourseName
+        CourseTerm
+     }
+   }
+`
+
+
