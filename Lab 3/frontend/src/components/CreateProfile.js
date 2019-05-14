@@ -51,7 +51,7 @@ class CreateProfile extends Component {
           return (
               <div>
             <Banner />
-            <Sidebar_Custom />
+            { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
         <div className = "profileContainer">
        
 

@@ -42,7 +42,7 @@ class RegisterCourse extends Component {
       
              
              
-                <Sidebar_Custom/>
+            { this.props.auth.isFaculty ? <Sidebar_Faculty /> : <Sidebar_Custom /> }
           
                 <div className = "selectCourseContainer">
                 
