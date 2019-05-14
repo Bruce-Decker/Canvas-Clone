@@ -4,3 +4,19 @@
 1. Install concurrently globally. Type ```npm install -g concurrently```
 2. cd into backend. Type ```npm install```
 3. After that, type ```npm run dev```
+
+
+### GraphiQL (Register)
+![alt text](./README_Files/GraphQL_Register.png "Register")
+
+### GraphiQL (Login)
+![alt text](./README_Files/GraphQL_Login.png "Login")
+
+### GraphiQL (Registered Courses)
+![alt text](./README_Files/GraphQL_Registered_Courses.png "Registered Courses")
+
+
+### GraphiQL (Get Profile Info)
+![alt text](./README_Files/GraphQL_getProfile.png "Get Profile Info")
+
+
