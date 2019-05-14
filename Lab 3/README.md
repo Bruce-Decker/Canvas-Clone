@@ -3,7 +3,8 @@
 
 1. Install concurrently globally. Type ```npm install -g concurrently```
 2. cd into backend. Type ```npm install```
-3. After that, type ```npm run dev```. This will start both frontend and backend
+3. cd into frontend. Type ```npm install```
+4. After that, type ```npm run dev```. This will start both frontend and backend
 
 
 ### GraphiQL (Register)
