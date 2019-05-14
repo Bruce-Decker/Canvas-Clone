@@ -66,7 +66,7 @@ class RegisterCourse extends Component {
                         
                                {/* <ListButton value = {course.CourseId} onClick = {this.onClick}/> */}
 
-                               {this.props.auth.isFaculty ?
+                               {this.props.auth.isFaculty ? null :
                                <Mutation mutation={REGISTER_COURSE} variables = {{email: email, CourseId: course.CourseId, faculty_email: course.email }}>
                                 {(registerCourse, { data, loading, error}) => {
                                     return (
@@ -76,7 +76,7 @@ class RegisterCourse extends Component {
                                     )
                                 }}
                                    </Mutation>
-                                   : null }
+                                    }
                         
                           
                            
