@@ -29,12 +29,11 @@ class SideBar_Custom extends Component {
       <i className ="fas fa-home"></i> Home
       </Link>
       <Link className="createCourse" to = "/createCourse"><i className="fas fa-graduation-cap"></i> Create  Course </Link>
-      <Link to = "/searchCourse"> <i className="fas fa-book"></i> Search Course </Link>
+      
       <Link className = "UpdateFacultyProfile" to = "/changeProfile"><i className="fas fa-user"></i> Update Profile</Link>
      
       <Link to = "viewMyProfile"> <i className="fas fa-user-circle"></i> My Profile </Link>
-      <Link to = "/SendMessage"> <i className="fas fa-comment-alt"></i> Send Messages</Link>
-      <Link to = "/ViewMessages"> <i className="fas fa-bell"></i> View Messages</Link>
+     
       <Link className = "logout" to = "/" onClick = {this.LogoutButton}>
       <i className="fas fa-sign-out-alt"></i> Logout
       </Link>

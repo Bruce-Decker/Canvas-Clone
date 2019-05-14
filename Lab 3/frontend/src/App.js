@@ -38,7 +38,7 @@ const client = new ApolloClient({
           console.log('Network Error', networkError)
           localStorage.removeItem('jwtToken')
      
-          window.location.href = "/";
+         // window.location.href = "/";
       }
      
   }
