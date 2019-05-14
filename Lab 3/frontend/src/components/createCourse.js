@@ -1,7 +1,6 @@
 import Sidebar_Faculty from './Sidebar_Faculty'
 import Banner from './Banner'
 import '../App.css';
-import axios from 'axios'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import { Query, Mutation } from 'react-apollo'

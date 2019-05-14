@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import RegisterBanner from './RegisterBanner'
 import { withRouter } from 'react-router-dom';
 import classnames from 'classnames'
-import axios from 'axios'
 import propTypes from 'prop-types'
 import Validator from 'validator'
 import { registerUser } from '../actions/authActions'

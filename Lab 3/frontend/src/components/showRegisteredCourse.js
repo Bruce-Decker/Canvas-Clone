@@ -89,6 +89,8 @@ class showRegisteredCourse extends Component {
                          
                         return (
                             <div>
+                         {data.showRegisteredCourses ? 
+                         <div>
                             {data.showRegisteredCourses.map(course => 
                             <div className="showRegisteredCourse">
                            {/* <h1>{data.showCreatedCourses.map(course => <li>{course._id}</li>)}</h1> */}
@@ -114,6 +116,8 @@ class showRegisteredCourse extends Component {
                            </div>
                            </div>
                             )}
+                            </div>
+                            : null }
                             </div>
                         )
                     }}

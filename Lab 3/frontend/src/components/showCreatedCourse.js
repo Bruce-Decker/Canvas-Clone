@@ -1,7 +1,6 @@
 import Sidebar_Faculty from './Sidebar_Faculty'
 import Banner from './Banner'
 import '../App.css';
-import axios from 'axios'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
@@ -37,19 +36,13 @@ class showCreatedCourse extends Component {
     }
 
     onClick = (deleteCreatedCourse) => {
-        // console.log(courseId)
-        // console.log(this.props.auth.user.email)
-       
-
+        
         deleteCreatedCourse().then(({ data }) => {
             window.location.reload()
         })
      
 
-        // axios.post('/course/deleteCourse', data)
-        // .then(res => window.location.reload())
-        // .catch(err => console.log(err))
-
+    
         
 
     }
@@ -93,6 +86,8 @@ class showCreatedCourse extends Component {
                          
                         return (
                             <div>
+                          {data.showCreatedCourses ?
+                          <div>
                             {data.showCreatedCourses.map(course => 
                             <div className="showRegisteredCourse">
                            {/* <h1>{data.showCreatedCourses.map(course => <li>{course._id}</li>)}</h1> */}
@@ -118,6 +113,8 @@ class showCreatedCourse extends Component {
                            </div>
                            </div>
                             )}
+                            </div>
+                            : null }
                             </div>
                         )
                     }}

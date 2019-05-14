@@ -59,36 +59,40 @@ class RegisterCourse extends Component {
                          
                         return (
                             <div>
-                            {data.showUnregisteredCourses.map(course => 
-                     <div class="card">
-                     <div class="card-body">
-                          <h1>{course.CourseId} {course.CourseName}  </h1>
-                        
-                               {/* <ListButton value = {course.CourseId} onClick = {this.onClick}/> */}
+                                {data.showUnregisteredCourses ?
+                                 <div>
+                                    {data.showUnregisteredCourses.map(course => 
+                                            <div class="card">
+                                            <div class="card-body">
+                                                <h1>{course.CourseId} {course.CourseName}  </h1>
+                                                
+                                                    {/* <ListButton value = {course.CourseId} onClick = {this.onClick}/> */}
 
-                               {this.props.auth.isFaculty ? null :
-                               <Mutation mutation={REGISTER_COURSE} variables = {{email: email, CourseId: course.CourseId, faculty_email: course.email }}>
-                                {(registerCourse, { data, loading, error}) => {
-                                    return (
-                                       
-                                        <ListButton value = {course._id} onClick = {() => this.onClick(registerCourse)}/>
-                                           
-                                    )
-                                }}
-                                   </Mutation>
-                                    }
-                        
-                          
-                           
-                          <div>
-                            
-                             Faculty Email: {course.email}
-                             {course.status === "closed" ? <h1> Closed </h1> : null }
-                         
-                            </div>
-                          </div>
-                          </div>
-                            )}
+                                                    {this.props.auth.isFaculty ? null :
+                                                    <Mutation mutation={REGISTER_COURSE} variables = {{email: email, CourseId: course.CourseId, faculty_email: course.email }}>
+                                                        {(registerCourse, { data, loading, error}) => {
+                                                            return (
+                                                            
+                                                                <ListButton value = {course._id} onClick = {() => this.onClick(registerCourse)}/>
+                                                                
+                                                            )
+                                                        }}
+                                                        </Mutation>
+                                                            }
+                                                
+                                                
+                                                
+                                                <div>
+                                                    
+                                                    Faculty Email: {course.email}
+                                                    {course.status === "closed" ? <h1> Closed </h1> : null }
+                                                
+                                                    </div>
+                                                </div>
+                                                </div>
+                                    )}
+                                    </div>
+                                    : null }
                             </div>
                         )
                             }}
