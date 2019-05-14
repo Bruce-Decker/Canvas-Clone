@@ -19,4 +19,10 @@
 ### GraphiQL (Get Profile Info)
 ![alt text](./README_Files/GraphQL_getProfile.png "Get Profile Info")
 
+## UI
+![alt text](./README_Files/Registered_Courses.png "Registered_Courses")
+
+![alt text](./README_Files/Profile.png "Profile")
+
+
 
