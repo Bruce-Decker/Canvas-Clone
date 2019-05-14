@@ -39,6 +39,8 @@ class ShowProfile extends Component {
                          
                         return (
                             <div>
+                              {data.getProfile ? 
+                              <div>
                                 <h3 className = "BreeSerif"> Name <i className="fas fa-user"></i> : {data.getProfile.name}  </h3>
                                 <h3 className = "BreeSerif">  Email <i className="fas fa-envelope-square"></i> : {data.getProfile.email}  </h3>
                                 <h3 className = "BreeSerif">  Phone Number <i className ="fas fa-phone"></i> : {data.getProfile.phone_number} </h3>
@@ -49,6 +51,8 @@ class ShowProfile extends Component {
                                 <h3 className = "BreeSerif"> School <i className="fas fa-university"></i> : {data.getProfile.school} </h3>
                                 <h3 className = "BreeSerif"> Languages <i className="fas fa-language"></i> : {data.getProfile.languages} </h3>
                                 <h3 className = "BreeSerif"> About Me: {data.getProfile.about_me} </h3>
+                                </div>
+                                : null }
                            </div>
                         )
                     }}
