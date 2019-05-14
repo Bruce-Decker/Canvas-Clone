@@ -66,14 +66,17 @@ class RegisterCourse extends Component {
                         
                                {/* <ListButton value = {course.CourseId} onClick = {this.onClick}/> */}
 
-                               
+                               {this.props.auth.isFaculty ?
                                <Mutation mutation={REGISTER_COURSE} variables = {{email: email, CourseId: course.CourseId, faculty_email: course.email }}>
                                 {(registerCourse, { data, loading, error}) => {
                                     return (
-                                       <ListButton value = {course._id} onClick = {() => this.onClick(registerCourse)}/>
+                                       
+                                        <ListButton value = {course._id} onClick = {() => this.onClick(registerCourse)}/>
+                                           
                                     )
                                 }}
                                    </Mutation>
+                                   : null }
                         
                           
                            
@@ -118,7 +121,9 @@ var ListButton = (props) => ({
     
     render: function() {
         return (
-            <button className="ui blue button drop_button" onClick={() => this.props.onClick(this.props.value)}> Add </button>
+           
+                 <button className="ui blue button drop_button" onClick={() => this.props.onClick(this.props.value)}> Add </button>
+                
 
         )
     }

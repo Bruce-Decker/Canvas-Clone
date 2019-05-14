@@ -31,7 +31,7 @@ class SideBar_Custom extends Component {
       <Link className="createCourse" to = "/createCourse"><i className="fas fa-graduation-cap"></i> Create  Course </Link>
       
       <Link className = "UpdateFacultyProfile" to = "/changeProfile"><i className="fas fa-user"></i> Update Profile</Link>
-     
+      <Link className="registerCourse" to = "/registerCourse"> <i className="fas fa-graduation-cap"></i> View Courses </Link>
       <Link to = "viewMyProfile"> <i className="fas fa-user-circle"></i> My Profile </Link>
      
       <Link className = "logout" to = "/" onClick = {this.LogoutButton}>
