@@ -3,7 +3,7 @@ import Banner from './Banner'
 import '../App.css';
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
-
+import Sidebar_Faculty from './Sidebar_Faculty';
 import { Query, Mutation } from 'react-apollo'
 import { GET_UNREGISTERED_COURSES } from '../queries/index'
 import { REGISTER_COURSE } from '../mutations/index'

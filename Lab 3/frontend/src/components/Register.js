@@ -119,13 +119,14 @@ class Register extends Component {
       }
 
       console.log(this.state.errors)
-     if (Object.entries(this.state.errors).length === 0)
-     
-        register().then(data => {
-            console.log(data)
-           // this.props.registerUser()
-           window.location.reload()
-        })
+       
+        
+            register().then(data => {
+                console.log(data)
+            // this.props.registerUser()
+            window.location.reload()
+            })
+      
   }
 
   render() {

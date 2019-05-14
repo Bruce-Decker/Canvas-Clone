@@ -7,6 +7,8 @@ import React, { Component } from 'react'
 import { Query, Mutation } from 'react-apollo'
 import { CREATE_PROFILE } from '../mutations/index'
 import PropTypes from 'prop-types'
+import Sidebar_Faculty from './Sidebar_Faculty';
+import isEmpty from '../validation/isEmpty'
 
 class CreateProfile extends Component {
     constructor() {
@@ -35,10 +37,12 @@ class CreateProfile extends Component {
 
     onSubmit = (e, createProfile) => {
       e.preventDefault() 
-      createProfile().then(data => {
-          console.log(data)
-          window.location.reload() 
-      })
+       
+          createProfile().then(data => {
+              console.log(data)
+              window.location.reload() 
+          })
+       
     }
 
    
@@ -166,6 +170,7 @@ class CreateProfile extends Component {
                 
                 </div>
                 <button className="ui button" type="submit">Submit</button>
+                { error ? <p>{error.message}</p> : null}
                 <div className="space">
                 
                 </div>
